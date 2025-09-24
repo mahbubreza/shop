@@ -24,7 +24,7 @@
 
     <!-- Page Content -->
     <div class="max-w-7xl mx-auto px-4">
-        @yield('content')
+        {{$slot}}
     </div>
 </body>
 </html>
