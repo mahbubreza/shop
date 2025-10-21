@@ -13,23 +13,24 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// Route::get('/admin/dashboard', function () {
-//     dd('now I see u');
-// })->name('admin.dashboard');
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-});
-
-// Route::middleware(['auth', 'admin'])->group(function() {
-    
-//     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-// });
-
-
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/categories/create', function(){
+    return view('categories.create');
+});
+
+Route::middleware('auth')->group(function () {
+    
+    
+});
+
+Route::get('/samples/create', function(){
+    return view('samples.create');
 });
 
 require __DIR__.'/auth.php';

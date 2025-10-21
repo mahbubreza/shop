@@ -23,7 +23,10 @@ class AdminMiddleware
         if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
-        return redirect('/admin/login');
+        // If not admin or not logged in
+        Auth::logout(); // Optional: log out if not admin
+        return redirect()->route('login')->with('error', 'Access denied.');
+    
     }
 
 }
