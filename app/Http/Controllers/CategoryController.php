@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -12,7 +13,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('categories.index', [
+            'categories'=> Category::paginate(10)
+        ]);
+
     }
 
     /**
@@ -20,7 +24,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
+
     }
 
     /**
@@ -28,7 +33,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories,slug',
+        ]);
+
+        $category = Category::create([
+            'name' => $validated['name'],
+            'slug' => $validated['slug'],
+            'created_by' => Auth::user()->email,  // or Auth::id() if you prefer user ID
+            'updated_by' => Auth::user()->email,
+        ]);
+
+        return redirect('/categories/create')->with('success', 'Category created successfully!');
     }
 
     /**
@@ -36,7 +53,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('categories.show', ['category'=>$category]);
     }
 
     /**
@@ -44,15 +61,29 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit', ['category'=>$category]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Category $category)
     {
-        //
+        request()->validate([
+                'name' => 'required',
+                'slug' => 'required'
+            ]);
+        // update the job
+        dd(request()->all());
+        $category = Category::update([
+            'name' => request('name'),
+            'slug' => request('slug'),
+            'updated_by' => Auth::user()->email,
+        ]);
+        // persist
+        // redirect to the job page
+        return redirect('/categories/'.$category['id']);
     }
 
     /**

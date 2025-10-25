@@ -1,24 +1,54 @@
-<x-layout>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-        <img src="{{ $product->image ? asset('storage/'.$product->image) : 'https://via.placeholder.com/400' }}" 
-             alt="{{ $product->name }}" 
-             class="w-full rounded shadow">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Category
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <div class="space-y-12">
+                    <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <x-forms.form-field>
+                                <x-forms.form-label for="name" >Title</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="name" type="text" name="title" value="{{ $category->name}}" disabled />
+                                    <x-forms.form-error name="name" />
+                                </div>
+                            </x-forms.form-field>
+
+                            <x-forms.form-field>
+                                <x-forms.form-label for="slug" >Slug</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="slug" type="text" name="slug" value="{{$category->slug}}" disabled/>
+                                    <x-forms.form-error name="slug" />
+                                </div>
+                            </x-forms.form-field>  
+
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Buttons --}}
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <x-forms.button 
+                        href="/categories"
+                    >
+                        Cancel
+                    </x-forms.button>
+
+                    <x-forms.button
+                        class="text-white bg-indigo-600 hover:bg-indigo-500
+                        focus-visible:outline-indigo-600"
+                        href="/categories/{{$category->id}}/edit"
+                    >
+                        Edit Job
+                    </x-forms.button>
+
+                </div>
+        </div>
     </div>
 
-    <div>
-        <h1 class="text-3xl font-bold mb-4">{{ $product->name }}</h1>
-        <p class="text-gray-700 mb-4">{{ $product->description }}</p>
-        <p class="text-2xl font-semibold text-blue-600 mb-6">${{ number_format($product->price, 2) }}</p>
-
-        <form action="{{ url('/cart/add/'.$product->id) }}" method="POST" class="flex items-center space-x-3">
-            @csrf
-            <input type="number" name="quantity" value="1" min="1" 
-                   class="w-16 border rounded px-2 py-1">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Add to Cart
-            </button>
-        </form>
-    </div>
-</div>
-</x-layout>
+    
+</x-app-layout>

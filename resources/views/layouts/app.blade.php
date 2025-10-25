@@ -19,22 +19,34 @@
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between items-center py-6">
-                    <div>
-                        {{ $header }}
-                    </div>
+@isset($header)
+    <header class="bg-white dark:bg-gray-800 shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                
+                <!-- Left: Header Title -->
+                <div>
+                    {{ $header }}
+                </div>
+
+                <!-- Right: Buttons -->
+                <div class="flex items-center gap-3">
+                    @isset($button)
+                        {{ $button }}
+                    @endisset
+
                     <!-- Dark Mode Toggle -->
-                    <button id="theme-toggle" class="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                    <button id="theme-toggle" 
+                        class="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                         🌞 / 🌙
                     </button>
-                    </div>
                 </div>
-                </header>
 
-            @endisset
+            </div>
+        </div>
+    </header>
+@endisset
+
 
             <!-- Page Content -->
             <main>

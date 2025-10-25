@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,15 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/categories/create', function(){
-    return view('categories.create');
-});
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/create', [CategoryController::class, 'create']);
+Route::get('/categories/{category}', [CategoryController::class, 'show']);
+Route::post('/categories', [CategoryController::class, 'store']);
+
+Route::get('/categories/{category}/edit', [CategoryController::class, 'edit']);
+
+Route::patch('/categories/update', [CategoryController::class, 'update']);
 
 Route::middleware('auth')->group(function () {
     

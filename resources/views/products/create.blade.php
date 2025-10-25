@@ -12,22 +12,34 @@
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <x-forms.form-field>
-                                <x-forms.form-label for="name" >Title</x-forms.form-label>
-                                <div class="mt-2">
-                                    <x-forms.form-input id="name" type="text" name="title" placeholder="Baby Shampoo" required />
-                                    <x-forms.form-error name="name" />
-                                </div>
-                            </x-forms.form-field>
 
-
-                            <x-forms.form-field>
-                                <x-forms.form-label for="slug" >Slug</x-forms.form-label>
+                            {{-- Name Field --}}
+                            <div class="sm:col-span-4">
+                                <label for="name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    Title
+                                </label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="slug" type="text" name="slug" placeholder="slug-shampoo" required/>
-                                    <x-forms.form-error name="slug" />
+                                    <div
+                                        class="flex items-center rounded-md bg-white dark:bg-gray-800 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <input id="name" type="text" name="name" placeholder="Baby Shampoo"
+                                            class="block min-w-0 grow bg-transparent py-1.5 pr-3 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm" />
+                                    </div>
                                 </div>
-                            </x-forms.form-field>                            
+                            </div>
+
+                            {{-- Slug Field --}}
+                            <div class="sm:col-span-4">
+                                <label for="slug" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    Slug
+                                </label>
+                                <div class="mt-2">
+                                    <div
+                                        class="flex items-center rounded-md bg-white dark:bg-gray-800 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <input id="slug" type="text" name="slug" placeholder="baby-shampoo"
+                                            class="block min-w-0 grow bg-transparent py-1.5 pr-3 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm" />
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -37,7 +49,7 @@
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
                         class="text-sm font-semibold text-gray-900 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-400 transition">
-                        <a href="/categories">Cancel</a>
+                        Cancel
                     </button>
 
                     <button type="submit"

@@ -1,26 +1,44 @@
-<x-layout>
-    <h1 class="text-2xl font-bold mb-4">Products</h1>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Categories
+        </h2>
+    </x-slot>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    @foreach ($products as $product)
-        <div class="bg-white rounded-lg shadow p-4 flex flex-col">
-            <img src="{{ $product->image ? asset('storage/'.$product->image) : 'https://via.placeholder.com/200' }}" 
-                 alt="{{ $product->name }}" 
-                 class="h-40 w-full object-cover rounded mb-4">
-            
-            <h2 class="font-semibold text-lg">{{ $product->name }}</h2>
-            <p class="text-sm text-gray-600 mb-2">{{ Str::limit($product->description, 50) }}</p>
-            <span class="font-bold text-blue-600">${{ number_format($product->price, 2) }}</span>
+    <x-slot name="button">
+        <a href="/categories/create" 
+        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white border border-green-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+        + Add Category
+        </a>
+    </x-slot>
 
-            <a href="{{ route('products.show', $product) }}" 
-               class="mt-auto bg-blue-500 text-white px-3 py-1 rounded text-center hover:bg-blue-600">
-               View
-            </a>
+
+    <div class="space-py-2 py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-2">
+        @foreach($categories as $category)
+            <div class="flex justify-between items-center px-4 py-2 border border-gray-200 rounded-lg shadow-sm">
+                <a href="/categories/{{ $category->id }}">
+                    <div class="font-bold text-blue-500 text-sm hover:underline">
+                        {{ $category->name }}
+                    </div>
+                </a>
+
+                <div class="flex gap-2">
+                    <a href="/categories/{{ $category->id }}" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white border border-blue-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        View
+                    </a>
+
+                    <a href="/categories/{{ $category->id }}/edit" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white border border-yellow-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        Edit
+                    </a>
+
+                </div>
+            </div>
+        @endforeach
+
+            <div>
+                {{ $categories->links() }}
+            </div>
         </div>
-    @endforeach
-</div>
-
-<div class="mt-6">
-    {{ $products->links() }}
-</div>
-</x-layout>
+   </div>
+</x-app-layout>

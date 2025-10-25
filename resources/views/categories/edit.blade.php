@@ -1,21 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            New Category
+            {{ $category->name }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <form method="POST" action="/categories">
+            <form method="POST" action="/categories/{{ $category->id }}">
                 @csrf
+                @method('PATCH')
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <x-forms.form-field>
                                 <x-forms.form-label for="name" >Title</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="name" type="text" name="title" placeholder="Baby Shampoo" required />
+                                    <x-forms.form-input id="name" type="text" name="title" value="{{ $category->name }}" required />
                                     <x-forms.form-error name="name" />
                                 </div>
                             </x-forms.form-field>
@@ -24,7 +25,7 @@
                             <x-forms.form-field>
                                 <x-forms.form-label for="slug" >Slug</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="slug" type="text" name="slug" placeholder="slug-shampoo" required/>
+                                    <x-forms.form-input id="slug" type="text" name="slug" value="{{ $category->slug }}" required/>
                                     <x-forms.form-error name="slug" />
                                 </div>
                             </x-forms.form-field>                            
@@ -42,7 +43,7 @@
 
                     <button type="submit"
                         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Save
+                        Update
                     </button>
                 </div>
             </form>
