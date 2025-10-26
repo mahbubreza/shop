@@ -32,19 +32,19 @@
 
                 {{-- Buttons --}}
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <x-forms.button 
+                    <x-forms.common-button 
                         href="/categories"
                     >
                         Cancel
-                    </x-forms.button>
+                    </x-forms.common-button>
 
-                    <x-forms.button
-                        class="text-white bg-indigo-600 hover:bg-indigo-500
+                    <x-forms.common-button
+                        class=" bg-indigo-600 text-white hover:bg-indigo-500
                         focus-visible:outline-indigo-600"
                         href="/categories/{{$category->id}}/edit"
                     >
                         Edit Job
-                    </x-forms.button>
+                    </x-forms.common-button>
 
                 </div>
         </div>

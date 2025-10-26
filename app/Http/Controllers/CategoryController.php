@@ -38,6 +38,7 @@ class CategoryController extends Controller
             'slug' => 'required|string|max:255|unique:categories,slug',
         ]);
 
+
         $category = Category::create([
             'name' => $validated['name'],
             'slug' => $validated['slug'],
@@ -72,18 +73,20 @@ class CategoryController extends Controller
     {
         request()->validate([
                 'name' => 'required',
-                'slug' => 'required'
+                'slug' => 'required',
+                'status' => 'required'
             ]);
         // update the job
-        dd(request()->all());
-        $category = Category::update([
-            'name' => request('name'),
-            'slug' => request('slug'),
-            'updated_by' => Auth::user()->email,
-        ]);
-        // persist
-        // redirect to the job page
-        return redirect('/categories/'.$category['id']);
+          
+        $category->update([
+        'name' => request('name'),
+        'slug' => request('slug'),
+        'status' => request('status'),
+        'updated_by' => Auth::user()->email,
+    ]);
+
+    return redirect('/categories/' . $category->id)
+        ->with('success', 'Category updated successfully!');
     }
 
     /**

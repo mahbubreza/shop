@@ -15,7 +15,7 @@
                             <x-forms.form-field>
                                 <x-forms.form-label for="name" >Title</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="name" type="text" name="title" placeholder="Baby Shampoo" required />
+                                    <x-forms.form-input id="name" type="text" name="name" placeholder="Baby Shampoo" required />
                                     <x-forms.form-error name="name" />
                                 </div>
                             </x-forms.form-field>

@@ -29,7 +29,7 @@ Route::post('/categories', [CategoryController::class, 'store']);
 
 Route::get('/categories/{category}/edit', [CategoryController::class, 'edit']);
 
-Route::patch('/categories/update', [CategoryController::class, 'update']);
+Route::patch('/categories/{category}', [CategoryController::class, 'update']);
 
 Route::middleware('auth')->group(function () {
     

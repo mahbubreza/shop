@@ -24,7 +24,7 @@
                 </a>
 
                 <div class="flex gap-2">
-                    <a href="/categories/{{ $category->id }}" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white border border-blue-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <a href="/categories/{{ $category->id }}" class="inline-flex items-center px-4 py-2 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 bg-blue-500 hover:bg-blue-600 text-white border border-blue-600  focus:ring-indigo-500 ">
                         View
                     </a>
 
