@@ -1,5 +1,16 @@
-<x-layout>
-    <h1 class="text-2xl font-bold mb-4">Products</h1>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Products
+        </h2>
+    </x-slot>
+
+    <x-slot name="button">
+        <a href="/products/create" 
+        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white border border-green-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+        + Add Product
+        </a>
+    </x-slot>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @foreach ($products as $product)
@@ -23,4 +34,4 @@
 <div class="mt-6">
     {{ $products->links() }}
 </div>
-</x-layout>
+</x-app-layout>
