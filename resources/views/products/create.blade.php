@@ -7,211 +7,181 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <form method="POST" action="/categories">
+            <form method="POST" action="/products"  enctype="multipart/form-data">
                 @csrf
-                <div class="space-y-12">
-                <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base/7 font-semibold text-gray-900">Profile</h2>
-                <p class="mt-1 text-sm/6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
-
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-4">
-                    <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
-                    <div class="mt-2">
-                        <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                        <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div>
-                        <input id="username" type="text" name="username" placeholder="janesmith" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="col-span-full">
-                    <label for="about" class="block text-sm/6 font-medium text-gray-900">About</label>
-                    <div class="mt-2">
-                        <textarea id="about" name="about" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                    </div>
-                    <p class="mt-3 text-sm/6 text-gray-600">Write a few sentences about yourself.</p>
-                    </div>
-
-                    <div class="col-span-full">
-                    <label for="photo" class="block text-sm/6 font-medium text-gray-900">Photo</label>
-                    <div class="mt-2 flex items-center gap-x-3">
-                        <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-12 text-gray-300">
-                        <path d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" fill-rule="evenodd" />
-                        </svg>
-                        <button type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50">Change</button>
-                    </div>
-                    </div>
-
-                    <div class="col-span-full">
-                    <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Cover photo</label>
-                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                        <div class="text-center">
-                        <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
-                            <path d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" fill-rule="evenodd" />
-                        </svg>
-                        <div class="mt-4 flex text-sm/6 text-gray-600">
-                            <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
-                            <span>Upload a file</span>
-                            <input id="file-upload" type="file" name="file-upload" class="sr-only" />
-                            </label>
-                            <p class="pl-1">or drag and drop</p>
-                        </div>
-                        <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-
-                <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base/7 font-semibold text-gray-900">Personal Information</h2>
-                <p class="mt-1 text-sm/6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
-                    <label for="first-name" class="block text-sm/6 font-medium text-gray-900">First name</label>
-                    <div class="mt-2">
-                        <input id="first-name" type="text" name="first-name" autocomplete="given-name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-3">
-                    <label for="last-name" class="block text-sm/6 font-medium text-gray-900">Last name</label>
-                    <div class="mt-2">
-                        <input id="last-name" type="text" name="last-name" autocomplete="family-name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                    <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
-                    <div class="mt-2">
-                        <input id="email" type="email" name="email" autocomplete="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-3">
-                    <label for="country" class="block text-sm/6 font-medium text-gray-900">Country</label>
-                    <div class="mt-2 grid grid-cols-1">
-                        <select id="country" name="country" autocomplete="country-name" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                        </select>
-                        <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4">
-                        <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
-                        </svg>
-                    </div>
-                    </div>
-
-                    <div class="col-span-full">
-                    <label for="street-address" class="block text-sm/6 font-medium text-gray-900">Street address</label>
-                    <div class="mt-2">
-                        <input id="street-address" type="text" name="street-address" autocomplete="street-address" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-2 sm:col-start-1">
-                    <label for="city" class="block text-sm/6 font-medium text-gray-900">City</label>
-                    <div class="mt-2">
-                        <input id="city" type="text" name="city" autocomplete="address-level2" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-2">
-                    <label for="region" class="block text-sm/6 font-medium text-gray-900">State / Province</label>
-                    <div class="mt-2">
-                        <input id="region" type="text" name="region" autocomplete="address-level1" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-
-                    <div class="sm:col-span-2">
-                    <label for="postal-code" class="block text-sm/6 font-medium text-gray-900">ZIP / Postal code</label>
-                    <div class="mt-2">
-                        <input id="postal-code" type="text" name="postal-code" autocomplete="postal-code" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-                    </div>
-                    </div>
-                </div>
-                </div>
-
-                <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base/7 font-semibold text-gray-900">Notifications</h2>
-                <p class="mt-1 text-sm/6 text-gray-600">We'll always let you know about important changes, but you pick what else you want to hear about.</p>
-
-                <div class="mt-10 space-y-10">
-                    <fieldset>
-                    <legend class="text-sm/6 font-semibold text-gray-900">By email</legend>
-                    <div class="mt-6 space-y-6">
-                        <div class="flex gap-3">
-                        <div class="flex h-6 shrink-0 items-center">
-                            <div class="group grid size-4 grid-cols-1">
-                            <input id="comments" type="checkbox" name="comments" checked aria-describedby="comments-description" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
-                            <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
-                                <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
-                                <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
-                            </svg>
+                <div class="space-y-12">  
+                    <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <!-- Body (Quill Editor) -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="name" >Product Title</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="name" type="text" name="name" placeholder="Shampoo"  />
+                                    <x-forms.form-error name="name" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="comments" class="font-medium text-gray-900">Comments</label>
-                            <p id="comments-description" class="text-gray-500">Get notified when someones posts a comment on a posting.</p>
-                        </div>
-                        </div>
-                        <div class="flex gap-3">
-                        <div class="flex h-6 shrink-0 items-center">
-                            <div class="group grid size-4 grid-cols-1">
-                            <input id="candidates" type="checkbox" name="candidates" aria-describedby="candidates-description" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
-                            <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
-                                <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
-                                <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
-                            </svg>
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="category_id" >Category</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select id="category_id" name="category_id">
+                                        @isset($categories)
+                                           @foreach ($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach  
+                                        @endisset
+                                    </x-forms.form-select>                                    
+                                </div>
+                            </div> 
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="price" >Price per unit (in Taka)</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="price" type="text" name="price" placeholder="1800"  />
+                                    <x-forms.form-error name="price" />
+                                </div>
+                            </div> 
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="stock" >Unit/Quantity (in pieces)</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="stock" type="text" name="stock" placeholder="10"  />
+                                    <x-forms.form-error name="stock" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="candidates" class="font-medium text-gray-900">Candidates</label>
-                            <p id="candidates-description" class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                        </div>
-                        </div>
-                        <div class="flex gap-3">
-                        <div class="flex h-6 shrink-0 items-center">
-                            <div class="group grid size-4 grid-cols-1">
-                            <input id="offers" type="checkbox" name="offers" aria-describedby="offers-description" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
-                            <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
-                                <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
-                                <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
-                            </svg>
+
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="weight" >Weight (in Kg)</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="weight" type="text" name="weight" placeholder="0.5 kg"  />
+                                    <x-forms.form-error name="weight" />
+                                </div>
+                            </div> 
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="tags" >Tags</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="tags" type="tags" name="tags" placeholder="health, beauty"  />
+                                    <x-forms.form-error name="tags" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="offers" class="font-medium text-gray-900">Offers</label>
-                            <p id="offers-description" class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                        </div>
-                        </div>
-                    </div>
-                    </fieldset>
 
-                    <fieldset>
-                    <legend class="text-sm/6 font-semibold text-gray-900">Push notifications</legend>
-                    <p class="mt-1 text-sm/6 text-gray-600">These are delivered via SMS to your mobile phone.</p>
-                    <div class="mt-6 space-y-6">
-                        <div class="flex items-center gap-x-3">
-                        <input id="push-everything" type="radio" name="push-notifications" checked class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
-                        <label for="push-everything" class="block text-sm/6 font-medium text-gray-900">Everything</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                        <input id="push-email" type="radio" name="push-notifications" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
-                        <label for="push-email" class="block text-sm/6 font-medium text-gray-900">Same as email</label>
-                        </div>
-                        <div class="flex items-center gap-x-3">
-                        <input id="push-nothing" type="radio" name="push-notifications" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
-                        <label for="push-nothing" class="block text-sm/6 font-medium text-gray-900">No push notifications</label>
-                        </div>
-                    </div>
-                    </fieldset>
-                </div>
-                </div>
-            </div>
+                            <div class="sm:col-span-full">
+                                <x-forms.form-label for="brand_id" >Brand</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select id="brand_id" name="brand_id">
+                                        @isset($brands)
+                                           @foreach ($brands as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                            @endforeach  
+                                        @endisset
+                                    </x-forms.form-select>                                    
+                                </div>
+                            </div> 
+                            
+                            <div class="col-span-full">
+                                <label for="body" class="block text-sm/6 font-medium text-gray-900">Product description</label>
+                                <div class="mt-2">
+                                    <textarea
+                                        id="body"
+                                        name="body"
+                                        rows="8"
+                                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 p-3 text-gray-800 shadow-sm"
+                                        placeholder="Write your post..."
+                                    ></textarea>
+                                </div>
+                            </div>
 
+                            <div class="sm:col-span-3">
+                                <label for="image" class="block text-sm/6 font-medium text-gray-900">Upload Thumbnail Image</label>
+                                <div class="mt-2">
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        id="image"
+                                        accept="image/*"
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                        onchange="previewImage(event)"
+                                    />
+                                </div>
+
+                                <p class="mt-1 text-sm/6 text-gray-600">
+                                    This image is visible in all product box. Minimum dimensions required: 195px width X 195px height. 
+                                    Keep some blank space around main object of your image as we had to crop some edge in different 
+                                    devices to make it responsive. If no thumbnail is uploaded, the product's first gallery image 
+                                    will be used as the thumbnail image.
+                                </p>
+
+
+                                <!-- Preview container -->
+                                <div class="mt-4">
+                                    <img id="preview" class="hidden w-48 h-48 object-cover rounded-lg shadow-md border border-gray-300" />
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <label for="images" class="block text-sm/6 font-medium text-gray-900">Gallery Images</label>
+                                <div class="mt-2">
+                                    <input
+                                        type="file"
+                                        name="images[]"
+                                        id="images"
+                                        accept="image/*"
+                                        multiple
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                        onchange="previewImages(event)"
+                                    />
+                                </div>
+                                <p class="mt-1 text-sm/6 text-gray-600">
+                                    These images are visible in product details page gallery. Minimum dimensions required: 900px width X 900px height.
+                                <p>
+                                <!-- Preview container -->
+                                <div id="preview-container" class="mt-4 flex flex-wrap gap-4"></div>
+                            </div>   
+
+                            <div class="col-span-full">
+                                <label for="images" class="block text-sm/6 font-medium text-gray-900">Upload Videos</label>
+                                <div class="mt-2">
+                                    <input
+                                        type="file"
+                                        name="videos[]"
+                                        id="videos"
+                                        accept="video/*"
+                                        multiple
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                        onchange="previewVideos(event)"
+                                    />
+                                </div>
+                                <p class="mt-1 text-sm/6 text-gray-600">
+                                    Try to upload videos under 30 seconds for better performance.                        <p>
+                                <!-- Video preview container -->
+                                <div id="video-preview-container" class="mt-4 flex flex-wrap gap-4"></div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="youtube_link">Youtube video / shorts link</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="youtube_link" type="text" name="youtube_link" placeholder="https://www.youtube.com/watch?v=AeY15GBpjqE&t=8476s"  />
+                                    <x-forms.form-error name="youtube_link" />
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <label for="pdfs" class="block text-sm/6 font-medium text-gray-900">Upload PDF Specification</label>
+                                <div class="mt-2">
+                                    <input
+                                        type="file"
+                                        name="pdfs[]"
+                                        id="pdfs"
+                                        accept="application/pdf"
+                                        multiple
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                        onchange="previewPDFs(event)"
+                                    />
+                                </div>
+                                <!-- PDF preview container -->
+                                <div id="pdf-preview-container" class="mt-4 flex flex-col gap-2"></div>
+                            </div>
+                        </div>      
+                    </div>
+                </div>
+   
                 {{-- Buttons --}}
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
@@ -228,21 +198,113 @@
         </div>
     </div>
 
-    {{-- ✅ Auto-generate slug script --}}
+    <!-- CKEditor Script -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const nameInput = document.getElementById('name');
-            const slugInput = document.getElementById('slug');
+        function previewPDFs(event) {
+        const container = document.getElementById('pdf-preview-container');
+        container.innerHTML = ''; // Clear previous previews
 
-            nameInput.addEventListener('input', () => {
-                let slug = nameInput.value
-                    .toLowerCase()
-                    .replace(/[^a-z0-9\s-]/g, '') // remove special chars
-                    .trim()
-                    .replace(/\s+/g, '-'); // replace spaces with hyphens
+        const files = event.target.files;
+        if (!files.length) {
+            container.innerHTML = '<p class="text-gray-500">No PDFs selected.</p>';
+            return;
+        }
 
-                slugInput.value = slug;
-            });
+        Array.from(files).forEach(file => {
+            if (file.type !== 'application/pdf') return;
+
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-2 p-2 border rounded-lg border-gray-300';
+
+            const icon = document.createElement('span');
+            icon.textContent = '📄';
+            icon.className = 'text-xl';
+
+            const name = document.createElement('span');
+            name.textContent = file.name;
+            name.className = 'text-gray-800';
+
+            div.appendChild(icon);
+            div.appendChild(name);
+            container.appendChild(div);
         });
+    }
+        function previewVideos(event) {
+        const container = document.getElementById('video-preview-container');
+        container.innerHTML = ''; // Clear previous previews
+
+        const files = event.target.files;
+        if (!files.length) {
+            container.innerHTML = '<p class="text-gray-500">No videos selected.</p>';
+            return;
+        }
+
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('video/')) return;
+
+            const video = document.createElement('video');
+            video.className = 'w-48 h-32 rounded-lg border border-gray-300 shadow-sm';
+            video.controls = true; // add play/pause controls
+
+            const source = document.createElement('source');
+            source.src = URL.createObjectURL(file);
+            source.type = file.type;
+
+            video.appendChild(source);
+            container.appendChild(video);
+        });
+    }
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.classList.add('hidden');
+                preview.src = '';
+            }
+        }
+        function previewImages(event) {
+            const container = document.getElementById('preview-container');
+            container.innerHTML = ''; // Clear previous previews
+
+            const files = event.target.files;
+
+            if (!files.length) {
+                container.innerHTML = '<p class="text-gray-500">No images selected.</p>';
+                return;
+            }
+
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-32 h-32 object-cover rounded-lg border border-gray-300 shadow-sm';
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        ClassicEditor.create(document.querySelector('#body'), {
+                ckfinder: {
+                    uploadUrl: '{{ route('ckeditor.upload').'?_token='.csrf_token() }}'
+                }
+            }).then(editor => {
+                console.log('CKEditor initialized', editor);
+            }).catch(error => {
+                console.error('CKEditor error:', error);
+            });
     </script>
 </x-app-layout>

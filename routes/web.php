@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +16,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
@@ -30,7 +33,8 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create']);
-
+    Route::post('/products', [ProductController::class, 'store']);
+   
 
 });
 

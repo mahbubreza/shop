@@ -14,12 +14,28 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+
+            // Foreign key to categories
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+
+            // Product fields
             $table->string('name');
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
             $table->text('description')->nullable();
-            $table->decimal('price', 10,2);
+            $table->decimal('price', 10, 2)->default(0);
             $table->integer('stock')->default(0);
-            $table->string('image')->nullable();
+            $table->string('weight')->nullable();
+            $table->string('tags')->nullable();
+            $table->string('youtube_link')->nullable();
+
+            // File uploads
+            $table->string('image')->nullable();         // Thumbnail
+            $table->text('images')->nullable();          // Gallery images (JSON encoded)
+            $table->text('videos')->nullable();          // Videos (JSON encoded)
+            $table->text('pdfs')->nullable();            // PDFs (JSON encoded)
+
+            $table->char('status', 1)->default('1');
+
             $table->timestamps();
         });
     }
