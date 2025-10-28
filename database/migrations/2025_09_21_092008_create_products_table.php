@@ -35,6 +35,8 @@ return new class extends Migration
             $table->text('pdfs')->nullable();            // PDFs (JSON encoded)
 
             $table->char('status', 1)->default('1');
+            $table->string('created_by');
+            $table->string('updated_by');
 
             $table->timestamps();
         });

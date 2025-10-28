@@ -23,7 +23,7 @@
             <p class="text-sm text-gray-600 mb-2">{{ Str::limit($product->description, 50) }}</p>
             <span class="font-bold text-blue-600">${{ number_format($product->price, 2) }}</span>
 
-            <a href="/product" 
+            <a href="/products/{{$product->id}}/edit" 
                class="mt-auto bg-blue-500 text-white px-3 py-1 rounded text-center hover:bg-blue-600">
                View
             </a>

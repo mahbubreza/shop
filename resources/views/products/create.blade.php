@@ -29,7 +29,8 @@
                                                 <option value="{{$category->id}}">{{$category->name}}</option>
                                             @endforeach  
                                         @endisset
-                                    </x-forms.form-select>                                    
+                                    </x-forms.form-select>  
+                                    <x-forms.form-error name="category_id" />                                  
                                 </div>
                             </div> 
                             <div class="sm:col-span-3">
@@ -71,7 +72,8 @@
                                                 <option value="{{$brand->id}}">{{$brand->name}}</option>
                                             @endforeach  
                                         @endisset
-                                    </x-forms.form-select>                                    
+                                    </x-forms.form-select>    
+                                    <x-forms.form-error name="brand_id" />                                  
                                 </div>
                             </div> 
                             
@@ -80,11 +82,12 @@
                                 <div class="mt-2">
                                     <textarea
                                         id="body"
-                                        name="body"
+                                        name="description"
                                         rows="8"
                                         class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 p-3 text-gray-800 shadow-sm"
                                         placeholder="Write your post..."
                                     ></textarea>
+                                    <x-forms.form-error name="description" />   
                                 </div>
                             </div>
 
@@ -97,8 +100,9 @@
                                         id="image"
                                         accept="image/*"
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                        onchange="previewImage(event)"
+                                        onchange="previewThumbnail(event)"
                                     />
+                                    <x-forms.form-error name="image" />   
                                 </div>
 
                                 <p class="mt-1 text-sm/6 text-gray-600">
@@ -109,49 +113,53 @@
                                 </p>
 
 
-                                <!-- Preview container -->
-                                <div class="mt-4">
-                                    <img id="preview" class="hidden w-48 h-48 object-cover rounded-lg shadow-md border border-gray-300" />
+                                <div id="thumbnailPreview" class="mt-3 hidden w-28 h-28 border rounded-lg overflow-hidden">
+                                    <!-- Preview will appear here -->
                                 </div>
+                                {{-- <div class="mt-4">
+                                    <img id="thumbnailPreview" class="hidden w-48 h-48 object-cover rounded-lg shadow-md border border-gray-300" />
+                                </div> --}}
                             </div>
 
                             <div class="sm:col-span-3">
                                 <label for="images" class="block text-sm/6 font-medium text-gray-900">Gallery Images</label>
                                 <div class="mt-2">
-                                    <input
-                                        type="file"
-                                        name="images[]"
-                                        id="images"
-                                        accept="image/*"
+                                    <input 
+                                        type="file" 
+                                        name="images[]" 
+                                        id="images" 
+                                        accept="image/*" 
                                         multiple
-                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                        onchange="previewImages(event)"
+                                        class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-indigo-200"
                                     />
+                                    <x-forms.form-error name="images[]" />   
                                 </div>
                                 <p class="mt-1 text-sm/6 text-gray-600">
                                     These images are visible in product details page gallery. Minimum dimensions required: 900px width X 900px height.
                                 <p>
                                 <!-- Preview container -->
-                                <div id="preview-container" class="mt-4 flex flex-wrap gap-4"></div>
+                                <div id="imagePreview" class="mt-4 flex flex-wrap gap-4"></div>
                             </div>   
 
                             <div class="col-span-full">
-                                <label for="images" class="block text-sm/6 font-medium text-gray-900">Upload Videos</label>
+                                <label for="videos" class="block text-sm/6 font-medium text-gray-900">Upload Videos</label>
                                 <div class="mt-2">
                                     <input
-                                        type="file"
-                                        name="videos[]"
-                                        id="videos"
-                                        accept="video/*"
+                                        type="file" 
+                                        name="videos[]" 
+                                        id="videos" 
+                                        accept="video/*" 
                                         multiple
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                         onchange="previewVideos(event)"
                                     />
+                                    <x-forms.form-error name="videos[]" />   
+
                                 </div>
                                 <p class="mt-1 text-sm/6 text-gray-600">
                                     Try to upload videos under 30 seconds for better performance.                        <p>
                                 <!-- Video preview container -->
-                                <div id="video-preview-container" class="mt-4 flex flex-wrap gap-4"></div>
+                                <div id="videoPreview" class="mt-4 flex flex-wrap gap-4"></div>
                             </div>
 
                             <div class="sm:col-span-3">
@@ -166,17 +174,18 @@
                                 <label for="pdfs" class="block text-sm/6 font-medium text-gray-900">Upload PDF Specification</label>
                                 <div class="mt-2">
                                     <input
-                                        type="file"
-                                        name="pdfs[]"
-                                        id="pdfs"
-                                        accept="application/pdf"
+                                        type="file" 
+                                        name="pdfs[]" 
+                                        id="pdfs" 
+                                        accept="application/pdf" 
                                         multiple
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                         onchange="previewPDFs(event)"
                                     />
+                                    <x-forms.form-error name="pdfs[]" />  
                                 </div>
                                 <!-- PDF preview container -->
-                                <div id="pdf-preview-container" class="mt-4 flex flex-col gap-2"></div>
+                                <div id="pdfPreview" class="mt-4 flex flex-col gap-2"></div>
                             </div>
                         </div>      
                     </div>
@@ -198,113 +207,94 @@
         </div>
     </div>
 
-    <!-- CKEditor Script -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
     <script>
-        function previewPDFs(event) {
-        const container = document.getElementById('pdf-preview-container');
-        container.innerHTML = ''; // Clear previous previews
-
-        const files = event.target.files;
-        if (!files.length) {
-            container.innerHTML = '<p class="text-gray-500">No PDFs selected.</p>';
-            return;
-        }
-
-        Array.from(files).forEach(file => {
-            if (file.type !== 'application/pdf') return;
-
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 p-2 border rounded-lg border-gray-300';
-
-            const icon = document.createElement('span');
-            icon.textContent = '📄';
-            icon.className = 'text-xl';
-
-            const name = document.createElement('span');
-            name.textContent = file.name;
-            name.className = 'text-gray-800';
-
-            div.appendChild(icon);
-            div.appendChild(name);
-            container.appendChild(div);
-        });
-    }
-        function previewVideos(event) {
-        const container = document.getElementById('video-preview-container');
-        container.innerHTML = ''; // Clear previous previews
-
-        const files = event.target.files;
-        if (!files.length) {
-            container.innerHTML = '<p class="text-gray-500">No videos selected.</p>';
-            return;
-        }
-
-        Array.from(files).forEach(file => {
-            if (!file.type.startsWith('video/')) return;
-
-            const video = document.createElement('video');
-            video.className = 'w-48 h-32 rounded-lg border border-gray-300 shadow-sm';
-            video.controls = true; // add play/pause controls
-
-            const source = document.createElement('source');
-            source.src = URL.createObjectURL(file);
-            source.type = file.type;
-
-            video.appendChild(source);
-            container.appendChild(video);
-        });
-    }
-        function previewImage(event) {
-            const input = event.target;
-            const preview = document.getElementById('preview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.classList.add('hidden');
-                preview.src = '';
+        // 🔹 Initialize CKEditor with image upload support
+        ClassicEditor.create(document.querySelector('#body'), {
+            ckfinder: {
+                uploadUrl: '{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}'
             }
-        }
-        function previewImages(event) {
-            const container = document.getElementById('preview-container');
-            container.innerHTML = ''; // Clear previous previews
+        }).catch(error => console.error(error));
 
-            const files = event.target.files;
-
-            if (!files.length) {
-                container.innerHTML = '<p class="text-gray-500">No images selected.</p>';
-                return;
-            }
-
-            Array.from(files).forEach(file => {
-                if (!file.type.startsWith('image/')) return;
-
+        // 🔹 Image Preview
+        document.getElementById('images').addEventListener('change', e => {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = e => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'w-32 h-32 object-cover rounded-lg border border-gray-300 shadow-sm';
-                    container.appendChild(img);
+                reader.onload = ev => {
+                    const div = document.createElement('div');
+                    div.className = 'relative w-28 h-28';
+                    div.innerHTML = `
+                        <img src="${ev.target.result}" class="w-full h-full object-cover rounded-lg border">
+                        <button type="button"
+                            class="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:scale-110 transition"
+                            onclick="this.parentElement.remove()">×</button>`;
+                    preview.appendChild(div);
                 };
                 reader.readAsDataURL(file);
             });
-        }
-        ClassicEditor.create(document.querySelector('#body'), {
-                ckfinder: {
-                    uploadUrl: '{{ route('ckeditor.upload').'?_token='.csrf_token() }}'
-                }
-            }).then(editor => {
-                console.log('CKEditor initialized', editor);
-            }).catch(error => {
-                console.error('CKEditor error:', error);
+        });
+
+        // 🔹 Video Preview
+        document.getElementById('videos').addEventListener('change', e => {
+            const preview = document.getElementById('videoPreview');
+            preview.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const url = URL.createObjectURL(file);
+                const div = document.createElement('div');
+                div.className = 'relative';
+                div.innerHTML = `
+                    <video src="${url}" class="w-40 h-24 rounded-lg border" controls></video>
+                    <button type="button"
+                        class="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:scale-110 transition"
+                        onclick="this.parentElement.remove()">×</button>`;
+                preview.appendChild(div);
             });
+        });
+
+        // 🔹 PDF Preview with hover remove button
+        document.getElementById('pdfs').addEventListener('change', e => {
+            const preview = document.getElementById('pdfPreview');
+            preview.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'relative flex items-center justify-between p-2 border rounded-lg border-gray-300 bg-gray-50 group cursor-move';
+                div.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 2a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6H6z"/>
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700 truncate max-w-[180px]">${file.name}</span>
+                    </div>
+                    <button type="button"
+                        class="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-red-600 hover:scale-110"
+                        onclick="this.parentElement.remove()">×</button>`;
+                preview.appendChild(div);
+            });
+        });
     </script>
+    <script>
+    function previewThumbnail(event) {
+    const preview = document.getElementById('thumbnailPreview');
+    const file = event.target.files[0];
+
+    if (file) {
+        preview.innerHTML = '';
+        preview.classList.remove('hidden'); // show preview
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'w-full h-full object-cover rounded-lg border'; // match gallery
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '';
+        preview.classList.add('hidden'); // hide if no file
+    }
+}
+
+</script>
 </x-app-layout>
