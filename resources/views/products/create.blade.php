@@ -12,18 +12,19 @@
                 <div class="space-y-12">  
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <!-- Body (Quill Editor) -->
+                            <!-- Product Title -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="name" >Product Title</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="name" type="text" name="name" placeholder="Shampoo"  />
+                                    <x-forms.form-input required id="name" type="text" name="name" placeholder="Shampoo"  />
                                     <x-forms.form-error name="name" />
                                 </div>
                             </div>
+                            <!-- Product Category -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="category_id" >Category</x-forms.form-label>
                                 <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select id="category_id" name="category_id">
+                                    <x-forms.form-select required id="category_id" name="category_id">
                                         @isset($categories)
                                            @foreach ($categories as $category)
                                                 <option value="{{$category->id}}">{{$category->name}}</option>
@@ -33,21 +34,23 @@
                                     <x-forms.form-error name="category_id" />                                  
                                 </div>
                             </div> 
+                            <!-- Price -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="price" >Price per unit (in Taka)</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="price" type="text" name="price" placeholder="1800"  />
+                                    <x-forms.form-input required id="price" type="text" name="price" placeholder="1800"  />
                                     <x-forms.form-error name="price" />
                                 </div>
                             </div> 
+                            <!-- Unit/Quantity/Stock -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="stock" >Unit/Quantity (in pieces)</x-forms.form-label>
                                 <div class="mt-2">
-                                    <x-forms.form-input id="stock" type="text" name="stock" placeholder="10"  />
+                                    <x-forms.form-input required id="stock" type="text" name="stock" placeholder="10"  />
                                     <x-forms.form-error name="stock" />
                                 </div>
                             </div>
-
+                            <!-- Weight -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="weight" >Weight (in Kg)</x-forms.form-label>
                                 <div class="mt-2">
@@ -55,6 +58,7 @@
                                     <x-forms.form-error name="weight" />
                                 </div>
                             </div> 
+                            <!-- Tags -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="tags" >Tags</x-forms.form-label>
                                 <div class="mt-2">
@@ -62,8 +66,8 @@
                                     <x-forms.form-error name="tags" />
                                 </div>
                             </div>
-
-                            <div class="sm:col-span-full">
+                            <!-- Brand -->
+                            <div class="sm:col-span-3">
                                 <x-forms.form-label for="brand_id" >Brand</x-forms.form-label>
                                 <div class="mt-2 grid grid-cols-1">
                                     <x-forms.form-select id="brand_id" name="brand_id">
@@ -76,9 +80,19 @@
                                     <x-forms.form-error name="brand_id" />                                  
                                 </div>
                             </div> 
-                            
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="featured" >Featured</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select id="featured" name="featured">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </x-forms.form-select>    
+                                    <x-forms.form-error name="featured" />                                  
+                                </div>
+                            </div> 
+                            <!-- Product Description -->
                             <div class="col-span-full">
-                                <label for="body" class="block text-sm/6 font-medium text-gray-900">Product description</label>
+                                <x-forms.form-label for="body">Product description</x-forms.form-label>
                                 <div class="mt-2">
                                     <textarea
                                         id="body"
@@ -90,9 +104,10 @@
                                     <x-forms.form-error name="description" />   
                                 </div>
                             </div>
-
+                            <!-- Thumbnail Image -->
                             <div class="sm:col-span-3">
-                                <label for="image" class="block text-sm/6 font-medium text-gray-900">Upload Thumbnail Image</label>
+                                <x-forms.form-label for="image">Upload Thumbnail Image</x-forms.form-label>
+
                                 <div class="mt-2">
                                     <input
                                         type="file"
@@ -120,9 +135,9 @@
                                     <img id="thumbnailPreview" class="hidden w-48 h-48 object-cover rounded-lg shadow-md border border-gray-300" />
                                 </div> --}}
                             </div>
-
+                            <!-- Gallery Images -->
                             <div class="sm:col-span-3">
-                                <label for="images" class="block text-sm/6 font-medium text-gray-900">Gallery Images</label>
+                                <x-forms.form-label for="images">Gallery Images</x-forms.form-label>
                                 <div class="mt-2">
                                     <input 
                                         type="file" 
@@ -140,9 +155,10 @@
                                 <!-- Preview container -->
                                 <div id="imagePreview" class="mt-4 flex flex-wrap gap-4"></div>
                             </div>   
+                            <!-- Vdieos -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="videos">Upload Videos</x-forms.form-label>
 
-                            <div class="col-span-full">
-                                <label for="videos" class="block text-sm/6 font-medium text-gray-900">Upload Videos</label>
                                 <div class="mt-2">
                                     <input
                                         type="file" 
@@ -157,11 +173,22 @@
 
                                 </div>
                                 <p class="mt-1 text-sm/6 text-gray-600">
-                                    Try to upload videos under 30 seconds for better performance.                        <p>
+                                    Try to upload videos under 30 seconds for better performance.                        
+                                </p>
                                 <!-- Video preview container -->
                                 <div id="videoPreview" class="mt-4 flex flex-wrap gap-4"></div>
                             </div>
-
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="published" >Published</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select id="published" name="published">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </x-forms.form-select>    
+                                    <x-forms.form-error name="published" />                                  
+                                </div>
+                            </div>
+                            <!-- Youtube Link -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="youtube_link">Youtube video / shorts link</x-forms.form-label>
                                 <div class="mt-2">
@@ -169,9 +196,10 @@
                                     <x-forms.form-error name="youtube_link" />
                                 </div>
                             </div>
-
+                            <!-- Pdf -->
                             <div class="sm:col-span-3">
-                                <label for="pdfs" class="block text-sm/6 font-medium text-gray-900">Upload PDF Specification</label>
+                                <x-forms.form-label for="pdfs">Upload PDF Specification</x-forms.form-label>
+
                                 <div class="mt-2">
                                     <input
                                         type="file" 
@@ -195,7 +223,7 @@
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
                         class="text-sm font-semibold text-gray-900 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-400 transition">
-                        Cancel
+                        <a href="/products">Cancel</a>
                     </button>
 
                     <button type="submit"

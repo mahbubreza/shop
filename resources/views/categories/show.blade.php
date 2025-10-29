@@ -43,7 +43,7 @@
                         focus-visible:outline-indigo-600"
                         href="/categories/{{$category->id}}/edit"
                     >
-                        Edit Job
+                        Edit Category
                     </x-forms.common-button>
 
                 </div>
