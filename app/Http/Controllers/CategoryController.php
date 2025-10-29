@@ -36,16 +36,23 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug',
+            'hot' => 'required',
+            'image' => 'nullable|image|max:5120', // 5MB thumbnail
+
         ]);
-
-
+        $thumbnail = $request->file('image') 
+            ? $request->file('image')->store('categories/thumbnails', 'public') 
+            : null;
         $category = Category::create([
             'name' => $validated['name'],
             'slug' => $validated['slug'],
+            'image' => $thumbnail,
+
+            'hot' => $validated['hot'],
+            'status' => 1,
             'created_by' => Auth::user()->email,  // or Auth::id() if you prefer user ID
             'updated_by' => Auth::user()->email,
         ]);
-
         return redirect('/categories/create')->with('success', 'Category created successfully!');
     }
 
@@ -87,6 +94,22 @@ class CategoryController extends Controller
 
     return redirect('/categories/' . $category->id)
         ->with('success', 'Category updated successfully!');
+    }
+
+     public function toggleStatus(Request $request, Category $category)
+    {
+        $field = $request->field;
+        $value = $request->value;
+
+        if (in_array($field, ['hot', 'status'])) {
+            $category->$field = $value;
+            $category->updated_by = Auth::user()->email;
+            $category->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 400);
     }
 
     /**

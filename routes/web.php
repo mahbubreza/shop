@@ -30,6 +30,8 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit']);
     Route::patch('/categories/{category}', [CategoryController::class, 'update']);
+    Route::post('/categories/{category}/toggle', [CategoryController::class, 'toggleStatus'])->name('categories.toggle');
+
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create']);

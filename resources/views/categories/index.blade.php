@@ -58,8 +58,8 @@
                                         <input type="checkbox" 
                                             class="sr-only peer toggle-checkbox"
                                             data-id="{{ $category->id }}" 
-                                            data-field="published"
-                                            {{ $category->status == 1 ? 'checked' : '' }}>
+                                            data-field="hot"
+                                            {{ $category->hot == 1 ? 'checked' : '' }}>
                                         <div class="w-10 h-5 bg-gray-300 peer-checked:bg-green-500 rounded-full transition dark:bg-gray-600"></div>
                                     </label>
                                 </td>   
@@ -69,7 +69,7 @@
                                         <input type="checkbox" 
                                             class="sr-only peer toggle-checkbox"
                                             data-id="{{ $category->id }}" 
-                                            data-field="featured"
+                                            data-field="status"
                                             {{ $category->status == 1? 'checked' : '' }}>
                                         <div class="w-10 h-5 bg-gray-300 peer-checked:bg-indigo-500 rounded-full transition dark:bg-gray-600"></div>
                                     </label>
@@ -107,6 +107,32 @@
         </div>
     </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.toggle-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', function () {
+                const categoryId = this.dataset.id;
+                const field = this.dataset.field;
+                const value = this.checked ? 1 : 0;
 
+                fetch(`/categories/${categryId}/toggle`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ field, value }),
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Failed to update field.');
+                    }
+                })
+                .catch(() => alert('Something went wrong!'));
+            });
+        });
+    });
+    </script>
     
 </x-app-layout>
