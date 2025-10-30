@@ -8,9 +8,9 @@
     </x-slot>
 
     <x-slot name="button">
-        <a href="/categories/create" 
+        <a href="/brands/create" 
         class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white border border-green-600 rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-        + Add Category
+        + Add Brand
         </a>
     </x-slot>
 
@@ -22,12 +22,11 @@
                     <select class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md text-sm">
                         <option>Sort By</option>
                         <option>Name</option>
-                        <option>Price</option>
-                        <option>Stock</option>
+                        
                     </select>
                 </div>
                 <div class="ml-auto">
-                    <input type="text" placeholder="Search Category..."
+                    <input type="text" placeholder="Search Brand..."
                            class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md text-sm px-3 py-2 w-56 focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
@@ -38,62 +37,44 @@
                     <thead class="bg-gray-100 dark:bg-gray-700 border-b dark:border-gray-600">
                         <tr>
                             <th class="px-4 py-3 text-left">Name</th>
-                            <th class="px-4 py-3 text-center">Featured</th>
-                            <th class="px-4 py-3 text-center">Hot</th>
+                            <th class="px-4 py-3 text-center">Logo</th>
                             <th class="px-4 py-3 text-center">Active</th>
                             <th class="px-4 py-3 text-center">Options</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y dark:divide-gray-700">
-                        @forelse($categories as $category)
+                        @forelse($brands as $brand)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                <td class="px-4 py-3 flex items-center gap-3">
-                                    <img src="{{ asset('storage/'.$category->image) }}" alt="" class="w-10 h-10 object-cover rounded">
-                                    <span class="font-medium text-gray-800 dark:text-gray-100">{{ $category->name }}</span>
+                                <td class="px-4 py-3 ">
+                                    <span class="font-medium text-gray-800 dark:text-gray-100">{{ $brand->name }}</span>
                                 </td>
 
                                 <td class="px-4 py-3 text-center">
-                                    <label class="inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" 
-                                            class="sr-only peer toggle-checkbox"
-                                            data-id="{{ $category->id }}" 
-                                            data-field="featured"
-                                            {{ $category->featured == 1 ? 'checked' : '' }}>
-                                        <div class="w-10 h-5 bg-gray-300 peer-checked:bg-indigo-500 rounded-full transition dark:bg-gray-600"></div>
-                                    </label>
-                                </td>   
+                                    <img src="{{ asset('storage/'.$brand->logo) }}" alt="" class="w-10 h-10 object-cover rounded">
+                                </td>
 
-                                <td class="px-4 py-3 text-center">
-                                    <label class="inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" 
-                                            class="sr-only peer toggle-checkbox"
-                                            data-id="{{ $category->id }}" 
-                                            data-field="hot"
-                                            {{ $category->hot == 1 ? 'checked' : '' }}>
-                                        <div class="w-10 h-5 bg-gray-300 peer-checked:bg-green-500 rounded-full transition dark:bg-gray-600"></div>
-                                    </label>
-                                </td>   
+                                 
                                 
                                 <td class="px-4 py-3 text-center">
                                     <label class="inline-flex items-center cursor-pointer">
                                         <input type="checkbox" 
                                             class="sr-only peer toggle-checkbox"
-                                            data-id="{{ $category->id }}" 
+                                            data-id="{{ $brand->id }}" 
                                             data-field="status"
-                                            {{ $category->status == 1? 'checked' : '' }}>
+                                            {{ $brand->status == 1? 'checked' : '' }}>
                                         <div class="w-10 h-5 bg-gray-300 peer-checked:bg-yellow-500 rounded-full transition dark:bg-gray-600"></div>
                                     </label>
                                 </td>
 
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center gap-3">
-                                        <a href="categories/{{ $category->id }}" class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300">
+                                        <a href="brands/{{ $brand->id }}" class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="categories/{{ $category->id }}/edit" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                                        <a href="brands/{{ $brand->id }}/edit" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="categories/{{ $category->id }}" method="POST" onsubmit="return confirm('Delete this category?')" class="inline">
+                                        <form action="brands/{{ $brand->id }}" method="POST" onsubmit="return confirm('Delete this brand?')" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
@@ -105,13 +86,13 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-6 text-gray-500 dark:text-gray-400">No Categories Found.</td>
+                                <td colspan="8" class="text-center py-6 text-gray-500 dark:text-gray-400">No brands found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
                 <div>
-                    {{ $categories->links() }}
+                    {{ $brands->links() }}
                 </div>
             </div>
         </div>
@@ -121,11 +102,11 @@
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.toggle-checkbox').forEach((checkbox) => {
             checkbox.addEventListener('change', function () {
-                const categoryId = this.dataset.id;
+                const brandId = this.dataset.id;
                 const field = this.dataset.field;
                 const value = this.checked ? 1 : 0;
 
-                fetch(`/categories/${categoryId}/toggle`, {
+                fetch(`/brands/${brandId}/toggle`, {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

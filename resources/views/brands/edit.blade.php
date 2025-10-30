@@ -1,14 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            New Category
+            {{ $brand->name }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <form method="POST" action="/categories" enctype="multipart/form-data">
+            <form method="POST" action="/brands/{{ $brand->id }}" enctype="multipart/form-data">
                 @csrf
+                @method('PATCH')
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -16,7 +17,7 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="name" >Title</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input id="name" type="text" name="name" placeholder="Baby Shampoo" required />
+                                        <x-forms.form-input id="name" type="text" name="name" value="{{ $brand->name }}" required />
                                         <x-forms.form-error name="name" />
                                     </div>
                                 </x-forms.form-field>
@@ -25,13 +26,15 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="slug" >Slug</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input id="slug" type="text" name="slug" placeholder="slug-shampoo" required/>
+                                        <x-forms.form-input id="slug" type="text" name="slug" value="{{ $brand->slug }}" required />
                                         <x-forms.form-error name="slug" />
                                     </div>
-                                </x-forms.form-field>     
+                                </x-forms.form-field>  
                             </div>
+
+                            <!-- Thumbnail Image -->
                             <div class="sm:col-span-3">
-                                <x-forms.form-label for="image">Upload Thumbnail Image</x-forms.form-label>
+                                <x-forms.form-label for="image" >Logo</x-forms.form-label>
 
                                 <div class="mt-2">
                                     <input
@@ -40,7 +43,7 @@
                                         id="image"
                                         accept="image/*"
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                        onchange="previewThumbnail(event)"
+                        
                                     />
                                     <x-forms.form-error name="image" />   
                                 </div>
@@ -52,34 +55,32 @@
                                     will be used as the thumbnail image.
                                 </p>
 
-                                <div id="thumbnailPreview" class="mt-3 hidden w-28 h-28 border rounded-lg overflow-hidden">
-                                    <!-- Preview will appear here -->
-                                </div>
-            
+                                @if ($brand->logo)
+                                    <div class="mt-2 relative inline-block">
+                                        <img src="{{ asset('storage/' . $brand->logo) }}" class="h-24 rounded">
+                                        <input type="checkbox" name="remove_thumbnail" value="1" class="absolute top-0 right-0">
+                                    </div>
+                                @endif
+
                             </div>
 
+                            
+
+                            
                             <div class="sm:col-span-3">
-                                <x-forms.form-label for="hot" >Hot</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select id="hot" name="hot">
-                                        <option value="0">No</option>
-                                        <option value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="hot" />                                  
-                                </div>
+                                <x-forms.form-field>
+                                    <x-forms.form-label for="status" >Status</x-forms.form-label>
+                                    <div class="mt-2 grid grid-cols-1">                                  
+                                        <x-forms.form-select id="status" name="status">
+                                            <option value="1" @selected($brand->status == 1)>Active</option>
+                                            <option value="0" @selected($brand->status == 0)>Inactive</option>                                     
+                                        </x-forms.form-select>                                  
+                                        <x-forms.form-error name="status" />
+                                    </div>
+                                </x-forms.form-field>  
                             </div>
 
-                            <div class="sm:col-span-3">
-                                <x-forms.form-label for="featured" >Featured</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select id="featured" name="featured">
-                                        <option value="0">No</option>
-                                        <option value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="featured" />                                  
-                                </div>
-                            </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -88,12 +89,12 @@
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
                         class="text-sm font-semibold text-gray-900 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-400 transition">
-                        <a href="/categories">Cancel</a>
+                        <a href="/brands">Cancel</a>
                     </button>
 
                     <button type="submit"
                         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Save
+                        Update
                     </button>
                 </div>
             </form>
@@ -116,28 +117,5 @@
                 slugInput.value = slug;
             });
         });
-    </script>
-    <script>
-        function previewThumbnail(event) {
-        const preview = document.getElementById('thumbnailPreview');
-        const file = event.target.files[0];
-
-        if (file) {
-            preview.innerHTML = '';
-            preview.classList.remove('hidden'); // show preview
-            const reader = new FileReader();
-            reader.onload = e => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'w-full h-full object-cover rounded-lg border'; // match gallery
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.innerHTML = '';
-            preview.classList.add('hidden'); // hide if no file
-        }
-    }
-
     </script>
 </x-app-layout>

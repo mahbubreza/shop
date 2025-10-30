@@ -10,6 +10,8 @@ class Brand extends Model
     /** @use HasFactory<\Database\Factories\BrandFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function products(){
         return $this->hasMany(Product::class);
     }

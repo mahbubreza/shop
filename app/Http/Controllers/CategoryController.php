@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -37,6 +38,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug',
             'hot' => 'required',
+            'featured' => 'required',
             'image' => 'nullable|image|max:5120', // 5MB thumbnail
 
         ]);
@@ -49,11 +51,12 @@ class CategoryController extends Controller
             'image' => $thumbnail,
 
             'hot' => $validated['hot'],
+            'featured' => $validated['featured'],
             'status' => 1,
             'created_by' => Auth::user()->email,  // or Auth::id() if you prefer user ID
             'updated_by' => Auth::user()->email,
         ]);
-        return redirect('/categories/create')->with('success', 'Category created successfully!');
+        return redirect('/categories')->with('success', 'Category created successfully!');
     }
 
     /**
@@ -81,18 +84,34 @@ class CategoryController extends Controller
         request()->validate([
                 'name' => 'required',
                 'slug' => 'required',
-                'status' => 'required'
+                'status' => 'required',
+                'hot' => 'required',
+                'featured' => 'required'
             ]);
-        // update the job
+        $thumbnail = $category->image;
+        if (request()->has('remove_thumbnail') && $category->image) {
+            Storage::disk('public')->delete($category->image);
+            $thumbnail = null;
+        }
+
+         if (request()->hasFile('image')) {
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            $thumbnail = request()->file('image')->store('categories/thumbnails', 'public');
+        }
           
         $category->update([
         'name' => request('name'),
         'slug' => request('slug'),
+        'hot' => request('hot'),
+        'featured' => request('featured'),
+        'image' => $thumbnail,
         'status' => request('status'),
         'updated_by' => Auth::user()->email,
     ]);
 
-    return redirect('/categories/' . $category->id)
+    return redirect('/categories')
         ->with('success', 'Category updated successfully!');
     }
 
@@ -101,7 +120,7 @@ class CategoryController extends Controller
         $field = $request->field;
         $value = $request->value;
 
-        if (in_array($field, ['hot', 'status'])) {
+        if (in_array($field, ['hot', 'status', 'featured'])) {
             $category->$field = $value;
             $category->updated_by = Auth::user()->email;
             $category->save();
@@ -117,6 +136,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        return redirect('/categories')->with('success', 'Delete is not permitted!');
     }
 }

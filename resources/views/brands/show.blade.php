@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ $category->name }}
+            {{ $brand->name }}
         </h2>
     </x-slot>
 
@@ -17,7 +17,7 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="name" >Title</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input disabled id="name" type="text" name="name" value="{{ $category->name }}" required />
+                                        <x-forms.form-input disabled id="name" type="text" name="name" value="{{ $brand->name }}" required />
                                         <x-forms.form-error name="name" />
                                     </div>
                                 </x-forms.form-field>
@@ -26,7 +26,7 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="slug" >Slug</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input disabled id="slug" type="text" name="slug" value="{{ $category->slug }}" required/>
+                                        <x-forms.form-input disabled id="slug" type="text" name="slug" value="{{ $brand->slug }}" required/>
                                         <x-forms.form-error name="slug" />
                                     </div>
                                 </x-forms.form-field>  
@@ -34,28 +34,19 @@
 
                             <!-- Thumbnail Image -->
                             <div class="sm:col-span-3">
-                                <x-forms.form-label for="image" >Thumbnail Image</x-forms.form-label>
+                                <x-forms.form-label for="image" >Logo</x-forms.form-label>
 
                                
 
-                                @if ($category->image)
+                                @if ($brand->logo)
                                     <div class="mt-2 relative inline-block">
-                                        <img src="{{ asset('storage/' . $category->image) }}" class="h-24 rounded">
+                                        <img src="{{ asset('storage/' . $brand->logo) }}" class="h-24 rounded">
                                     </div>
                                 @endif
 
                             </div>
 
-                            <div class="sm:col-span-3">
-                                <x-forms.form-label for="hot" >Hot</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select disabled id="hot" name="hot">
-                                        <option @selected($category->hot == 0) value="0">No</option>
-                                        <option @selected($category->hot == 1) value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="hot" />                                  
-                                </div>
-                            </div>
+                            
 
                             
                             <div class="sm:col-span-3">
@@ -63,24 +54,14 @@
                                     <x-forms.form-label for="status" >Status</x-forms.form-label>
                                     <div class="mt-2 grid grid-cols-1">                                  
                                         <x-forms.form-select disabled id="status" name="status">
-                                            <option value="1" @selected($category->status == 1)>Active</option>
-                                            <option value="0" @selected($category->status == 0)>Inactive</option>                                     
+                                            <option value="1" @selected($brand->status == 1)>Active</option>
+                                            <option value="0" @selected($brand->status == 0)>Inactive</option>                                     
                                         </x-forms.form-select>                                  
                                         <x-forms.form-error name="status" />
                                     </div>
                                 </x-forms.form-field>  
                             </div>
 
-                            <div class="sm:col-span-3">
-                                <x-forms.form-label for="featured" >Featured</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select disabled id="featured" name="featured">
-                                        <option @selected($category->featured == 0) value="0">No</option>
-                                        <option @selected($category->featured == 1) value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="featured" />                                  
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,7 +70,7 @@
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
                         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        <a href="/categories">Ok</a>
+                        <a href="/brands">Ok</a>
                     </button>
 
                     

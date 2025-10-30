@@ -270,6 +270,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        return redirect('/products')->with('success', 'Delete is not permitted!');
     }
 }

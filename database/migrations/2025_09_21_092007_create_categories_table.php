@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image')->nullable();
             $table->char('hot', 1)->default('0');
+            $table->char('featured', 1)->default('0');
             $table->char('status', 1)->default('1');
             $table->string('created_by');
             $table->string('updated_by');

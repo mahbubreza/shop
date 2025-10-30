@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            New Category
+            New Brand
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <form method="POST" action="/categories" enctype="multipart/form-data">
+            <form method="POST" action="/brands" enctype="multipart/form-data">
                 @csrf
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
@@ -16,7 +16,7 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="name" >Title</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input id="name" type="text" name="name" placeholder="Baby Shampoo" required />
+                                        <x-forms.form-input id="name" type="text" name="name" placeholder="acer" required />
                                         <x-forms.form-error name="name" />
                                     </div>
                                 </x-forms.form-field>
@@ -25,13 +25,13 @@
                                 <x-forms.form-field>
                                     <x-forms.form-label for="slug" >Slug</x-forms.form-label>
                                     <div class="mt-2">
-                                        <x-forms.form-input id="slug" type="text" name="slug" placeholder="slug-shampoo" required/>
+                                        <x-forms.form-input id="slug" type="text" name="slug" placeholder="acer" required/>
                                         <x-forms.form-error name="slug" />
                                     </div>
                                 </x-forms.form-field>     
                             </div>
                             <div class="sm:col-span-3">
-                                <x-forms.form-label for="image">Upload Thumbnail Image</x-forms.form-label>
+                                <x-forms.form-label for="image">Upload Logo</x-forms.form-label>
 
                                 <div class="mt-2">
                                     <input
@@ -58,27 +58,7 @@
             
                             </div>
 
-                            <div class="sm:col-span-3">
-                                <x-forms.form-label for="hot" >Hot</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select id="hot" name="hot">
-                                        <option value="0">No</option>
-                                        <option value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="hot" />                                  
-                                </div>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <x-forms.form-label for="featured" >Featured</x-forms.form-label>
-                                <div class="mt-2 grid grid-cols-1">
-                                    <x-forms.form-select id="featured" name="featured">
-                                        <option value="0">No</option>
-                                        <option value="1">Yes</option>
-                                    </x-forms.form-select>    
-                                    <x-forms.form-error name="featured" />                                  
-                                </div>
-                            </div>
+                            
 
                         </div>
                     </div>
@@ -88,7 +68,7 @@
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button"
                         class="text-sm font-semibold text-gray-900 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-400 transition">
-                        <a href="/categories">Cancel</a>
+                        <a href="/brands">Cancel</a>
                     </button>
 
                     <button type="submit"

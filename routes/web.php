@@ -1,16 +1,17 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -24,12 +25,22 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands');
+    Route::get('/brands/create', [BrandController::class, 'create']);
+    Route::get('/brands/{brand}', [BrandController::class, 'show']);
+    Route::post('/brands', [BrandController::class, 'store']);
+    Route::get('/brands/{brand}/edit', [BrandController::class, 'edit']);
+    Route::patch('/brands/{brand}', [BrandController::class, 'update']);
+    Route::delete('/brands/{brand}', [BrandController::class, 'destroy']);
+    Route::post('/brands/{brand}/toggle', [BrandController::class, 'toggleStatus'])->name('brands.toggle');
+
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/categories/create', [CategoryController::class, 'create']);
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit']);
     Route::patch('/categories/{category}', [CategoryController::class, 'update']);
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
     Route::post('/categories/{category}/toggle', [CategoryController::class, 'toggleStatus'])->name('categories.toggle');
 
 
