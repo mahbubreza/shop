@@ -13,8 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">    
-    @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/css/swiper-bundle.css', 'resources/css/custom.css', 'resources/js/app.js'])
-   
+    @vite(['resources/css/app.css', 'resources/css/styles.css',  'resources/css/custom.css', 'resources/css/swiper-bundle.min.css', 'resources/js/app.js'])
+   <!-- Swiper CSS -->
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
+<!-- Swiper CSS -->
+
 </head>
 
 <body>
@@ -642,10 +645,11 @@
         </div>
     </footer>
 
-    @vite(['resources/js/swiper-bundle.js', 'resources/js/script.js'])
+    @vite(['resources/js/script.js'])
 
 
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 </body>
 </html>
