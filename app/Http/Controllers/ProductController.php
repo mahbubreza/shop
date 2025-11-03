@@ -263,7 +263,13 @@ class ProductController extends Controller
         return response()->json(['success' => false], 400);
     }
 
-
+    public function details(Product $product)
+    {
+       
+        return view('products.details', [
+            'product'=>$product]
+        );
+    }
 
     /**
      * Remove the specified resource from storage.

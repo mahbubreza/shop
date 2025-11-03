@@ -53,11 +53,9 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     Route::post('/products/{product}/toggle', [ProductController::class, 'toggleStatus'])->name('products.toggle');
 
-   
-
 });
 
-
+Route::get('/products/{product}/details', [ProductController::class, 'details']);
 
 Route::middleware('auth')->group(function () {
     
