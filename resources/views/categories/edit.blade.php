@@ -49,10 +49,7 @@
                                 </div>
 
                                 <p class="mt-1 text-sm/6 text-gray-600">
-                                    This image is visible in all product box. Minimum dimensions required: 195px width X 195px height. 
-                                    Keep some blank space around main object of your image as we had to crop some edge in different 
-                                    devices to make it responsive. If no thumbnail is uploaded, the product's first gallery image 
-                                    will be used as the thumbnail image.
+                                    This image is visible in slider. Dimensions required: 1900px width X 800px height. 
                                 </p>
 
                                 @if ($category->image)

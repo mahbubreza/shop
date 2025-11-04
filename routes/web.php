@@ -19,6 +19,8 @@ Route::get('/dashboard', function () {
 
 Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
+Route::get('/products/list', [ProductController::class, 'list']);
+
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -56,6 +58,8 @@ Route::middleware(['auth', 'admin'])->group(function() {
 });
 
 Route::get('/products/{product}/details', [ProductController::class, 'details']);
+
+
 
 Route::middleware('auth')->group(function () {
     

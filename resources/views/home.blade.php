@@ -6,9 +6,9 @@
           <div class="swiper-wrapper">
               <!-- Slide 1 -->
               <div class="swiper-slide">
-                  <img src="storage/images/main-slider/5.jpg" alt="Product 1">
+                  <img src="storage/images/main-slider/1.jpg" alt="Product 1">
                   <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Women</h2>
+                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Serum</h2>
                     <p class="mb-4 text-white md:text-2xl">Experience the best in sportswear with <br>our latest collection.</p>
                       <a href="/"
                           class="bg-primary hover:bg-transparent text-white hover:text-white border border-transparent hover:border-white font-semibold px-4 py-2 rounded-full inline-block">Shop
@@ -17,9 +17,9 @@
               </div>
               <!-- Slide 2 -->
               <div class="swiper-slide">
-                  <img src="storage/images/main-slider/2.png" alt="Product 2">
+                  <img src="storage/images/main-slider/2.jpg" alt="Product 2">
                   <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Men</h2>
+                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Facewash & Facescrub</h2>
                     <p class="mb-4 text-white md:text-2xl">Discover the latest trends in Men`s <br>sportswear and casual fashion.</p>
                       <a href="/"
                           class="bg-white hover:bg-transparent text-black hover:text-white font-semibold px-4 py-2 rounded-full inline-block border border-transparent hover:border-white">Shop
@@ -28,9 +28,9 @@
               </div>
               <!-- Slide 3 -->
               <div class="swiper-slide">
-                  <img src="storage/images/main-slider/4.jpg" alt="Product 3">
+                  <img src="storage/images/main-slider/3.jpg" alt="Product 3">
                   <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Accessories</h2>
+                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Korean pain releif Pad</h2>
                     <p class="mb-4 text-white md:text-2xl">Elevate your style with our latest <br>sportswear collection.</p>
                       <a href="/"
                           class="bg-primary hover:bg-transparent text-white hover:text-white border border-transparent hover:border-white font-semibold px-4 py-2 rounded-full inline-block">Shop

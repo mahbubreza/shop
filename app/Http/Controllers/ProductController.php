@@ -271,6 +271,17 @@ class ProductController extends Controller
         );
     }
 
+    public function list()
+    {
+       
+        return view('products.list', [
+                'products'=> Product::all(),
+                'categories' => Category::all(),
+                'brands' => Brand::all()
+            ]
+        );
+    }
+
     /**
      * Remove the specified resource from storage.
      */

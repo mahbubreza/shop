@@ -43,7 +43,7 @@
             <!-- Center section: Menu -->
             <nav class="hidden lg:flex md:flex-grow justify-center">
               <ul class="flex justify-center space-x-4 text-white">
-                  <li><a href="index.html" class="hover:text-secondary font-semibold">Home</a></li>
+                  <li><a href="/" class="hover:text-secondary font-semibold">Home</a></li>
                   <li><a href="single-product-page.html" class="hover:text-secondary font-semibold">Products</a></li>
                   <!-- Category Dropdown -->
                   <li class="relative group" x-data="{ open: false }">
@@ -105,7 +105,7 @@
                   class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">Login</a>
               <div class="relative group cart-wrapper">
                   <a href="/cart.html" >
-                      <img src="{{ asset('storage/images/cart-shopping.svg.png') }}" alt="Cart" class="h-6 w-6 group-hover:scale-120">
+                      <img src="{{ asset('storage/images/cart-shopping.svg') }}" alt="Cart" class="h-6 w-6 group-hover:scale-120">
                   </a>
                   <!-- Cart dropdown -->
                   <div class="absolute right-0 mt-1 w-80 bg-white shadow-lg p-4 rounded hidden group-hover:block">
@@ -113,7 +113,7 @@
                           <!-- product item -->
                           <div class="flex items-center justify-between pb-4 border-b border-gray-line">
                               <div class="flex items-center">
-                                  <img  src="{{ asset('storage/images/single-product/1.jpg"') }}" alt="Product" class="h-12 w-12 object-cover rounded mr-2">
+                                  <img  src="{{ asset('storage/images/single-product/1.jpg') }}" alt="Product" class="h-12 w-12 object-cover rounded mr-2">
                                   <div>
                                       <p class="font-semibold">Summer black dress</p>
                                       <p class="text-sm">Quantity: 1</p>
@@ -124,7 +124,7 @@
                           <!-- product item -->
                           <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <img src="{{ asset('storage/images/single-product/2.jpg"') }}"  alt="Product" class="h-12 w-12 object-cover rounded mr-2">
+                                <img src="{{ asset('storage/images/single-product/2.jpg') }}"  alt="Product" class="h-12 w-12 object-cover rounded mr-2">
                                 <div>
                                     <p class="font-semibold">Black suit</p>
                                     <p class="text-sm">Quantity: 1</p>
@@ -137,7 +137,7 @@
                   </div>
               </div>
               <a id="search-icon" href="javascript:void(0);" class="text-white hover:text-secondary group">
-                  <img src="{{ asset('storage/images/search-icon.svg"') }}"  alt="Search"
+                  <img src="{{ asset('storage/images/search-icon.svg') }}"  alt="Search"
                       class="h-6 w-6 transition-transform transform group-hover:scale-120">
               </a>
               <!-- Search field -->
@@ -153,8 +153,8 @@
     <!-- Mobile menu -->
     <nav id="mobile-menu-placeholder" class="mobile-menu hidden flex flex-col items-center space-y-8 lg:hidden">
       <ul class="w-full">
-          <li><a href="index.html" class="hover:text-secondary font-bold block py-2">Home</a></li>
-          <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Products</a></li>
+          <li><a href="/" class="hover:text-secondary font-bold block py-2">Home</a></li>
+          <li><a href="/products/list" class="hover:text-secondary font-bold block py-2">Products</a></li>
           <!-- Men Dropdown -->
           <li class="relative group" x-data="{ open: false }">
               <a @click="open = !open; $event.preventDefault()" class="hover:text-secondary font-bold block py-2 flex justify-center items-center cursor-pointer">
@@ -238,7 +238,7 @@
               <h3 class="text-lg font-semibold mb-4">Shop</h3>
               <ul>
                 <li><a href="/shop.html" class="hover:text-primary">Shop</a></li>
-                <li><a href="/single-product-page.html" class="hover:text-primary">Products</a></li>
+                <li><a href="/products/list" class="hover:text-primary">Products</a></li>
                 <li><a href="/shop.html" class="hover:text-primary">Categories</a></li>
                 <li><a href="/single-product-page.html" class="hover:text-primary">Brands</a></li>
               </ul>
