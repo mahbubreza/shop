@@ -36,9 +36,11 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:100',
             'slug' => 'required|string|max:255|unique:categories,slug',
             'hot' => 'required',
             'featured' => 'required',
+            'carousal' => 'required',
             'image' => 'nullable|image|max:5120', // 5MB thumbnail
 
         ]);
@@ -47,11 +49,13 @@ class CategoryController extends Controller
             : null;
         $category = Category::create([
             'name' => $validated['name'],
+            'description' => trim($validated['description']),
             'slug' => $validated['slug'],
             'image' => $thumbnail,
 
             'hot' => $validated['hot'],
             'featured' => $validated['featured'],
+            'carousal' => $validated['carousal'],
             'status' => 1,
             'created_by' => Auth::user()->email,  // or Auth::id() if you prefer user ID
             'updated_by' => Auth::user()->email,
@@ -86,6 +90,7 @@ class CategoryController extends Controller
                 'slug' => 'required',
                 'status' => 'required',
                 'hot' => 'required',
+                'carousal' => 'required',
                 'featured' => 'required'
             ]);
         $thumbnail = $category->image;
@@ -103,11 +108,13 @@ class CategoryController extends Controller
           
         $category->update([
         'name' => request('name'),
+        'description' => trim(request('description')), // ✅ trims extra spaces
         'slug' => request('slug'),
         'hot' => request('hot'),
         'featured' => request('featured'),
         'image' => $thumbnail,
         'status' => request('status'),
+        'carousal' => request('carousal'),
         'updated_by' => Auth::user()->email,
     ]);
 
@@ -120,7 +127,7 @@ class CategoryController extends Controller
         $field = $request->field;
         $value = $request->value;
 
-        if (in_array($field, ['hot', 'status', 'featured'])) {
+        if (in_array($field, ['hot', 'carousal', 'featured'])) {
             $category->$field = $value;
             $category->updated_by = Auth::user()->email;
             $category->save();

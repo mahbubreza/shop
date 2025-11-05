@@ -32,6 +32,17 @@
                                 </x-forms.form-field>  
                             </div>
 
+                            <!-- Category Description -->
+                            <div class="col-span-full">
+                                <x-forms.form-label for="body" >Category description</x-forms.form-label>
+
+                                <div class="mt-2">
+                                    <textarea disabled id="description" name="description" rows="3" class="w-full border-gray-300 rounded-md">{!! old('description', $category->description) !!}</textarea>
+
+                                    <x-forms.form-error name="description" />   
+                                </div>
+                            </div>
+
                             <!-- Thumbnail Image -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="image" >Thumbnail Image</x-forms.form-label>
@@ -79,6 +90,16 @@
                                         <option @selected($category->featured == 1) value="1">Yes</option>
                                     </x-forms.form-select>    
                                     <x-forms.form-error name="featured" />                                  
+                                </div>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="carousal" >Carousal</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select disabled id="carousal" name="carousal">
+                                        <option @selected($category->carousal == 0) value="0">No</option>
+                                        <option @selected($category->carousal == 1) value="1">Yes</option>
+                                    </x-forms.form-select>    
+                                    <x-forms.form-error name="carousal" />                                  
                                 </div>
                             </div>
                         </div>

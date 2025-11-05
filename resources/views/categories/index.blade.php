@@ -40,7 +40,7 @@
                             <th class="px-4 py-3 text-left">Name</th>
                             <th class="px-4 py-3 text-center">Featured</th>
                             <th class="px-4 py-3 text-center">Hot</th>
-                            <th class="px-4 py-3 text-center">Active</th>
+                            <th class="px-4 py-3 text-center">Carousal</th>
                             <th class="px-4 py-3 text-center">Options</th>
                         </tr>
                     </thead>
@@ -79,8 +79,8 @@
                                         <input type="checkbox" 
                                             class="sr-only peer toggle-checkbox"
                                             data-id="{{ $category->id }}" 
-                                            data-field="status"
-                                            {{ $category->status == 1? 'checked' : '' }}>
+                                            data-field="carousal"
+                                            {{ $category->carousal == 1? 'checked' : '' }}>
                                         <div class="w-10 h-5 bg-gray-300 peer-checked:bg-yellow-500 rounded-full transition dark:bg-gray-600"></div>
                                     </label>
                                 </td>

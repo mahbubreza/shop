@@ -30,6 +30,20 @@
                                     </div>
                                 </x-forms.form-field>     
                             </div>
+                            <!-- Category Description -->
+                            <div class="col-span-full">
+                                <x-forms.form-label for="description">Product description</x-forms.form-label>
+                                <div class="mt-2">
+                                    <textarea
+                                        id="body"
+                                        name="description"
+                                        rows="3"
+                                        class="w-full rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 p-3 text-gray-800 shadow-sm"
+                                        placeholder="Write details..."
+                                    ></textarea>
+                                    <x-forms.form-error name="description" />   
+                                </div>
+                            </div>
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="image">Upload Thumbnail Image</x-forms.form-label>
 
@@ -74,6 +88,17 @@
                                         <option value="1">Yes</option>
                                     </x-forms.form-select>    
                                     <x-forms.form-error name="featured" />                                  
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="carousal" >Carousal</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-1">
+                                    <x-forms.form-select id="carousal" name="carousal">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </x-forms.form-select>    
+                                    <x-forms.form-error name="carousal" />                                  
                                 </div>
                             </div>
 
