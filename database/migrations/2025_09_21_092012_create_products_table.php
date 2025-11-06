@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;
@@ -35,12 +38,33 @@ return new class extends Migration
             $table->text('videos')->nullable();          // Videos (JSON encoded)
             $table->text('pdfs')->nullable();            // PDFs (JSON encoded)
 
+            // $table->foreignId('size_id')->nullable()->constrained('sizes')->nullOnDelete();
+            // $table->foreignId('color_id')->nullable()->constrained('colors')->nullOnDelete();
+            $table->decimal('discounted_price', 10, 2)->default(0);
+            $table->date('discount_start_date')->nullable();
+            $table->date('discount_end_date')->nullable();
+            
+
             $table->char('status', 1)->default('1');
             $table->char('featured', 1)->default('0');
             $table->char('published', 1)->default('0');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
 
+            $table->timestamps();
+        });
+
+        Schema::create('product_color', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Color::class)->constrained()->cascadeOnDelete();
+            $table->timestamps();
+        });
+
+        Schema::create('product_size', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Size::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -51,5 +75,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('products');
+        Schema::dropIfExists('product_color');
+        Schema::dropIfExists('product_size');
     }
 };

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -28,8 +31,10 @@ class ProductController extends Controller
     public function create()
     {
         return view('products.create', [
-            'categories' => Category::all(),
-            'brands' => Brand::all()
+            'categories' => Category::where('status', 1)->get(),
+            'brands' => Brand::where('status', 1)->get(),
+            'sizes' => Size::where('status', 1)->get(),
+            'colors' => Color::where('status', 1)->get()
         ]);
     }
 
@@ -53,6 +58,13 @@ class ProductController extends Controller
             'videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime|max:51200', // 50MB
             'pdfs.*' => 'nullable|mimes:pdf|max:10240', // 10MB
             'description' => 'nullable|string',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'discount_start_date' => 'nullable|date',
+            'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
+            'sizes' => 'nullable|array',
+            'sizes.*' => 'exists:sizes,id',
+            'colors' => 'nullable|array',
+            'colors.*' => 'exists:colors,id',
         ]);
 
         // ✅ Handle thumbnail image
@@ -83,7 +95,7 @@ class ProductController extends Controller
                 $pdfs[] = $pdf->store('products/pdfs', 'public');
             }
         }
-
+       $discounted_price = $request->discounted_price ?? 0;
         // ✅ Create product
         $product = Product::create([
             'name' => $request->name,
@@ -100,10 +112,37 @@ class ProductController extends Controller
             'image' => $thumbnail,
             'images' => !empty($gallery) ? json_encode($gallery) : null,
             'videos' => !empty($videos) ? json_encode($videos) : null,
-            'pdfs' => !empty($pdfs) ? json_encode($pdfs) : null,
+            'pdfs' => !empty($pdfs) ? json_encode($pdfs) : null,        
+            'discounted_price' => $discounted_price,
+            'discount_start_date' => $request->discount_start_date,
+            'discount_end_date' => $request->discount_end_date,
             'status' => 1,
             'created_by' => Auth::user()->email,
         ]);
+
+            // 🔹 Attach sizes
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $sizeId) {
+                DB::table('product_size')->insert([
+                    'product_id' => $product->id,
+                    'size_id' => $sizeId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        // 🔹 Attach colors
+        if ($request->has('colors')) {
+            foreach ($request->colors as $colorId) {
+                DB::table('product_color')->insert([
+                    'product_id' => $product->id,
+                    'color_id' => $colorId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         return redirect('/products')->with('success', 'Product created successfully!');
     }

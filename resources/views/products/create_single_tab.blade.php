@@ -9,24 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <form method="POST" action="/products"  enctype="multipart/form-data">
                 @csrf
-                <!-- Tabs Navigation -->
-                <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
-                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                        <button type="button"
-                            class="tab-button border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-                            data-tab="general">
-                            General Info
-                        </button>
-                        <button type="button"
-                            class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-                            data-tab="additional">
-                            Additional Info
-                        </button>
-                    </nav>
-                </div>
-
-                <!-- TAB 1: General Info -->
-                <div id="tab-general" class="tab-content space-y-12"> 
+                <div class="space-y-12">  
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <!-- Product Title -->
@@ -172,16 +155,7 @@
                                 <!-- Preview container -->
                                 <div id="imagePreview" class="mt-4 flex flex-wrap gap-4"></div>
                             </div>   
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: Additional Info -->
-                <div id="tab-additional" class="tab-content hidden space-y-12">
-                    <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
-                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            
-                             <!-- Vdieos -->
+                            <!-- Vdieos -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="videos">Upload Videos</x-forms.form-label>
 
@@ -241,7 +215,6 @@
                                 <!-- PDF preview container -->
                                 <div id="pdfPreview" class="mt-4 flex flex-col gap-2"></div>
                             </div>
-                            
                             <!-- Discounted Price -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="discounted_price">Discounted Price (in Taka)</x-forms.form-label>
@@ -316,21 +289,7 @@
             </form>
         </div>
     </div>
-    <!-- Tab Switcher Script -->
-    <script>
-        const tabs = document.querySelectorAll('.tab-button');
-        const contents = document.querySelectorAll('.tab-content');
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('border-indigo-500', 'text-indigo-600'));
-                tab.classList.add('border-indigo-500', 'text-indigo-600');
-
-                contents.forEach(c => c.classList.add('hidden'));
-                document.getElementById(`tab-${tab.dataset.tab}`).classList.remove('hidden');
-            });
-        });
-    </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
     <script>
         // 🔹 Initialize CKEditor with image upload support
