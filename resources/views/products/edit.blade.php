@@ -11,7 +11,24 @@
             <form method="POST" action="/products/{{ $product->id }}" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
-                <div class="space-y-12">
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button type="button"
+                            class="tab-button border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+                            data-tab="general">
+                            General Info
+                        </button>
+                        <button type="button"
+                            class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+                            data-tab="additional">
+                            Additional Info
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- TAB 1: General Info -->
+                <div id="tab-general" class="tab-content space-y-12"> 
                     <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <!-- Title -->
@@ -167,7 +184,13 @@
                                     @endforeach
                                 </div>
                             </div> 
-
+                        </div>
+                    </div>
+                </div>
+                <!-- TAB 2: Additional Info -->
+                <div id="tab-additional" class="tab-content hidden space-y-12">
+                    <div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <!-- Vdieos -->
                             <div class="sm:col-span-3">
                                 <x-forms.form-label for="new_videos" >Upload Videos</x-forms.form-label>
@@ -250,11 +273,89 @@
                                 </div>
                             </div>
 
+                            <!-- Discounted Price -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="discounted_price">Discounted Price (in Taka)</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input id="discounted_price" type="text" name="discounted_price" value="{{ old('name', $product->discounted_price) }}" />
+                                    <x-forms.form-error name="discounted_price" />
+                                </div>
+                            </div>
+
+                            <!-- Discount Start Date -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="discount_start_date">Discount Start Date</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input 
+                                    id="discount_start_date" 
+                                    type="text" 
+                                    name="discount_start_date" 
+                                    value="{{ old('discount_start_date', $product->discount_start_date) }}"
+ />
+                                    <x-forms.form-error name="discount_start_date" />
+                                </div>
+                            </div>
+
+                            <!-- Discount End Date -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="discount_end_date">Discount End Date</x-forms.form-label>
+                                <div class="mt-2">
+                                    <x-forms.form-input 
+                                        id="discount_end_date" 
+                                        type="text" 
+                                        name="discount_end_date" 
+                                        value="{{ old('discount_end_date', $product->discount_end_date) }}"
+                                        />
+                                    <x-forms.form-error name="discount_end_date" />
+                                </div>
+                            </div>
+
+                            <!-- Sizes -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="sizes">Available Sizes</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-2 gap-2 border p-3 rounded-lg">
+                                    @foreach ($sizes as $size)
+                                        <label class="flex items-center space-x-2">
+                                            <input 
+                                                type="checkbox" 
+                                                name="sizes[]" 
+                                                value="{{ $size->id }}" 
+                                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                @checked(in_array($size->id, $product->sizes->pluck('id')->toArray()))
+
+                                            >
+                                            <span>{{ $size->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <x-forms.form-error name="sizes" />
+                            </div>
+
+                            <!-- Colors -->
+                            <div class="sm:col-span-3">
+                                <x-forms.form-label for="colors">Available Colors</x-forms.form-label>
+                                <div class="mt-2 grid grid-cols-2 gap-2 border p-3 rounded-lg">
+                                    @foreach ($colors as $color)
+                                        <label class="flex items-center space-x-2">
+                                            <input 
+                                                type="checkbox" 
+                                                name="colors[]" 
+                                                value="{{ $color->id }}" 
+                                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                @checked(in_array($color->id, $product->colors->pluck('id')->toArray()))
+
+                                            >
+                                            <span>{{ $color->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <x-forms.form-error name="colors" />
+                            </div>
+
+
 
                             <!-- Hidden removed files -->
                             <div id="removed-files"></div>
-
-                            
                         </div>
                     </div>
                 </div>
@@ -273,7 +374,20 @@
             
         </div>
     </div>
+    <script>
+        const tabs = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
 
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('border-indigo-500', 'text-indigo-600'));
+                tab.classList.add('border-indigo-500', 'text-indigo-600');
+
+                contents.forEach(c => c.classList.add('hidden'));
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.remove('hidden');
+            });
+        });
+    </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
     <script>
         ClassicEditor.create(document.querySelector('#editor'), {
@@ -291,4 +405,16 @@
             button.parentElement.remove();
         }
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#discount_start_date", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+    flatpickr("#discount_end_date", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+</script>
 </x-app-layout>

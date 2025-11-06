@@ -48,9 +48,10 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create']);
-    Route::get('/products/{product}', [ProductController::class, 'show']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::get('/products/{product}/edit', [ProductController::class, 'edit']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+
     Route::patch('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     Route::post('/products/{product}/toggle', [ProductController::class, 'toggleStatus'])->name('products.toggle');

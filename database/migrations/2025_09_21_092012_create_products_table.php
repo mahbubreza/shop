@@ -58,6 +58,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Color::class)->constrained()->cascadeOnDelete();
+            $table->char('status', 1)->default('1');
+
             $table->timestamps();
         });
 
@@ -65,6 +67,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Size::class)->constrained()->cascadeOnDelete();
+            $table->char('status', 1)->default('1');
+
             $table->timestamps();
         });
     }

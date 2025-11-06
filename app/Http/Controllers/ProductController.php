@@ -152,10 +152,13 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-       return view('products.show', [
+        $product->load(['sizes', 'colors']);
+        return view('products.show', [
             'product'=>$product,
-            'categories' => Category::all(),
-            'brands' => Brand::all()]
+            'categories' => Category::where('status', 1)->get(),
+            'brands' => Brand::where('status', 1)->get(),
+            'sizes' => Size::where('status', 1)->get(),
+            'colors' => Color::where('status', 1)->get()]
         );
     }
 
@@ -164,10 +167,13 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $product->load(['sizes', 'colors']);
         return view('products.edit', [
             'product'=>$product,
-            'categories' => Category::all(),
-            'brands' => Brand::all()]
+            'categories' => Category::where('status', 1)->get(),
+            'brands' => Brand::where('status', 1)->get(),
+            'sizes' => Size::where('status', 1)->get(),
+            'colors' => Color::where('status', 1)->get()]
         );
     }
 
@@ -191,13 +197,23 @@ class ProductController extends Controller
             'new_videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime|max:51200', // 50MB
             'new_pdfs.*' => 'nullable|mimes:pdf|max:10240', // 10MB
             'description' => 'nullable|string',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'discount_start_date' => 'nullable|date',
+            'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
+            'sizes' => 'nullable|array',
+            'colors' => 'nullable|array',
         ]);
         
         // --- Basic fields
+               
+
         $data = [
             'name' => $request->name,
             'stock' => $request->stock,
             'price' => $request->price, 
+            'discounted_price' => $request->discounted_price ?? 0,
+            'discount_start_date' => $request->discount_start_date,
+            'discount_end_date' => $request->discount_end_date,
             'weight' => $request->weight, 
             'tags' => $request->tags, 
             'category_id' => $request->category_id, 
@@ -276,11 +292,29 @@ class ProductController extends Controller
         }
 
         $data['pdfs'] = json_encode(array_values($existingPdfs));
-
-
-
         // ✅ Finally, perform one single update
         $product->update($data);
+        // ✅ Update Sizes
+        DB::table('product_size')->where('product_id', $product->id)->update(['status' => 0]);
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $sizeId) {
+                DB::table('product_size')->updateOrInsert(
+                    ['product_id' => $product->id, 'size_id' => $sizeId],
+                    ['status' => 1]
+                );
+            }
+        }
+
+        // ✅ Update Colors
+        DB::table('product_color')->where('product_id', $product->id)->update(['status' => 0]);
+        if ($request->has('colors')) {
+            foreach ($request->colors as $colorId) {
+                DB::table('product_color')->updateOrInsert(
+                    ['product_id' => $product->id, 'color_id' => $colorId],
+                    ['status' => 1]
+                );
+            }
+        }
 
         return redirect('products')->with('success', 'Product updated successfully!');
     }
@@ -304,7 +338,6 @@ class ProductController extends Controller
 
     public function details(Product $product)
     {
-       
         return view('products.details', [
             'product'=>$product]
         );
