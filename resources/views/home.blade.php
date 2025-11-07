@@ -4,39 +4,20 @@
   <section id="product-slider">
       <div class="main-slider swiper-container">
           <div class="swiper-wrapper">
-              <!-- Slide 1 -->
-              <div class="swiper-slide">
-                  <img src="storage/images/main-slider/1.jpg" alt="Product 1">
+            @isset($categories)
+                @foreach ($categories->where('carousal', 1) as  $category)
+                <div class="swiper-slide">
+                  <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
                   <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Serum</h2>
-                    <p class="mb-4 text-white md:text-2xl">Experience the best in sportswear with <br>our latest collection.</p>
+                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">{{ $category->name }}</h2>
+                    <p class="mb-4 text-white md:text-2xl">{{$category->description}}</p>
                       <a href="/"
                           class="bg-primary hover:bg-transparent text-white hover:text-white border border-transparent hover:border-white font-semibold px-4 py-2 rounded-full inline-block">Shop
                           now</a>
                   </div>
-              </div>
-              <!-- Slide 2 -->
-              <div class="swiper-slide">
-                  <img src="storage/images/main-slider/2.jpg" alt="Product 2">
-                  <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Facewash & Facescrub</h2>
-                    <p class="mb-4 text-white md:text-2xl">Discover the latest trends in Men`s <br>sportswear and casual fashion.</p>
-                      <a href="/"
-                          class="bg-white hover:bg-transparent text-black hover:text-white font-semibold px-4 py-2 rounded-full inline-block border border-transparent hover:border-white">Shop
-                          now</a>
-                  </div>
-              </div>
-              <!-- Slide 3 -->
-              <div class="swiper-slide">
-                  <img src="storage/images/main-slider/3.jpg" alt="Product 3">
-                  <div class="swiper-slide-content">
-                    <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">Korean pain releif Pad</h2>
-                    <p class="mb-4 text-white md:text-2xl">Elevate your style with our latest <br>sportswear collection.</p>
-                      <a href="/"
-                          class="bg-primary hover:bg-transparent text-white hover:text-white border border-transparent hover:border-white font-semibold px-4 py-2 rounded-full inline-block">Shop
-                          now</a>
-                  </div>
-              </div>
+              </div>                   
+                @endforeach             
+            @endisset
           </div>
       </div>
       <!-- Slider Pagination -->
@@ -49,47 +30,23 @@
       <div class="container mx-auto py-10">
           <div class="flex flex-wrap -mx-4">
               <!-- Category 1 -->
-              <div class="w-full sm:w-1/3 px-4 mb-8">
-                  <div class="category-banner relative overflow-hidden rounded-lg shadow-lg group">
-                      <img src="storage/images/cat-image1.jpg" alt="Category 1" class="w-full h-auto">
-                      <div class="absolute inset-0 bg-gray-light bg-opacity-50"></div>
-                      <div
-                          class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
-                          <h2 class="text-2xl md:text-3xl font-bold mb-4">Men</h2>
-                          <a href="/"
-                              class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block">Shop
-                              now</a>
-                      </div>
-                  </div>
-              </div>
-              <!-- Category 2 -->
-              <div class="w-full sm:w-1/3 px-4 mb-8">
-                  <div class="category-banner relative overflow-hidden rounded-lg shadow-lg group">
-                      <img src="storage/images/cat-image4.jpg" alt="Category 2" class="w-full h-auto">
-                      <div class="absolute inset-0 bg-gray-light bg-opacity-50"></div>
-                      <div
-                          class="category-text absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4 transition duration-300">
-                          <h2 class="text-2xl md:text-3xl font-bold mb-4">Women</h2>
-                          <a href="/"
-                              class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block">Shop
-                              now</a>
-                      </div>
-                  </div>
-              </div>
-              <!-- Category 3 -->
-              <div class="w-full sm:w-1/3 px-4 mb-8">
-                  <div class="category-banner relative overflow-hidden rounded-lg shadow-lg group">
-                      <img src="storage/images/cat-image5.jpg" alt="Category 3" class="w-full h-auto">
-                      <div class="absolute inset-0 bg-gray-light bg-opacity-50"></div>
-                      <div
-                          class="category-text absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4 transition duration-300">
-                          <h2 class="text-2xl md:text-3xl font-bold mb-4">Accessories</h2>
-                          <a href="/"
-                              class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block">Shop
-                              now</a>
-                      </div>
-                  </div>
-              </div>
+              @isset($categories)
+                @foreach ($categories->where('featured', 1) as  $category)
+                <div class="w-full sm:w-1/3 px-4 mb-8">
+                    <div class="category-banner relative overflow-hidden rounded-lg shadow-lg group">
+                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gray-light bg-opacity-50"></div>
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
+                            <h2 class="text-2xl md:text-3xl font-bold mb-4">{{ $category->name }}</h2>
+                            <a href="/"
+                                class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block">Shop
+                                now</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach             
+            @endisset
           </div>
       </div>
   </section>
@@ -99,57 +56,29 @@
       <div class="container mx-auto px-4">
           <h2 class="text-2xl font-bold mb-8">Popular products</h2>
           <div class="flex flex-wrap -mx-4">
-              <!-- Product 1 -->
-              <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
+              @isset($products)
+              @foreach ($products as $product)
+                  <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
-                  <img src="storage/images/products/1.jpg" alt="Product 1" class="w-full object-cover mb-4 rounded-lg">
-                  <a href="#" class="text-lg font-semibold mb-2">Summer black dress</a>
-                  <p class="my-2">Women</p>
+                  <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
+                  <a href="#" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
+                  <p class="my-2">{{ $product->category->name }}</p>
                   <div class="flex items-center mb-4">
-                    <span class="text-lg font-bold text-primary">$19.99</span>
-                    <span class="text-sm line-through ml-2">$24.99</span>
+                    <span class="text-lg font-bold text-primary">${{$product->price}}</span>
+
+                    @if ($product->discounted_price>0)
+                    <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+
+                    @endif
                   </div>
                   <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
                 </div>
               </div>
-              <!-- Product 2 -->
-              <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
-                <div class="bg-white p-3 rounded-lg shadow-lg">
-                  <img src="storage/images/products/2.jpg" alt="Product 2" class="w-full object-cover mb-4 rounded-lg">
-                  <a href="#" class="text-lg font-semibold mb-2">Black suit</a>
-                  <p class=" my-2">Women</p>
-                  <div class="flex items-center mb-4">
-                    <span class="text-lg font-bold text-gray-900">$29.99</span>
-                  </div>
-                  <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
-                </div>
-              </div>
-              <!-- Product 3 -->
-              <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
-                <div class="bg-white p-3 rounded-lg shadow-lg">
-                  <img src="storage/images/products/3.jpg" alt="Product 3" class="w-full object-cover mb-4 rounded-lg">
-                  <a href="#" class="text-lg font-semibold mb-2">Black long dress</a>
-                  <p class=" my-2">Women, Accessories</p>
-                  <div class="flex items-center mb-4">
-                    <span class="text-lg font-bold text-gray-900">$15.99</span>
-                    <span class="text-sm line-through  ml-2">$19.99</span>
-                  </div>
-                  <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
-                </div>
-              </div>
-              <!-- Product 4 -->
-              <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
-                <div class="bg-white p-3 rounded-lg shadow-lg">
-                  <img src="storage/images/products/4.jpg" alt="Product 4" class="w-full object-cover mb-4 rounded-lg">
-                  <a href="#" class="text-lg font-semibold">Black leather jacket</a>
-                  <p class="my-2">Women</p>
-                  <div class="flex items-center mb-4">
-                      <span class="text-lg font-bold text-primary">$39.99</span>
-                      <span class="text-sm line-through ml-2">$49.99</span>
-                  </div>
-                  <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
-                </div>
-              </div>
+              @endforeach
+                  
+              @endisset
+              
+              
             </div>
       </div>
   </section>
