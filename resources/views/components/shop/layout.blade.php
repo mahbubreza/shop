@@ -21,6 +21,7 @@
 </head>
 
 <body>
+   
     <!-- Header -->
     <header class="bg-gray-dark sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center py-4">
@@ -39,7 +40,7 @@
                     </svg>
                 </button>
             </div>
-
+            
             <!-- Center section: Menu -->
             <nav class="hidden lg:flex md:flex-grow justify-center">
               <ul class="flex justify-center space-x-4 text-white">
@@ -47,7 +48,7 @@
                   <li><a href="single-product-page.html" class="hover:text-secondary font-semibold">Products</a></li>
                   <!-- Category Dropdown -->
                   <li class="relative group" x-data="{ open: false }">
-                      <a href="shop.html" @mouseover="open = true" @mouseleave="open = false" href="#" class="hover:text-secondary font-semibold flex items-center">
+                      <a href="/" @mouseover="open = true" @mouseleave="open = false" href="#" class="hover:text-secondary font-semibold flex items-center">
                           Categories
                           <i :class="open ? 'fas fa-chevron-up ml-1 text-xs' : 'fas fa-chevron-down ml-1 text-xs'"></i>
                       </a>
@@ -63,9 +64,12 @@
                           x-transition:leave-start="opacity-100 scale-100"
                           x-transition:leave-end="opacity-0 scale-90"
                       >
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Category Item 1</a></li>
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Category Item 2</a></li>
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Category Item 3</a></li>
+                      @isset($categories)
+                        
+                      @foreach ($categories as $category)
+                            <li><a href="/" class="min-w-56 block px-4 py-2 whitespace-nowrap hover:bg-primary hover:text-white rounded">{{$category->name}}</a></li>
+                        @endforeach
+                      @endisset                 
                       </ul>
                   </li>
 
@@ -87,9 +91,12 @@
                           x-transition:leave-start="opacity-100 scale-100"
                           x-transition:leave-end="opacity-0 scale-90"
                       >
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Brand Item 1</a></li>
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Brand Item 2</a></li>
-                          <li><a href="shop.html" class="min-w-40 block px-4 py-2 hover:bg-primary hover:text-white rounded">Brand Item 3</a></li>
+                          
+                          @isset($brands)
+                            @foreach ($brands as $brand)
+                                <li><a href="/" class="min-w-56 whitespace-nowrap block px-4 py-2 hover:bg-primary hover:text-white rounded">{{$brand->name}}</a></li>
+                            @endforeach                 
+                          @endisset
                       </ul>
                   </li>
                   
@@ -165,9 +172,13 @@
               </a>
               <ul class="mobile-dropdown-menu" x-show="open" x-transition class="space-y-2">
                   <li><a href="shop.html" class="hover:text-secondary font-bold block pt-2 pb-3">Shop Category</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Category subitem 1</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Category subitem 2</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Category subitem 3</a></li>
+                  @isset($categories)
+                  @foreach ($categories as $category)
+                  <li><a href="/" class="hover:text-secondary font-bold block py-2">{{$category->name}}</a></li>
+
+                  @endforeach
+                    
+                  @endisset
               </ul>
           </li>
 
@@ -180,21 +191,24 @@
                     </span>
               </a>
               <ul class="mobile-dropdown-menu" x-show="open" x-transition class="pl-4 space-y-2">
-                  <li><a href="shop.html" class="hover:text-secondary font-bold block py-2">Shop Brand</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Brand item 1</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Brand item 2</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-bold block py-2">Brand item 3</a></li>
+                  <li><a href="/" class="hover:text-secondary font-bold block py-2">Shop Brand</a></li>
+                  @isset($brands)
+                    @foreach ($brands as $brand)
+                    <li><a href="/" class="hover:text-secondary font-bold block py-2">{{$brand->name}}</a></li>
+
+                    @endforeach
+                  @endisset
               </ul>
           </li>
 
           <li><a href="checkout.html" class="hover:text-secondary font-bold block py-2">Contact Us</a></li>
       </ul>
       <div class="flex flex-col mt-6 space-y-2 items-center">
-          <a href="register.html"
+          <a href="/register"
               class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Register</a>
-          <a href="register.html"
+          <a href="/login"
               class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Login</a>
-          <a href="register.html"
+          <a href="/"
               class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Cart -&nbsp;<span>5</span>&nbsp;items</a>
       </div>
       <!-- Search field -->

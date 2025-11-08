@@ -1,3 +1,8 @@
+@php
+use Carbon\Carbon;
+
+$now = Carbon::now();
+@endphp
 <x-shop.layout>
   @vite(['resources/css/swiper-bundle.min.css'])
   <!-- Slider -->
@@ -61,15 +66,18 @@
                   <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
                   <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
-                  <a href="#" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
+                  <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
                   <p class="my-2">{{ $product->category->name }}</p>
                   <div class="flex items-center mb-4">
                     <span class="text-lg font-bold text-primary">${{$product->price}}</span>
 
-                    @if ($product->discounted_price>0)
-                    <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+                    
 
+                    @if ($product->discounted_price > 0 
+                        && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
+                        <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
                     @endif
+
                   </div>
                   <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
                 </div>

@@ -1,3 +1,8 @@
+@php
+use Carbon\Carbon;
+
+$now = Carbon::now();
+@endphp
 <x-shop.layout>
     <!-- Shop -->
     <section id="shop">
@@ -26,9 +31,12 @@
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center px-2">
-                            <img id="arrow-down" class="h-4 w-4" src="/assets/images/filter-down-arrow.svg"
+                            <img id="arrow-down" class="h-4 w-4"
+                             src="{{ asset('storage/images/filter-down-arrow.svg') }}"
                                 alt="filter arrow">
-                            <img id="arrow-up" class="h-4 w-4 hidden" src="/assets/images/filter-up-arrow.svg"
+                            <img id="arrow-up" class="h-4 w-4 hidden" 
+                            src="{{ asset('storage/images/filter-up-arrow.svg') }}"
+
                                 alt="filter arrow">
                         </div>
                     </div>
@@ -46,76 +54,64 @@
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Category</h3>
                         <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">T-Shirts</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Hoodies</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Accessories</span>
-                            </label>
+                            @isset($categories)
+                            @foreach ($categories as $category)
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox custom-checkbox">
+                                    <span class="ml-2">{{$category->name}}</span>
+                                </label>
+                            @endforeach
+                            @endisset                        
                         </div>
                     </div>
                     <!-- Size Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Size</h3>
                         <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">S (30)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">M (44)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">L (22)</span>
-                            </label>
+                            @isset($sizes)
+                            @foreach ($sizes as $size)
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox custom-checkbox">
+                                    <span class="ml-2">{{$size->name}}</span>
+                                </label>
+                            @endforeach
+                            @endisset  
+                            
                         </div>
                     </div>
                     <!-- Color Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Color</h3>
                         <div class="space-y-2">
-                            <label class="flex items-center custom-color-checkbox" data-color="#ff0000">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Red</span>
-                            </label>
-                            <label class="flex items-center custom-color-checkbox" data-color="#0000ff">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Blue</span>
-                            </label>
-                            <label class="flex items-center custom-color-checkbox" data-color="#00ff00">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Green</span>
-                            </label>
+                            @isset($colors)
+                            @foreach ($colors as $color)
+                                <label class="flex items-center custom-color-checkbox" 
+                                data-color="#ff0000">
+                                    <input type="checkbox" class="form-checkbox custom-checkbox">
+                                    <span class="ml-2">{{$color->name}}</span>
+                                </label>
+                            @endforeach
+                            @endisset
+                            
                         </div>
                     </div>
                     <!-- Brand Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Brand</h3>
                         <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Nike</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Adidas</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox custom-checkbox">
-                                <span class="ml-2">Puma</span>
-                            </label>
+                            @isset($brands)
+                            @foreach ($brands as $brand)
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox custom-checkbox">
+                                    <span class="ml-2">{{$brand->name}}</span>
+                                </label>
+                            @endforeach
+                            @endisset 
+                            
                         </div>
                     </div>
                     <!-- Rating Filter -->
-                    <div class="mb-6">
+                    {{-- <div class="mb-6">
                         <h3 class="text-lg font-semibold mb-6">Rating</h3>
                         <div class="space-y-2">
                             <label class="flex items-center">
@@ -131,7 +127,7 @@
                                 <span class="ml-2">★★★☆☆</span>
                             </label>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- Products List -->
                 <div class="w-full md:w-3/4 p-4">
@@ -153,8 +149,8 @@
                         </div>
                         <!-- Product 2 -->
                         <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/6.jpg') }}"  alt="Product 2"
-                                class="w-full object-cover mb-4 rounded-lg">
+                            <img src="{{ asset('storage/images/products/6.jpg') }}" alt="Product 2"
+                                class="w-fu  ll object-cover mb-4 rounded-lg">
                             <a href="#" class="text-lg font-semibold mb-2">White shirt with long sleeves</a>
                             <p class=" my-2">Women</p>
                             <div class="flex items-center mb-4">

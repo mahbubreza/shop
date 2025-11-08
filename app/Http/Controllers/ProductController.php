@@ -155,8 +155,6 @@ class ProductController extends Controller
         $product->load(['sizes', 'colors']);
         return view('products.show', [
             'product'=>$product,
-            'categories' => Category::where('status', 1)->get(),
-            'brands' => Brand::where('status', 1)->get(),
             'sizes' => Size::where('status', 1)->get(),
             'colors' => Color::where('status', 1)->get()]
         );
@@ -339,7 +337,8 @@ class ProductController extends Controller
     public function details(Product $product)
     {
         return view('products.details', [
-            'product'=>$product]
+            'product'=>$product
+            ]
         );
     }
 
@@ -347,9 +346,9 @@ class ProductController extends Controller
     {
        
         return view('products.list', [
-                'products'=> Product::all(),
-                'categories' => Category::all(),
-                'brands' => Brand::all()
+                'products'=> Product::where('status', 1)->get(),
+                'sizes' => Size::where('status', 1)->get(),
+                'colors' => Color::where('status', 1)->get()
             ]
         );
     }
