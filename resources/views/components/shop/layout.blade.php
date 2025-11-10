@@ -45,10 +45,10 @@
             <nav class="hidden lg:flex md:flex-grow justify-center">
               <ul class="flex justify-center space-x-4 text-white">
                   <li><a href="/" class="hover:text-secondary font-semibold">Home</a></li>
-                  <li><a href="single-product-page.html" class="hover:text-secondary font-semibold">Products</a></li>
+                  <li><a href="/products/list" class="hover:text-secondary font-semibold">Products</a></li>
                   <!-- Category Dropdown -->
                   <li class="relative group" x-data="{ open: false }">
-                      <a href="/" @mouseover="open = true" @mouseleave="open = false" href="#" class="hover:text-secondary font-semibold flex items-center">
+                      <a href="/" @mouseover="open = true" @mouseleave="open = false" href="/" class="hover:text-secondary font-semibold flex items-center">
                           Categories
                           <i :class="open ? 'fas fa-chevron-up ml-1 text-xs' : 'fas fa-chevron-down ml-1 text-xs'"></i>
                       </a>

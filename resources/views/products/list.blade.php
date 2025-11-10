@@ -14,12 +14,12 @@ $now = Carbon::now();
                         class="bg-primary text-white hover:bg-transparent hover:text-primary border hover:border-primary py-2 px-4 rounded-full focus:outline-none">Show
                         On
                         Sale</button>
-                    <button
+                    {{-- <button
                         class="bg-primary text-white hover:bg-transparent hover:text-primary border hover:border-primary py-2 px-4 rounded-full focus:outline-none">List
                         View</button>
                     <button
                         class="bg-primary text-white hover:bg-transparent hover:text-primary border hover:border-primary py-2 px-4 rounded-full focus:outline-none">Grid
-                        View</button>
+                        View</button> --}}
                 </div>
                 <div class="flex mt-5 md:mt-0 space-x-4">
                     <div class="relative">
@@ -111,7 +111,7 @@ $now = Carbon::now();
                         </div>
                     </div>
                     <!-- Rating Filter -->
-                    {{-- <div class="mb-6">
+                    <div class="mb-6">
                         <h3 class="text-lg font-semibold mb-6">Rating</h3>
                         <div class="space-y-2">
                             <label class="flex items-center">
@@ -127,95 +127,38 @@ $now = Carbon::now();
                                 <span class="ml-2">★★★☆☆</span>
                             </label>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
                 <!-- Products List -->
                 <div class="w-full md:w-3/4 p-4">
                     <!-- Products grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <!-- Product 1 -->
+                        @isset($products)
+                        @foreach ($products as $product)
                         <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/5.jpg') }}" alt="Product 1"
-                                class="w-full object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold mb-2">Blue women's suit</a>
-                            <p class=" my-2">Women</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-primary">$19.99</span>
-                                <span class="text-sm line-through ml-2">$24.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
+                        <img  src="{{ asset('storage/' . $product->image) }}" alt="{{$product->name}}"
+                            class="w-full object-cover mb-4 rounded-lg">
+                        <a href="/products/{{$product->id}}/details" class="text-lg font-semibold mb-2">{{$product->name}}</a>
+                        <p class=" my-2">{{$product->category->name}}</p>
+                        <div class="flex items-center mb-4">
+                            <span class="text-lg font-bold text-primary">${{$product->price}}</span>
+                            @if ($product->discounted_price > 0 
+                                    && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
+                                    <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+                                @endif
                         </div>
-                        <!-- Product 2 -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/6.jpg') }}" alt="Product 2"
-                                class="w-fu  ll object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold mb-2">White shirt with long sleeves</a>
-                            <p class=" my-2">Women</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-gray-900">$29.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
+                        <button
+                            class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full"
+                        >
+                            Addto Cart
+                        </button>
                         </div>
-                        <!-- Product 3 -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/7.jpg') }}"  alt="Product 3"
-                                class="w-full object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold mb-2">Yellow men's suit</a>
-                            <p class="my-2">Men</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-gray-900">$15.99</span>
-                                <span class="text-sm line-through  ml-2">$19.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
-                        </div>
-                        <!-- Product 4 -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/4.jpg') }}"  alt="Product 4"
-                                class="w-full object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold mb-2">Red dress</a>
-                            <p class="my-2">Women</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-primary">$39.99</span>
-                                <span class="text-sm line-through ml-2">$49.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
-                        </div>
-                        <!-- Product 5 -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/9.jpg') }}"  alt="Product 4"
-                                class="w-full object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold">Black leather jacket</a>
-                            <p class="my-2">Women</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-primary">$39.99</span>
-                                <span class="text-sm line-through ml-2">$49.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
-                        </div>
-                        <!-- Product 6 -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <img src="{{ asset('storage/images/products/3.jpg') }}"  alt="Product 3"
-                                class="w-full object-cover mb-4 rounded-lg">
-                            <a href="#" class="text-lg font-semibold mb-2">Black long dress</a>
-                            <p class=" my-2">Women, Accessories</p>
-                            <div class="flex items-center mb-4">
-                                <span class="text-lg font-bold text-gray-900">$15.99</span>
-                                <span class="text-sm line-through  ml-2">$19.99</span>
-                            </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add
-                                to Cart</button>
-                        </div>
+                        @endforeach
+                            
+                        @endisset
+                        
+                        
                     </div>
                     <!-- Pagination -->
                     <div class="flex justify-center mt-8">
@@ -248,19 +191,11 @@ $now = Carbon::now();
     <section id="shop-category-description" class="py-8">
         <div class="container mx-auto">
             <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">Shirts Category</h2>
+                <h2 class="text-2xl font-bold mb-4">{{$product->category->name}} Category</h2>
                 <p class="mb-4">
-                    Discover our wide range of shirts, perfect for any occasion. Whether you're looking for something
-                    casual
-                    or formal, we have the perfect shirt for you. Our collection includes a variety of styles, colors,
-                    and
-                    sizes to suit everyone's taste.
+                    {{$product->category->description}}
                 </p>
-                <p>
-                    Browse through our selection and find your new favorite shirt today. All our shirts are made from
-                    high-quality materials and are designed to provide both comfort and style. Shop now and elevate your
-                    wardrobe with our premium shirts.
-                </p>
+                
             </div>
         </div>
     </section>

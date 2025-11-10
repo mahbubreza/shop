@@ -55,7 +55,7 @@ class ProductController extends Controller
             'youtube_link' => 'nullable|url',
             'image' => 'nullable|image|max:5120', // 5MB thumbnail
             'images.*' => 'nullable|image|max:5120',
-            'videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime|max:51200', // 50MB
+            'videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime,video/x-m4v,video/webm|max:51200',
             'pdfs.*' => 'nullable|mimes:pdf|max:10240', // 10MB
             'description' => 'nullable|string',
             'discounted_price' => 'nullable|numeric|min:0',
@@ -192,7 +192,7 @@ class ProductController extends Controller
             'youtube_link' => 'nullable|url',
             'image' => 'nullable|image|max:5120', // 5MB thumbnail
             'new_images.*' => 'nullable|image|max:5120',
-            'new_videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime|max:51200', // 50MB
+            'new_videos.*' => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime,video/x-m4v,video/webm|max:51200',
             'new_pdfs.*' => 'nullable|mimes:pdf|max:10240', // 10MB
             'description' => 'nullable|string',
             'discounted_price' => 'nullable|numeric|min:0',
@@ -257,7 +257,7 @@ class ProductController extends Controller
 
         // --- Handle Videos
         $existingVideos = json_decode($product->videos ?? '[]', true);
-
+        
         if ($request->removed_videos) {
             foreach ($request->removed_videos as $file) {
                 Storage::disk('public')->delete($file);
@@ -336,6 +336,10 @@ class ProductController extends Controller
 
     public function details(Product $product)
     {
+        // update views of product here
+        $product->update([
+        'views'=>  $product->views +1
+        ]);
         return view('products.details', [
             'product'=>$product
             ]

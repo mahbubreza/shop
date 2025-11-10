@@ -44,7 +44,7 @@ return new class extends Migration
             $table->date('discount_start_date')->nullable();
             $table->date('discount_end_date')->nullable();
             
-
+            $table->integer('views')->default(0);
             $table->char('status', 1)->default('1');
             $table->char('featured', 1)->default('0');
             $table->char('published', 1)->default('0');
