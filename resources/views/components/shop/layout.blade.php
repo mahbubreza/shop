@@ -212,11 +212,14 @@
               class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Cart -&nbsp;<span>5</span>&nbsp;items</a>
       </div>
       <!-- Search field -->
-      <div 
-          class="  top-full right-0 mt-2 w-full bg-white shadow-lg p-2 rounded">
-          <input type="text" class="w-full p-2 border border-gray-300 rounded"
-              placeholder="Search for products...">
+      <div id="search-field" class="hidden absolute top-full right-0 mt-2 w-full bg-white shadow-lg p-2 rounded">
+          <form action="products/list" method="GET">
+              <input type="text" name="search" value="{{ request('search') }}"
+                    class="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Search for products...">
+          </form>
       </div>
+
     </nav>
 
     {{ $slot }}

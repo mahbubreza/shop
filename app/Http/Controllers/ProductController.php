@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -346,15 +347,75 @@ class ProductController extends Controller
         );
     }
 
-    public function list()
+    public function list(Request $request)
     {
-       
+        $now = Carbon::now();
+
+        $query = Product::with(['category', 'brand'])
+            ->where('status', 1)
+            ->where('published', 1);
+
+        // 🔍 Search
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // 🏷 Category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // 🏢 Brand filter
+        if ($request->filled('brand')) {
+            $query->where('brand_id', $request->brand);
+        }
+
+        // 🎨 Color filter (pivot table)
+        if ($request->filled('color')) {
+            $query->whereHas('colors', function ($q) use ($request) {
+                $q->where('color_id', $request->color);
+            });
+        }
+
+        // 📏 Size filter (pivot table)
+        if ($request->filled('size')) {
+            $query->whereHas('sizes', function ($q) use ($request) {
+                $q->where('size_id', $request->size);
+            });
+        }
+
+        // 💸 On Sale filter (active discount)
+        if ($request->has('on_sale')) {
+            $query->where('discounted_price', '>', 0)
+                ->whereDate('discount_start_date', '<=', $now)
+                ->whereDate('discount_end_date', '>=', $now);
+        }
+
+        // 📊 Sorting
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'latest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'az':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'popularity':
+                    $query->orderBy('views', 'desc');
+                    break;
+            }
+        }
+
+        $products = $query->paginate(9)->appends($request->query());
+
         return view('products.list', [
-                'products'=> Product::where('status', 1)->get(),
-                'sizes' => Size::where('status', 1)->get(),
-                'colors' => Color::where('status', 1)->get()
-            ]
-        );
+            'products' => $products,
+            'categories' => Category::where('status', 1)->get(),
+            'brands' => Brand::where('status', 1)->get(),
+            'colors' => Color::where('status', 1)->get(),
+            'sizes' => Size::where('status', 1)->get(),
+            'now' => $now,
+        ]);
     }
 
     /**

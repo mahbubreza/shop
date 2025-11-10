@@ -19,7 +19,7 @@ Route::get('/dashboard', function () {
 
 Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
-Route::get('/products/list', [ProductController::class, 'list']);
+Route::get('/products/list', [ProductController::class, 'list'])->name('products.list');
 
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
