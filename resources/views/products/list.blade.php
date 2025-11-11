@@ -43,64 +43,72 @@
                 <div id="filters" class="w-full md:w-1/4 p-4 hidden md:block">
                     <!-- Category Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
-                        <h3 class="text-lg font-semibold mb-6">Category l2l</h3>
+                        <h3 class="text-lg font-semibold mb-6">Category</h3>
                         <div class="space-y-2">
+                            @isset($categories)
                             @foreach ($categories as $category)
                                 <label class="flex items-center">
-                                    <input type="radio" name="category" value="{{ $category->id }}"
+                                    <input type="checkbox" name="category[]" value="{{ $category->id }}"
                                         onchange="filterProducts()"
-                                        {{ request('category') == $category->id ? 'checked' : '' }}>
+                                        {{ in_array($category->id, (array) request('category')) ? 'checked' : '' }}>
                                     <span class="ml-2">{{ $category->name }}</span>
                                 </label>
                             @endforeach
+                            @endisset                        
                         </div>
                     </div>
-
                     <!-- Size Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Size</h3>
                         <div class="space-y-2">
+                            @isset($sizes)
                             @foreach ($sizes as $size)
+                                
                                 <label class="flex items-center">
-                                    <input type="radio" name="size" value="{{ $size->id }}"
+                                    <input type="checkbox" name="size[]" value="{{ $size->id }}"
                                         onchange="filterProducts()"
-                                        {{ request('size') == $size->id ? 'checked' : '' }}>
+                                        {{ in_array($size->id, (array) request('size')) ? 'checked' : '' }}>
                                     <span class="ml-2">{{ $size->name }}</span>
                                 </label>
                             @endforeach
+                            @endisset  
+                            
                         </div>
                     </div>
-
                     <!-- Color Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Color</h3>
                         <div class="space-y-2">
+                            @isset($colors)
                             @foreach ($colors as $color)
                                 <label class="flex items-center">
-                                    <input type="radio" name="color" value="{{ $color->id }}"
+                                    <input type="checkbox" name="color[]" value="{{ $color->id }}"
                                         onchange="filterProducts()"
-                                        {{ request('color') == $color->id ? 'checked' : '' }}>
+                                        {{ in_array($color->id, (array) request('color')) ? 'checked' : '' }}>
                                     <span class="ml-2">{{ $color->name }}</span>
                                 </label>
                             @endforeach
+                            @endisset
+                            
                         </div>
                     </div>
-
                     <!-- Brand Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Brand</h3>
                         <div class="space-y-2">
+                            @isset($brands)
                             @foreach ($brands as $brand)
                                 <label class="flex items-center">
-                                    <input type="radio" name="brand" value="{{ $brand->id }}"
+                                    <input type="checkbox" name="brand[]" value="{{ $brand->id }}"
                                         onchange="filterProducts()"
-                                        {{ request('brand') == $brand->id ? 'checked' : '' }}>
+                                        {{ in_array($brand->id, (array) request('brand')) ? 'checked' : '' }}>
                                     <span class="ml-2">{{ $brand->name }}</span>
                                 </label>
                             @endforeach
+                            @endisset 
+                            
                         </div>
                     </div>
-
                     <!-- Rating Filter -->
                     <div class="mb-6">
                         <h3 class="text-lg font-semibold mb-6">Rating</h3>
@@ -158,28 +166,50 @@
                         
                         
                     </div>
-                    <!-- Pagination -->
-                    <div class="flex justify-center mt-8">
-                        <nav aria-label="Page navigation">
-                            <ul class="inline-flex space-x-2">
-                                <li>
-                                    <a href="#"
-                                        class="bg-primary text-white w-10 h-10 flex items-center justify-center rounded-full">1</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary hover:text-white">2</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary hover:text-white">3</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center mt-8">
+                    <nav aria-label="Page navigation" class="pagination-custom">
+                        {{ $products->withQueryString()->links('pagination::tailwind') }}
+                    </nav>
+                </div>
+
+                <style>
+                .pagination-custom nav > div span[aria-current='page'] {
+                    background-color: var(--color-primary, #FF0042); /* or your Tailwind primary */
+                    color: #fff;
+                    border: 1px solid var(--color-primary, #FF0042);
+                    border-radius: 9999px;
+                    padding: 0.5rem 1rem;
+                    font-weight: 600;
+                }
+
+                .pagination-custom nav > div a {
+                    border: 1px solid var(--color-primary, #FF0042);
+                    color: var(--color-primary, #FF0042);
+                    border-radius: 9999px;
+                    padding: 0.5rem 1rem;
+                    margin: 0 0.25rem;
+                    font-weight: 600;
+                    transition: all 0.2s;
+                    text-decoration: none;
+                }
+
+                .pagination-custom nav > div a:hover {
+                    background-color: var(--color-primary, #FF0042);
+                    color: #fff;
+                }
+
+                .pagination-custom nav > div span {
+                    padding: 0.5rem 1rem;
+                    margin: 0 0.25rem;
+                    border-radius: 9999px;
+                    color: #9ca3af; /* gray-400 */
+                }
+                </style>
+
+
+                   
                 </div>
             </div>
         </div>
@@ -187,16 +217,27 @@
 
     <script>
 function filterProducts() {
-    const params = new URLSearchParams(window.location.search);
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-    // Reset all filter keys to avoid stacking
-    ['category', 'brand', 'color', 'size', 'on_sale', 'sort'].forEach(k => params.delete(k));
-
-    document.querySelectorAll('#filters input:checked').forEach(input => {
-        params.set(input.name, input.value);
+    // Clear all filter keys (including [] versions)
+    ['category', 'brand', 'color', 'size', 'on_sale', 'sort'].forEach(k => {
+        params.delete(k);
+        params.delete(k + '[]');
     });
-    window.location.search = params.toString();
+
+    // Add current selections (allow multiple per name)
+    document.querySelectorAll('#filters input:checked').forEach(input => {
+        const name = input.name.replace('[]', '');
+        params.append(name + '[]', input.value);
+    });
+
+    // Update the URL
+    url.search = params.toString();
+    window.location.href = url.toString();
 }
 </script>
+
+
 </x-shop.layout>
 

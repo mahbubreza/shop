@@ -61,8 +61,8 @@ $now = Carbon::now();
       <div class="container mx-auto px-4">
           <h2 class="text-2xl font-bold mb-8">Popular products</h2>
           <div class="flex flex-wrap -mx-4">
-              @isset($products)
-              @foreach ($products as $product)
+              @isset($popularProducts)
+              @foreach ($popularProducts as $product)
                   <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
                   <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
@@ -70,8 +70,6 @@ $now = Carbon::now();
                   <p class="my-2">{{ $product->category->name }}</p>
                   <div class="flex items-center mb-4">
                     <span class="text-lg font-bold text-primary">${{$product->price}}</span>
-
-                    
 
                     @if ($product->discounted_price > 0 
                         && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
@@ -91,7 +89,37 @@ $now = Carbon::now();
       </div>
   </section>
 
-   <x-shop.latest_product></x-shop.latest_product>
+    <!-- Latest product section -->
+    <section id="latest-products" class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-8">Latest products</h2>
+            <div class="flex flex-wrap -mx-4">
+                @isset($latestProducts)
+                @foreach ($latestProducts as $product)
+                <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
+                  <div class="bg-white p-3 rounded-lg shadow-lg">
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
+                    <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
+                    <p class=" my-2">{{ $product->category->name }}</p>
+                    <div class="flex items-center mb-4">
+                      <span class="text-lg font-bold text-primary">${{$product->price}}</span>
+                    
+                        @if ($product->discounted_price > 0 
+                            && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
+                            <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+                        @endif
+                    </div>
+                    <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
+                  </div>
+                </div>
+
+                @endforeach
+                  
+              @endisset
+            </div>
+        </div>
+    </section>
+
   <!-- Brand section -->
   <section id="brands" class="bg-white py-16 px-4">
       <div class="container mx-auto max-w-screen-xl px-4 testimonials">
@@ -148,51 +176,12 @@ $now = Carbon::now();
           <div class="relative flex flex-col items-center justify-center h-full text-center text-white py-20">
               <h2 class="text-4xl font-bold mb-4">Welcome to Our Shop</h2>
               <div class="flex space-x-4">
-                  <a href="#" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">Shop Now</a>
-                  <a href="#" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">New Arrivals</a>
-                  <a href="#" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">Sale</a>
+                  <a href="products/list" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">Shop Now</a>
+                  <a href="products/list?sort=latest" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">New Arrivals</a>
+                  <a href="products/list?on_sale=1" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-transparent hover:border-primary font-semibold px-4 py-2 rounded-full inline-block">Sale</a>
               </div>
           </div>
       </div>
-  </section>
-
-  <!-- Blog section -->
-  <section class="py-16">
-    <div class="text-center mb-12 lg:mb-20">
-        <h2 class="text-5xl font-bold mb-4">Discover <span class="text-primary">Our</span> Blog</h2>
-        <p class="my-7">Stay updated with the latest trends, tips, and stories in the world of fashion</p>
-    </div>
-    <div class="relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-24 max-w-7xl">
-        <div class="grid w-full grid-cols-1 gap-6 mx-auto lg:grid-cols-3">
-            <div class="flex flex-col p-6 bg-white rounded-xl shadow-lg">
-                <img class="object-cover object-center w-full mb-8 rounded-xl" src="storage/images/fashion-trends.jpg" alt="blog">
-                <h2 class="mb-2 text-xs font-semibold tracking-widest text-primary uppercase">Fashion Trends</h2>
-                <h1 class="mb-4 text-2xl font-semibold leading-none tracking-tighter text-gray-dark lg:text-3xl">Latest Shirt Trends for 2024</h1>
-                <p class="flex-grow text-base font-medium leading-relaxed text-gray-txt">Explore the hottest shirt trends of 2024. From bold prints to classic styles, stay ahead of the fashion curve with our expert insights.</p>
-                <div class="mt-8">
-                    <a href="#" class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Read more</a>
-                </div>
-            </div>
-            <div class="flex flex-col p-6 bg-white rounded-xl shadow-lg">
-                <img class="object-cover object-center w-full mb-8 rounded-xl" src="storage/images/stylisng-tips.jpg" alt="blog">
-                <h2 class="mb-2 text-xs font-semibold tracking-widest text-primary uppercase">Styling Tips</h2>
-                <h1 class="mb-4 text-2xl font-semibold leading-none tracking-tighter text-gray-dark lg:text-3xl">How to Style Your Shirt for Any Occasion</h1>
-                <p class="flex-grow text-base font-medium leading-relaxed text-gray-txt">Learn how to style your shirt for different occasions, whether it's a casual day out or a formal event. Get tips from fashion experts.</p>
-                <div class="mt-8">
-                    <a href="#" class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Read more</a>
-                </div>
-            </div>
-            <div class="flex flex-col p-6 bg-white rounded-xl shadow-lg">
-                <img class="object-cover object-center w-full mb-8 rounded-xl" src="storage/images/customer-stories.jpg" alt="blog">
-                <h2 class="mb-2 text-xs font-semibold tracking-widest text-primary uppercase">Customer Stories</h2>
-                <h1 class="mb-4 text-2xl font-semibold leading-none tracking-tighter text-gray-dark lg:text-3xl">Real Stories from Our Happy Customers</h1>
-                <p class="flex-grow text-base font-medium leading-relaxed text-gray-txt">Read about the experiences of our customers. Discover how our shirts have made a difference in their lives and their personal style.</p>
-                <div class="mt-8">
-                    <a href="#" class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Read more</a>
-                </div>
-            </div>
-        </div>
-    </div>
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

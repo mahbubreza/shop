@@ -341,8 +341,10 @@ class ProductController extends Controller
         $product->update([
         'views'=>  $product->views +1
         ]);
+        $reviews = $product->ratings()->with('user')->orderBy('rating', 'desc')->get();
         return view('products.details', [
-            'product'=>$product
+            'product'=>$product,
+            'reviews' => $reviews
             ]
         );
     }
@@ -356,18 +358,18 @@ class ProductController extends Controller
             ->where('published', 1);
 
         // 🔍 Search
-        if ($request->filled('search')) {
+        if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
         // 🏷 Category filter
         if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
+            $query->whereIn('category_id', $request->category);
         }
 
         // 🏢 Brand filter
         if ($request->filled('brand')) {
-            $query->where('brand_id', $request->brand);
+            $query->whereIn('brand_id', $request->brand);
         }
 
         // 🎨 Color filter (pivot table)
@@ -406,7 +408,7 @@ class ProductController extends Controller
             }
         }
 
-        $products = $query->paginate(9)->appends($request->query());
+        $products = $query->paginate(3)->appends($request->query());
 
         return view('products.list', [
             'products' => $products,

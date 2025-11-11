@@ -9,4 +9,8 @@ class Color extends Model
 {
     /** @use HasFactory<\Database\Factories\ColorFactory> */
     use HasFactory;
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

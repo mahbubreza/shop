@@ -25,5 +25,24 @@ class Product extends Model
     {
         return $this->belongsToMany(Color::class, 'product_color')->wherePivot('status', 1);
     }
+    public function ratings()
+    {
+        return $this->hasMany(ProductRating::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
+
+    public function ratingCount()
+    {
+        return $this->ratings()->count();
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 }

@@ -63,6 +63,24 @@ $now = Carbon::now();
                                 <span class="ml-2">(0 Reviews)</span>
                                 <a href="#" class="ml-4 text-primary font-semibold">Write a review</a>
                             </div> --}}
+                            <div class="mt-4">
+                                <h3 class="text-lg font-semibold mb-2">Customer Ratings</h3>
+                                @php
+                                    $avg = round($product->averageRating(), 1);
+                                @endphp
+
+                                <div class="flex items-center space-x-2">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $avg)
+                                            <span class="text-yellow-400 text-xl">&#9733;</span>
+                                        @else
+                                            <span class="text-gray-300 text-xl">&#9733;</span>
+                                        @endif
+                                    @endfor
+                                    <span class="text-gray-600 text-sm">({{ $avg ?? 0 }}/5 from {{ $product->ratingCount() }} reviews)</span>
+                                </div>
+                            </div>
+                                
                             <div class="mb-4 pb-4 border-b border-gray-line">
                                 <p class="mb-2">Brand:<strong><a href="#" class="hover:text-primary"> {{ $product->brand->name }}</a></strong>
                                 </p>
@@ -78,20 +96,46 @@ $now = Carbon::now();
                                 @endif
 
                             </div>
+                             
 
                             <div class="flex items-center mb-8">
                                 <button id="decrease"
                                     class="bg-primary hover:bg-transparent border border-transparent hover:border-primary text-white hover:text-primary font-semibold w-10 h-10 rounded-full flex items-center justify-center focus:outline-none"
                                     disabled>-</button>
                                 <input id="quantity" type="number" value="1"
-                                    class="w-16 py-2 text-center focus:outline-none" readonly>
+                                    class="w-16 py-2 m-1 text-center focus:outline-none" readonly>
                                 <button id="increase"
                                     class="bg-primary hover:bg-transparent border border-transparent hover:border-primary text-white hover:text-primary font-semibold  w-10 h-10 rounded-full focus:outline-none">+</button>
                             </div>
                             <button
                                 class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full">Add
                                 to Cart</button>
+
                         </div>
+                        @if (Auth::check())
+                        <form action="{{ route('products.rate', $product->id) }}" method="POST" class="mt-6">
+                            @csrf
+                            <label for="rating" class="block text-sm font-medium text-gray-700">Your Rating</label>
+                            <div class="flex space-x-1 my-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <label>
+                                        <input type="radio" name="rating" value="{{ $i }}" class="hidden peer">
+                                        <span class="text-2xl cursor-pointer peer-checked:text-yellow-400">&#9733;</span>
+                                    </label>
+                                @endfor
+                            </div>
+
+                            <textarea name="review" rows="3" class="w-full border-gray-300 rounded-md" placeholder="Write your review (optional)"></textarea>
+
+                            <button type="submit" class="mt-3 bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                Submit Rating
+                            </button>
+                        </form>
+                            @else
+                        <p class="mt-4 text-sm text-gray-500">
+                            <a href="{{ route('login') }}" class="text-primary hover:underline">Login</a> to rate this product.
+                        </p>
+                        @endif
                         <!-- Social sharing -->
                         <div class="flex space-x-4 my-6">
                             <a href="#" class="w-4 h-4 flex items-center justify-center">
@@ -115,46 +159,170 @@ $now = Carbon::now();
                                     class="w-4 h-4 transition-transform transform hover:scale-110">
                             </a>
                         </div>
-                        <!-- Additional Information -->
-                        <div>
-                                                      
-                            @php
-                                $videos = json_decode($product->videos ?? '[]', true);
-                            @endphp
-
-                            @if (!empty($videos) && count($videos) > 0)
-                                <h3 class="text-lg font-semibold mb-2">Product Videos</h3>
-                                <div class="grid grid-cols-5 gap-4">
-                                    @foreach ($videos as $vid)
-                                        <div>
-                                            <video 
-                                                src="{{ asset('storage/' . $vid) }}" 
-                                                class="h-24 rounded" 
-                                                controls>
-                                            </video>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Product tabs description -->
-    <section>
+     <!-- Product tabs description -->
+        <section>
         <div class="container mx-auto">
             <div class="py-12">
                 <div class="mt-10">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2">Product Description</h3>
-                        <p>{!! $product->description !!}</p>
+                    <div class="flex space-x-4" role="tablist">
+                        <button id="description-tab" role="tab" aria-controls="description-content" aria-selected="true"
+                            class="tab active">Description</button>
+                        <button id="additional-info-tab" role="tab" aria-controls="additional-info-content"
+                            aria-selected="false" class="tab">Videos</button>
+                        <button id="size-shape-tab" role="tab" aria-controls="size-shape-content" aria-selected="false"
+                            class="tab">Documents</button>
+                        <button id="reviews-tab" role="tab" aria-controls="reviews-content" aria-selected="false"
+                            class="tab">Reviews ({{count($reviews)}})</button>
                     </div>
-                   
-    
+                    <div class="mt-8">
+                        <div id="description-content" role="tabpanel" aria-labelledby="description-tab"
+                            class="tab-content">
+                            <div class="flex flex-col lg:flex-row lg:space-x-8">
+                                <div>
+                                <h3 class="text-lg font-semibold mb-2">Product Description</h3>
+                                <p>{!! $product->description !!}</p>
+                            </div>
+                            </div>
+                        </div>
+                        <div id="additional-info-content" role="tabpanel" aria-labelledby="additional-info-tab"
+                            class="tab-content hidden">
+                            <p>Videos about the product.</p>
+                            <div class="flex flex-col space-y-8">
+                                <div>                                                     
+                                    @php
+                                        $videos = json_decode($product->videos ?? '[]', true);
+                                    @endphp
+
+                                    @if (!empty($videos) && count($videos) > 0)
+                                        <h3 class="text-lg font-semibold mb-2">Product Videos</h3>
+                                        <div class="grid grid-cols-5 gap-4">
+                                            @foreach ($videos as $vid)
+                                                <div>
+                                                    <video 
+                                                        src="{{ asset('storage/' . $vid) }}" 
+                                                        class="h-24 rounded" 
+                                                        controls>
+                                                    </video>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="size-shape-content" role="tabpanel" aria-labelledby="size-shape-tab"
+                            class="tab-content hidden">
+
+
+                        </div>
+                        <div id="reviews-content" role="tabpanel" aria-labelledby="reviews-tab"
+                            class="tab-content hidden">
+                            <!-- Reviews List -->
+                            <div class="space-y-6">
+                            <h3 class="text-lg font-semibold mb-4">Customer Reviews</h3>
+
+                            <div id="reviews-list">
+                                @forelse ($reviews as $review)
+                                    <div class="py-4 border-b border-gray-200">
+                                        <div class="flex items-center mb-2">
+                                            <span class="text-lg font-semibold text-gray-700">
+                                                {{ $review->user->name ?? 'Anonymous' }}
+                                            </span>
+
+                                            {{-- Display stars --}}
+                                            <span class="ml-2 text-primary">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $review->rating)
+                                                        ★
+                                                    @else
+                                                        ☆
+                                                    @endif
+                                                @endfor
+                                            </span>
+                                        </div>
+
+                                        {{-- Comment --}}
+                                        <p class="text-gray-600">{{ $review->review }}</p>
+
+                                        {{-- Optional: show date --}}
+                                        <small class="text-gray-400">
+                                            Reviewed on {{ $review->created_at->format('M d, Y') }}
+                                        </small>
+                                    </div>
+                                @empty
+                                    <p class="text-gray-500">No reviews yet. Be the first to review this product!</p>
+                                @endforelse
+                            </div>
+                        </div>
+
+
+                            <!-- Submit Review Form -->
+                            <div class="mt-8">
+                                <h3 class="text-lg font-semibold mb-4">Write a Review</h3>
+                                @guest
+                                <h4 class="text-red-500">Please login to write a review.</h4>
+                                <form  class="space-y-4">
+
+                                @endguest
+                                @auth
+                                    <form action="{{ route('products.rate', $product->id) }}" method="POST" class="space-y-4">
+
+                                @endauth
+                                    @csrf
+                                    <div class="space-y-4 md:flex md:space-x-4 md:space-y-0">
+                                        <div class="md:flex-1">
+                                            <label for="review-name"
+                                                class="block text-sm font-medium text-gray-700">Name</label>
+                                            <input type="text" id="review-name" name="name"
+                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                        </div>
+                                        <div class="md:flex-1">
+                                            <label for="review-email"
+                                                class="block text-sm font-medium text-gray-700">Email</label>
+                                            <input type="email" id="review-email" name="email"
+                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                        </div>
+                                        <div class="md:flex-1">
+                                            <label for="review-rating"
+                                                class="block text-sm font-medium text-gray-700">Rating</label>
+                                            <select id="rating" name="rating"
+                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                                <option value="5">★★★★★</option>
+                                                <option value="4">★★★★☆</option>
+                                                <option value="3">★★★☆☆</option>
+                                                <option value="2">★★☆☆☆</option>
+                                                <option value="1">★☆☆☆☆</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="review-text"
+                                            class="block text-sm font-medium text-gray-700">Review</label>
+                                        <textarea id="review-text" name="review" rows="4"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
+                                    </div>
+                                    @auth
+                                      <div>
+                                        <button type="submit"
+                                            class="bg-primary hover:bg-transparent border border-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full focus:outline-none">Submit
+                                            Review</button>
+                                    </div>  
+                                    @endauth
+                                    
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,20 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    // public function handle(Request $request, Closure $next): Response
-    // {
-    //     return $next($request);
-    // }
-    public function handle(Request $request, Closure $next) { 
-        if (Auth::check() && Auth::user()->role === 'admin') { 
+    public function handle(Request $request, Closure $next): Response
+    {
+        // Only allow admin users
+        if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
-         } 
-         return redirect('/admin/login'); 
-    }
+        }
 
+        // If not admin, redirect to home
+        return redirect('/');
+    }
 }

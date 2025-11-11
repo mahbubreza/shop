@@ -9,4 +9,8 @@ class Size extends Model
 {
     /** @use HasFactory<\Database\Factories\SizeFactory> */
     use HasFactory;
+    
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

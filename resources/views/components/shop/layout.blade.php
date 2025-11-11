@@ -46,6 +46,8 @@
               <ul class="flex justify-center space-x-4 text-white">
                   <li><a href="/" class="hover:text-secondary font-semibold">Home</a></li>
                   <li><a href="/products/list" class="hover:text-secondary font-semibold">Products</a></li>
+                  <li><a href="#brands" class="hover:text-secondary font-semibold">Brands</a></li>
+
                   <!-- Category Dropdown -->
                   <li class="relative group" x-data="{ open: false }">
                       <a href="/" @mouseover="open = true" @mouseleave="open = false" href="/" class="hover:text-secondary font-semibold flex items-center">
@@ -67,36 +69,9 @@
                       @isset($categories)
                         
                       @foreach ($categories as $category)
-                            <li><a href="/" class="min-w-56 block px-4 py-2 whitespace-nowrap hover:bg-primary hover:text-white rounded">{{$category->name}}</a></li>
+                            <li><a href="products/list?category%5B%5D={{$category->id}}" class="min-w-56 block px-4 py-2 whitespace-nowrap hover:bg-primary hover:text-white rounded">{{$category->name}}</a></li>
                         @endforeach
                       @endisset                 
-                      </ul>
-                  </li>
-
-                  <!-- Brand Dropdown -->
-                  <li class="relative group" x-data="{ open: false }">
-                      <a href="shop.html" @mouseover="open = true" @mouseleave="open = false" href="#" class="hover:text-secondary font-semibold flex items-center">
-                          Brands
-                          <i :class="open ? 'fas fa-chevron-up ml-1 text-xs' : 'fas fa-chevron-down ml-1 text-xs'"></i>
-                      </a>
-                      <ul
-                          x-show="open"
-                          @mouseover="open = true"
-                          @mouseleave="open = false"
-                          class="absolute left-0 bg-white text-black space-y-2 mt-1 p-2 rounded shadow-lg"
-                          x-transition:enter="transition ease-out duration-100"
-                          x-transition:enter-start="opacity-0 scale-90"
-                          x-transition:enter-end="opacity-100 scale-100"
-                          x-transition:leave="transition ease-in duration-100"
-                          x-transition:leave-start="opacity-100 scale-100"
-                          x-transition:leave-end="opacity-0 scale-90"
-                      >
-                          
-                          @isset($brands)
-                            @foreach ($brands as $brand)
-                                <li><a href="/" class="min-w-56 whitespace-nowrap block px-4 py-2 hover:bg-primary hover:text-white rounded">{{$brand->name}}</a></li>
-                            @endforeach                 
-                          @endisset
                       </ul>
                   </li>
                   
@@ -106,10 +81,27 @@
 
             <!-- Right section: Buttons (for desktop) -->
             <div class="hidden lg:flex items-center space-x-4 relative">
-              <a href="/register"
-                  class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">Register</a>
-              <a href="/login"
-                  class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">Login</a>
+              @guest
+                  <a href="/register"
+                      class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
+                      Register
+                  </a>
+                  <a href="/login"
+                      class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
+                      Login
+                  </a>
+              @endguest
+
+              <!-- For authenticated users: show Logout -->
+              @auth
+                  <form method="POST" action="/logout">
+                      @csrf
+                      <button type="submit"
+                          class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
+                          Logout
+                      </button>
+                  </form>
+              @endauth
               <div class="relative group cart-wrapper">
                   <a href="/cart.html" >
                       <img src="{{ asset('storage/images/cart-shopping.svg') }}" alt="Cart" class="h-6 w-6 group-hover:scale-120">
@@ -147,12 +139,26 @@
                   <img src="{{ asset('storage/images/search-icon.svg') }}"  alt="Search"
                       class="h-6 w-6 transition-transform transform group-hover:scale-120">
               </a>
+
               <!-- Search field -->
               <div id="search-field"
-                  class="hidden absolute top-full right-0 mt-2 w-full bg-white shadow-lg p-2 rounded">
-                  <input type="text" class="w-full p-2 border border-gray-300 rounded"
-                      placeholder="Search for products...">
+                  class="hidden absolute top-full right-0 mt-2 w-72 bg-white shadow-lg p-2 rounded">
+                  <form action="{{ route('products.list') }}" method="GET" class="flex">
+                      <input 
+                          type="text" 
+                          name="search" 
+                          value="{{ request('search') }}"
+                          class="w-full p-2 border border-gray-300 rounded-l-full focus:outline-none"
+                          placeholder="Search for products..."
+                      >
+                      <button 
+                          type="submit" 
+                          class="bg-primary text-white px-4 rounded-r-full hover:bg-transparent hover:text-primary border border-primary transition">
+                          <i class="fas fa-search"></i>
+                      </button>
+                  </form>
               </div>
+
           </div>
         </div>
     </header>
@@ -162,6 +168,8 @@
       <ul class="w-full">
           <li><a href="/" class="hover:text-secondary font-bold block py-2">Home</a></li>
           <li><a href="/products/list" class="hover:text-secondary font-bold block py-2">Products</a></li>
+                    <li><a href="#brands" class="hover:text-secondary font-bold block py-2">Brands</a></li>
+
           <!-- Men Dropdown -->
           <li class="relative group" x-data="{ open: false }">
               <a @click="open = !open; $event.preventDefault()" class="hover:text-secondary font-bold block py-2 flex justify-center items-center cursor-pointer">
@@ -174,7 +182,7 @@
                   <li><a href="shop.html" class="hover:text-secondary font-bold block pt-2 pb-3">Shop Category</a></li>
                   @isset($categories)
                   @foreach ($categories as $category)
-                  <li><a href="/" class="hover:text-secondary font-bold block py-2">{{$category->name}}</a></li>
+                  <li><a href="products/list?category%5B%5D={{$category->id}}" class="hover:text-secondary font-bold block py-2">{{$category->name}}</a></li>
 
                   @endforeach
                     
@@ -182,24 +190,6 @@
               </ul>
           </li>
 
-          <!-- Women Dropdown -->
-          <li class="relative group" x-data="{ open: false }">
-              <a @click="open = !open; $event.preventDefault()" class="hover:text-secondary font-bold block py-2 flex justify-center items-center cursor-pointer">
-                    <span>Brands</span>
-                    <span @click.stop="open = !open">
-                        <i :class="open ? 'fas fa-chevron-up text-xs ml-2' : 'fas fa-chevron-down text-xs ml-2'"></i>
-                    </span>
-              </a>
-              <ul class="mobile-dropdown-menu" x-show="open" x-transition class="pl-4 space-y-2">
-                  <li><a href="/" class="hover:text-secondary font-bold block py-2">Shop Brand</a></li>
-                  @isset($brands)
-                    @foreach ($brands as $brand)
-                    <li><a href="/" class="hover:text-secondary font-bold block py-2">{{$brand->name}}</a></li>
-
-                    @endforeach
-                  @endisset
-              </ul>
-          </li>
 
           <li><a href="checkout.html" class="hover:text-secondary font-bold block py-2">Contact Us</a></li>
       </ul>
@@ -213,11 +203,16 @@
       </div>
       <!-- Search field -->
       <div id="search-field" class="hidden absolute top-full right-0 mt-2 w-full bg-white shadow-lg p-2 rounded">
-          <form action="products/list" method="GET">
-              <input type="text" name="search" value="{{ request('search') }}"
-                    class="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Search for products...">
-          </form>
+          <form action="{{ route('products.list') }}" method="GET" class="flex gap-2">
+            <input type="text" name="search" value="{{ request('search') }}"
+                  class="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Search for products...">
+            <button type="submit" 
+                    class="bg-primary text-white px-4 rounded-full hover:bg-transparent hover:text-primary border border-primary transition">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+
       </div>
 
     </nav>
@@ -254,20 +249,18 @@
             <div class="w-full sm:w-1/6 px-4 mb-8">
               <h3 class="text-lg font-semibold mb-4">Shop</h3>
               <ul>
-                <li><a href="/shop.html" class="hover:text-primary">Shop</a></li>
                 <li><a href="/products/list" class="hover:text-primary">Products</a></li>
-                <li><a href="/shop.html" class="hover:text-primary">Categories</a></li>
-                <li><a href="/single-product-page.html" class="hover:text-primary">Brands</a></li>
+                <li><a href="#brands" class="hover:text-primary">Brands</a></li>
+                <li><a href="/404.html" class="hover:text-primary">Contact Us</a></li>
               </ul>
             </div>
             <!-- Menu 2 -->
             <div class="w-full sm:w-1/6 px-4 mb-8">
               <h3 class="text-lg font-semibold mb-4">Pages</h3>
               <ul>
-                <li><a href="/shop.html" class="hover:text-primary">Shop</a></li>
-                <li><a href="/single-product-page.html" class="hover:text-primary">Product</a></li>
-                <li><a href="/checkout.html" class="hover:text-primary">Checkout</a></li>
-                <li><a href="/404.html" class="hover:text-primary">404</a></li>
+                <li><a href="/products/list" class="hover:text-primary">Products</a></li>
+                <li><a href="#brands" class="hover:text-primary">Brands</a></li>
+                <li><a href="/404.html" class="hover:text-primary">Contact Us</a></li>
               </ul>
             </div>
             <!-- Menu 3 -->
@@ -275,8 +268,8 @@
               <h3 class="text-lg font-semibold mb-4">Account</h3>
               <ul>
                 <li><a href="/cart.html" class="hover:text-primary">Cart</a></li>
-                <li><a href="/register.html" class="hover:text-primary">Registration</a></li>
-                <li><a href="/register.html" class="hover:text-primary">Login</a></li>
+                <li><a href="/register" class="hover:text-primary">Registration</a></li>
+                <li><a href="/login" class="hover:text-primary">Login</a></li>
               </ul>
             </div>
             <!-- Social Media -->
@@ -321,7 +314,7 @@
           <div class="container mx-auto px-4 flex flex-wrap justify-between items-center">
             <!-- Copyright and Links -->
             <div class="w-full lg:w-3/4 text-center lg:text-left mb-4 lg:mb-0">
-              <p class="mb-2 font-bold">&copy; 2024 Your Company. All rights reserved.</p>
+              <p class="mb-2 font-bold">&copy;  {{ date('Y') }}  Your Company. All rights reserved.</p>
               <ul class="flex justify-center lg:justify-start space-x-4 mb-4 lg:mb-0">
                 <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
                 <li><a href="#" class="hover:text-primary">Terms of Service</a></li>
