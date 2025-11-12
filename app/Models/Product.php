@@ -43,6 +43,14 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // ⭐ Average Rating (Dynamic Attribute)
+    public function getAverageRatingAttribute()
+    {
+        if ($this->ratings->count() > 0) {
+            return round($this->ratings->avg('rating'), 1);
+        }
+        return null;
+    }
 
 
 }

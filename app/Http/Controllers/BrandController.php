@@ -12,7 +12,7 @@ class BrandController extends Controller
     public function index()
     {
         return view('brands.index', [
-            'brands'=> Brand::paginate(10)
+            'paginatedBrands'=> Brand::paginate(10)
         ]);
 
     }

@@ -129,40 +129,18 @@ $now = Carbon::now();
       </div>
           <div class="swiper brands-swiper-slider">
               <div class="swiper-wrapper">
-                  <!-- Brand Logo 1 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/html.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
+                  @isset($brands)
+                  @foreach ($brands as $brand)
+                    <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
+                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="Client Logo" class="max-h-full max-w-full">
+                    </div>
+                  @endforeach
+                    
+                  @endisset
 
-                  <!-- Brand Logo 2 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/js.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
+                  
 
-                  <!-- Brand Logo 3 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/laravel.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
-
-                  <!-- Brand Logo 4 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/php.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
-
-                  <!-- Brand Logo 5 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/react.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
-
-                  <!-- Brand Logo 6 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                      <img src="storage/images/brands/tailwind.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
-
-                  <!-- Brand Logo 7 -->
-                  <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                    <img src="storage/images/brands/typescript.svg" alt="Client Logo" class="max-h-full max-w-full">
-                  </div>
+                  
               </div>
               <div class="swiper-button-prev"></div>
               <div class="swiper-button-next"></div>

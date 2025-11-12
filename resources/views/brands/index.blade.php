@@ -3,7 +3,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Categories
+            Brands
         </h2>
     </x-slot>
 
@@ -43,7 +43,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y dark:divide-gray-700">
-                        @forelse($brands as $brand)
+                        @forelse($paginatedBrands as $brand)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <td class="px-4 py-3 ">
                                     <span class="font-medium text-gray-800 dark:text-gray-100">{{ $brand->name }}</span>
@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
                 <div>
-                    {{ $brands->links() }}
+                    {{ $paginatedBrands->links() }}
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\ProfileController;
@@ -68,6 +69,9 @@ Route::middleware('auth')->group(function () {
    Route::post('/products/{product}/rate', [ProductRatingController::class, 'store'])->name('products.rate');
 
 });
+
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+
 
 Route::get('/samples/create', function(){
     return view('samples.create');

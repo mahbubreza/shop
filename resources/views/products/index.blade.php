@@ -95,17 +95,22 @@
                                     <div>Num of Sale: <span class="font-semibold">{{ $product->num_of_sale ?? rand(5,20) }} times</span></div>
                                     <div>Base Price: <span class="font-semibold">${{ number_format($product->price, 2) }}</span></div>
                                     <div>Rating:
-                                        @if($product->rating)
-                                            <span class="font-semibold">{{ $product->rating }}</span>
+                                        @php
+                                            $avgRating = round($product->ratings_avg_rating ?? 0, 1);
+                                        @endphp
+
+                                        @if($avgRating > 0)
+                                            <span class="font-semibold">{{ $avgRating }}</span>
                                             <span class="text-yellow-400 ml-1">
                                                 @for($i = 1; $i <= 5; $i++)
-                                                    <i class="fa{{ $i <= $product->rating ? 's' : 'r' }} fa-star"></i>
+                                                    <i class="fa{{ $i <= $avgRating ? 's' : 'r' }} fa-star"></i>
                                                 @endfor
                                             </span>
                                         @else
                                             <span class="text-gray-400">No Rating</span>
                                         @endif
                                     </div>
+
                                 </td>
 
                                 <td class="px-4 py-3">

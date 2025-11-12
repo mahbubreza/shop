@@ -20,17 +20,16 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // Get all categories and brands for dropdowns
         $categories = Category::orderBy('name')->get();
         $brands = Brand::orderBy('name')->get();
 
-        // Base query
-        $query = Product::with('category', 'brand');
+        // Base query with category, brand, and ratings
+        $query = Product::with(['category', 'brand', 'ratings']);
 
         // 🔍 Search
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
             });
@@ -65,10 +64,12 @@ class ProductController extends Controller
             $query->latest();
         }
 
-        $products = $query->paginate(10)->appends($request->query());
+        // 🧮 Eager load average rating efficiently
+        $products = $query->withAvg('ratings', 'rating')->paginate(10)->appends($request->query());
 
         return view('products.index', compact('products', 'categories', 'brands'));
     }
+
 
 
     /**
