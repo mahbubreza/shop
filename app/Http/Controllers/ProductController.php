@@ -18,13 +18,58 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $products = Product::with('category', 'brand')->paginate(2);
-        return view('products.index', compact('products'));
+        // Get all categories and brands for dropdowns
+        $categories = Category::orderBy('name')->get();
+        $brands = Brand::orderBy('name')->get();
 
+        // Base query
+        $query = Product::with('category', 'brand');
+
+        // 🔍 Search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // 🏷️ Filter by category
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        // 🏷️ Filter by brand
+        if ($request->filled('brand')) {
+            $query->where('brand_id', $request->input('brand'));
+        }
+
+        // ↕️ Sorting
+        if ($request->filled('sort_by')) {
+            switch ($request->input('sort_by')) {
+                case 'name':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'price':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'stock':
+                    $query->orderBy('stock', 'desc');
+                    break;
+                default:
+                    $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->paginate(10)->appends($request->query());
+
+        return view('products.index', compact('products', 'categories', 'brands'));
     }
+
 
     /**
      * Show the form for creating a new resource.
