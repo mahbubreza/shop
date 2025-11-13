@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CKEditorController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
@@ -68,9 +71,24 @@ Route::middleware(['auth', 'admin'])->group(function() {
 Route::middleware('auth')->group(function () {
    Route::post('/products/{product}/rate', [ProductRatingController::class, 'store'])->name('products.rate');
 
+   Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+   Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+   Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+
+    Route::get('/checkout/payment/{orderId}', [CheckoutController::class, 'payment'])->name('checkout.payment');
+    Route::get('/checkout/payment-success/{orderId}', [CheckoutController::class, 'paymentSuccess'])->name('checkout.payment.success');
+    Route::get('/checkout/payment-fail/{orderId}', [CheckoutController::class, 'paymentFail'])->name('checkout.payment.fail');
+
 });
 
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
+
+
 
 
 Route::get('/samples/create', function(){

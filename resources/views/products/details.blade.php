@@ -58,11 +58,7 @@ $now = Carbon::now();
                     <div class="w-full lg:w-1/2 flex flex-col justify-between">
                         <div class="pb-8 border-b border-gray-line">
                             <h1 class="text-3xl font-bold mb-4">{{$product->name}}</h1>
-                            {{-- <div class="flex items-center mb-8">
-                                <span>★★★★★</span>
-                                <span class="ml-2">(0 Reviews)</span>
-                                <a href="#" class="ml-4 text-primary font-semibold">Write a review</a>
-                            </div> --}}
+                          
                             <div class="mt-4">
                                 <h3 class="text-lg font-semibold mb-2">Customer Ratings</h3>
                                 @php
@@ -90,8 +86,9 @@ $now = Carbon::now();
                             <div class="flex items-center mb-4">
                                 <span class="text-2xl font-semibold">${{$product->price}}</span>
 
-                                @if ($product->discounted_price > 0 
-                                    && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
+                                
+
+                                @if ($product->discounted_price > 0 && $product->discount_start_date && $product->discount_end_date && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
                                     <span class="text-lg line-through ml-2">${{ $product->discounted_price }}</span>
                                 @endif
 
@@ -107,9 +104,15 @@ $now = Carbon::now();
                                 <button id="increase"
                                     class="bg-primary hover:bg-transparent border border-transparent hover:border-primary text-white hover:text-primary font-semibold  w-10 h-10 rounded-full focus:outline-none">+</button>
                             </div>
-                            <button
-                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full">Add
-                                to Cart</button>
+                            <button id="addToCart"
+                                class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full"
+                                @guest disabled @endguest>
+                                Add to Cart
+                            </button>
+
+                            @guest
+                            <p class="text-red-500 mt-2">Please <a href="{{ route('login') }}" class="text-primary underline">login</a> to add items to cart.</p>
+                            @endguest
 
                         </div>
                         @if (Auth::check())
@@ -327,5 +330,66 @@ $now = Carbon::now();
             </div>
         </div>
     </section>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnAdd = document.getElementById('addToCart');
+    const quantityInput = document.getElementById('quantity');
+    const productId = "{{ $product->id }}";
+    const decreaseBtn = document.getElementById('decrease');
+    const increaseBtn = document.getElementById('increase');
+    const isLoggedIn = @json(Auth::check());
+
+    increaseBtn.onclick = () => {
+        let current = parseInt(quantityInput.value) || 1;
+        quantityInput.value = current + 1;
+        decreaseBtn.disabled = false;
+    };
+
+    decreaseBtn.onclick = () => {
+        let current = parseInt(quantityInput.value) || 1;
+        if (current > 1) quantityInput.value = current - 1;
+        decreaseBtn.disabled = (parseInt(quantityInput.value) <= 1);
+    };
+
+    btnAdd.onclick = async () => {
+        if (!isLoggedIn) {
+            alert('Please login to add products to cart.');
+            window.location.href = "{{ route('login') }}";
+            return;
+        }
+
+        try {
+            const res = await fetch("{{ route('cart.add') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: parseInt(quantityInput.value)
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert(data.message || "Something went wrong!");
+            }
+        } catch(err) {
+            console.error(err);
+        }
+    };
+});
+
+// Change main image
+function changeImage(el) {
+    document.getElementById('main-image').src = el.dataset.full;
+}
+</script>
+
 
 </x-shop.layout>
+
+

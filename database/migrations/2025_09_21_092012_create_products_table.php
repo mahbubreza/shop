@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->default(0);
             $table->integer('stock')->default(0);
+            $table->integer('reserved_stock')->default(0);
             $table->string('weight')->nullable();
             $table->string('tags')->nullable();
             $table->string('youtube_link')->nullable();

@@ -410,20 +410,30 @@ class ProductController extends Controller
 
         // 🏷 Category filter
         if ($request->filled('category')) {
-            $query->whereIn('category_id', $request->category);
+            $categories = is_array($request->category)
+                ? $request->category
+                : [$request->category]; // convert string to array
+            $query->whereIn('category_id', $categories);
         }
 
         // 🏢 Brand filter
         if ($request->filled('brand')) {
-            $query->whereIn('brand_id', $request->brand);
+            $brands = is_array($request->brand)
+                ? $request->brand
+                : [$request->brand];
+            $query->whereIn('brand_id', $brands);
         }
 
-        // 🎨 Color filter (pivot table)
+        // 🎨 Color filter
         if ($request->filled('color')) {
-            $query->whereHas('colors', function ($q) use ($request) {
-                $q->where('color_id', $request->color);
+            $colors = is_array($request->color)
+                ? $request->color
+                : [$request->color];
+            $query->whereHas('colors', function ($q) use ($colors) {
+                $q->whereIn('color_id', $colors);
             });
         }
+
 
         // 📏 Size filter (pivot table)
         if ($request->filled('size')) {

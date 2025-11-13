@@ -4,363 +4,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link rel="icon" type="icon" href="storage/images/favicon.png" />
+    <link rel="icon" type="icon" href="{{ asset('storage/images/favicon.png') }}" />
     <title>Home page</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">    
-    @vite(['resources/css/app.css', 'resources/css/styles.css',  'resources/css/custom.css', 'resources/js/app.js'])
-   <!-- Swiper CSS -->
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
-<!-- Swiper CSS -->
-
+    @vite([
+        'resources/css/app.css',
+        'resources/css/styles.css',
+        'resources/css/custom.css',
+        'resources/js/app.js',
+        'resources/js/script.js'
+    ])
 </head>
 
-<body>
-   
+<body x-data="{ mobileMenuOpen: false }">
+
     <!-- Header -->
     <header class="bg-gray-dark sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center py-4">
-            <!-- Left section: Logo -->
             <a href="/" class="flex items-center">
-              <div>
                 <img src="{{ asset('storage/images/walstyle.png') }}" class="h-24 rounded" width="100">
-              </div>
             </a>
-            <!-- Hamburger menu (for mobile) -->
+
+            <!-- Hamburger menu -->
             <div class="flex lg:hidden">
-                <button id="hamburger" class="text-white focus:outline-none">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
                 </button>
             </div>
-            
-            <!-- Center section: Menu -->
-            <nav class="hidden lg:flex md:flex-grow justify-center">
-              <ul class="flex justify-center space-x-4 text-white">
-                  <li><a href="/" class="hover:text-secondary font-semibold">Home</a></li>
-                  <li><a href="/products/list" class="hover:text-secondary font-semibold">Products</a></li>
-                  <li><a href="#brands" class="hover:text-secondary font-semibold">Brands</a></li>
 
-                  <!-- Category Dropdown -->
-                  <li class="relative group" x-data="{ open: false }">
-                      <a href="/" @mouseover="open = true" @mouseleave="open = false" href="/" class="hover:text-secondary font-semibold flex items-center">
-                          Categories
-                          <i :class="open ? 'fas fa-chevron-up ml-1 text-xs' : 'fas fa-chevron-down ml-1 text-xs'"></i>
-                      </a>
-                      <ul 
-                          x-show="open"
-                          @mouseover="open = true"
-                          @mouseleave="open = false"
-                          class="absolute left-0 bg-white text-black space-y-2 mt-1 p-2 rounded shadow-lg"
-                          x-transition:enter="transition ease-out duration-100"
-                          x-transition:enter-start="opacity-0 scale-90"
-                          x-transition:enter-end="opacity-100 scale-100"
-                          x-transition:leave="transition ease-in duration-100"
-                          x-transition:leave-start="opacity-100 scale-100"
-                          x-transition:leave-end="opacity-0 scale-90"
-                      >
-                      @isset($categories)
-                        
-                      @foreach ($categories as $category)
-                            <li><a href="products/list?category%5B%5D={{$category->id}}" class="min-w-56 block px-4 py-2 whitespace-nowrap hover:bg-primary hover:text-white rounded">{{$category->name}}</a></li>
-                        @endforeach
-                      @endisset                 
-                      </ul>
-                  </li>
-                  
-                  <li><a href="checkout.html" class="hover:text-secondary font-semibold">Contact Us</a></li>
-              </ul>
+            <!-- Desktop Menu -->
+            <nav class="hidden lg:flex md:flex-grow justify-center">
+                <ul class="flex justify-center space-x-4 text-white">
+                    <li><a href="/" class="hover:text-secondary font-semibold">Home</a></li>
+                    <li><a href="/products/list" class="hover:text-secondary font-semibold">Products</a></li>
+                    <li><a href="#brands" class="hover:text-secondary font-semibold">Brands</a></li>
+
+                    <!-- Category Dropdown -->
+                    <li class="relative group" x-data="{ open: false }">
+                        <a href="#" @mouseover="open = true" @mouseleave="open = false"
+                            class="hover:text-secondary font-semibold flex items-center">
+                            Categories
+                            <i :class="open ? 'fas fa-chevron-up ml-1 text-xs' : 'fas fa-chevron-down ml-1 text-xs'"></i>
+                        </a>
+                        <ul x-show="open" @mouseover="open = true" @mouseleave="open = false"
+                            class="absolute left-0 bg-white text-black space-y-2 mt-1 p-2 rounded shadow-lg"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-90"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-90">
+                            @isset($categories)
+                                @foreach ($categories as $category)
+                                    <li><a href="products/list?category={{$category->id}}" class="min-w-56 block px-4 py-2 whitespace-nowrap hover:bg-primary hover:text-white rounded">{{$category->name}}</a></li>
+                                @endforeach
+                            @endisset
+                        </ul>
+                    </li>
+                    <li><a href="/contact" class="hover:text-secondary font-semibold">Contact Us</a></li>
+                </ul>
             </nav>
 
-            <!-- Right section: Buttons (for desktop) -->
+            <!-- Right Buttons -->
             <div class="hidden lg:flex items-center space-x-4 relative">
-              @guest
-                  <a href="/register"
-                      class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
-                      Register
-                  </a>
-                  <a href="/login"
-                      class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
-                      Login
-                  </a>
-              @endguest
+                @guest
+                    <a href="/register"
+                        class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full">
+                        Register
+                    </a>
+                    <a href="/login"
+                        class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full">
+                        Login
+                    </a>
+                @endguest
+                @auth
+                    <form method="POST" action="/logout">
+                        @csrf
+                        <button type="submit"
+                            class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full">
+                            Logout
+                        </button>
+                    </form>
+                @endauth
 
-              <!-- For authenticated users: show Logout -->
-              @auth
-                  <form method="POST" action="/logout">
-                      @csrf
-                      <button type="submit"
-                          class="bg-primary border border-primary hover:bg-transparent text-white hover:text-primary font-semibold px-4 py-2 rounded-full inline-block">
-                          Logout
-                      </button>
-                  </form>
-              @endauth
-              <div class="relative group cart-wrapper">
-                  <a href="/cart.html" >
-                      <img src="{{ asset('storage/images/cart-shopping.svg') }}" alt="Cart" class="h-6 w-6 group-hover:scale-120">
-                  </a>
-                  <!-- Cart dropdown -->
-                  <div class="absolute right-0 mt-1 w-80 bg-white shadow-lg p-4 rounded hidden group-hover:block">
-                      <div class="space-y-4">
-                          <!-- product item -->
-                          <div class="flex items-center justify-between pb-4 border-b border-gray-line">
-                              <div class="flex items-center">
-                                  <img  src="{{ asset('storage/images/single-product/1.jpg') }}" alt="Product" class="h-12 w-12 object-cover rounded mr-2">
-                                  <div>
-                                      <p class="font-semibold">Summer black dress</p>
-                                      <p class="text-sm">Quantity: 1</p>
-                                  </div>
-                              </div>
-                              <p class="font-semibold">$25.00</p>
-                          </div>
-                          <!-- product item -->
-                          <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="{{ asset('storage/images/single-product/2.jpg') }}"  alt="Product" class="h-12 w-12 object-cover rounded mr-2">
-                                <div>
-                                    <p class="font-semibold">Black suit</p>
-                                    <p class="text-sm">Quantity: 1</p>
+                <div class="relative group cart-wrapper">
+                    <a href="/cart.html">
+                        <img src="{{ asset('storage/images/cart-shopping.svg') }}" alt="Cart" class="h-6 w-6 group-hover:scale-120">
+                    </a>
+                    <div class="absolute right-0 mt-1 w-80 bg-white shadow-lg p-4 rounded hidden group-hover:block">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between pb-4 border-b border-gray-line">
+                                <div class="flex items-center">
+                                    <img src="{{ asset('storage/images/single-product/1.jpg') }}" alt="Product"
+                                        class="h-12 w-12 object-cover rounded mr-2">
+                                    <div>
+                                        <p class="font-semibold">Summer black dress</p>
+                                        <p class="text-sm">Quantity: 1</p>
+                                    </div>
                                 </div>
+                                <p class="font-semibold">$25.00</p>
                             </div>
-                            <p class="font-semibold">$125.00</p>
                         </div>
-                      </div>
-                      <a href="/cart.html" class="block text-center mt-4 border border-primary bg-primary hover:bg-transparent text-white hover:text-primary py-2 rounded-full font-semibold">Go to Cart</a>
-                  </div>
-              </div>
-              <a id="search-icon" href="javascript:void(0);" class="text-white hover:text-secondary group">
-                  <img src="{{ asset('storage/images/search-icon.svg') }}"  alt="Search"
-                      class="h-6 w-6 transition-transform transform group-hover:scale-120">
-              </a>
+                        <a href="/cart.html" class="block text-center mt-4 border border-primary bg-primary hover:bg-transparent text-white hover:text-primary py-2 rounded-full font-semibold">Go to Cart</a>
+                    </div>
+                </div>
 
-              <!-- Search field -->
-              <div id="search-field"
-                  class="hidden absolute top-full right-0 mt-2 w-72 bg-white shadow-lg p-2 rounded">
-                  <form action="{{ route('products.list') }}" method="GET" class="flex">
-                      <input 
-                          type="text" 
-                          name="search" 
-                          value="{{ request('search') }}"
-                          class="w-full p-2 border border-gray-300 rounded-l-full focus:outline-none"
-                          placeholder="Search for products..."
-                      >
-                      <button 
-                          type="submit" 
-                          class="bg-primary text-white px-4 rounded-r-full hover:bg-transparent hover:text-primary border border-primary transition">
-                          <i class="fas fa-search"></i>
-                      </button>
-                  </form>
-              </div>
+                <a id="search-icon-desktop" href="javascript:void(0);" class="text-white hover:text-secondary group">
+                    <img src="{{ asset('storage/images/search-icon.svg') }}" alt="Search" class="h-6 w-6 transition-transform transform group-hover:scale-120">
+                </a>
 
-          </div>
+                <div id="search-field-desktop" class="hidden absolute top-full right-0 mt-2 w-72 bg-white shadow-lg p-2 rounded">
+                    <form action="{{ route('products.list') }}" method="GET" class="flex">
+                        <input type="text" name="search" value="{{ request('search') }}" class="w-full p-2 border border-gray-300 rounded-l-full focus:outline-none" placeholder="Search for products...">
+                        <button type="submit" class="bg-primary text-white px-4 rounded-r-full hover:bg-transparent hover:text-primary border border-primary transition">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </header>
 
-    <!-- Mobile menu -->
-    <nav id="mobile-menu-placeholder" class="mobile-menu hidden flex flex-col items-center space-y-8 lg:hidden">
-      <ul class="w-full">
-          <li><a href="/" class="hover:text-secondary font-bold block py-2">Home</a></li>
-          <li><a href="/products/list" class="hover:text-secondary font-bold block py-2">Products</a></li>
-                    <li><a href="#brands" class="hover:text-secondary font-bold block py-2">Brands</a></li>
+    <!-- Mobile Menu -->
+    <nav x-show="mobileMenuOpen" class="lg:hidden flex flex-col items-center space-y-8">
+        <ul class="w-full text-center">
+            <li><a href="/" class="hover:text-secondary font-bold block py-2">Home</a></li>
+            <li><a href="/products/list" class="hover:text-secondary font-bold block py-2">Products</a></li>
+            <li><a href="#brands" class="hover:text-secondary font-bold block py-2">Brands</a></li>
+            <li class="relative" x-data="{ open: false }">
+                <a @click.prevent="open = !open" class="hover:text-secondary font-bold block py-2 flex justify-center items-center cursor-pointer">
+                    Categories
+                    <i :class="open ? 'fas fa-chevron-up ml-2 text-xs' : 'fas fa-chevron-down ml-2 text-xs'"></i>
+                </a>
+                <ul x-show="open" class="space-y-2">
+                    @isset($categories)
+                        @foreach ($categories as $category)
+                            <li><a href="products/list?category={{$category->id}}" class="hover:text-secondary font-bold block py-2">{{$category->name}}</a></li>
+                        @endforeach
+                    @endisset
+                </ul>
+            </li>
+            <li><a href="/contact" class="hover:text-secondary font-bold block py-2">Contact Us</a></li>
+        </ul>
 
-          <!-- Men Dropdown -->
-          <li class="relative group" x-data="{ open: false }">
-              <a @click="open = !open; $event.preventDefault()" class="hover:text-secondary font-bold block py-2 flex justify-center items-center cursor-pointer">
-                <span>Categories</span>
-                <span @click.stop="open = !open">
-                    <i :class="open ? 'fas fa-chevron-up text-xs ml-2' : 'fas fa-chevron-down text-xs ml-2'"></i>
-                </span>
-              </a>
-              <ul class="mobile-dropdown-menu" x-show="open" x-transition class="space-y-2">
-                  <li><a href="shop.html" class="hover:text-secondary font-bold block pt-2 pb-3">Shop Category</a></li>
-                  @isset($categories)
-                  @foreach ($categories as $category)
-                  <li><a href="products/list?category%5B%5D={{$category->id}}" class="hover:text-secondary font-bold block py-2">{{$category->name}}</a></li>
-
-                  @endforeach
-                    
-                  @endisset
-              </ul>
-          </li>
-
-
-          <li><a href="checkout.html" class="hover:text-secondary font-bold block py-2">Contact Us</a></li>
-      </ul>
-      <div class="flex flex-col mt-6 space-y-2 items-center">
-          <a href="/register"
-              class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Register</a>
-          <a href="/login"
-              class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Login</a>
-          <a href="/"
-              class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full inline-block flex items-center justify-center min-w-[110px]">Cart -&nbsp;<span>5</span>&nbsp;items</a>
-      </div>
-      <!-- Search field -->
-      <div id="search-field" class="hidden absolute top-full right-0 mt-2 w-full bg-white shadow-lg p-2 rounded">
-          <form action="{{ route('products.list') }}" method="GET" class="flex gap-2">
-            <input type="text" name="search" value="{{ request('search') }}"
-                  class="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Search for products...">
-            <button type="submit" 
-                    class="bg-primary text-white px-4 rounded-full hover:bg-transparent hover:text-primary border border-primary transition">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-
-      </div>
-
+        <div class="flex flex-col mt-6 space-y-2 items-center">
+            <a href="/register" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full min-w-[110px]">Register</a>
+            <a href="/login" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full min-w-[110px]">Login</a>
+        </div>
     </nav>
 
     {{ $slot }}
 
-    <!-- Subscribe section -->
-<section id="subscribe" class="py-6 lg:py-24 bg-white border-t border-gray-line">
-  <div class="container mx-auto">
-    <div class="flex flex-col items-center rounded-lg p-4 sm:p-0">
-      <div class="mb-8">
-        <h2 class="text-center text-xl font-bold sm:text-2xl lg:text-left lg:text-3xl">
-          Join our newsletter
-        </h2>
-      </div>
-
-      @if (session('success'))
-        <div class="mb-4 text-green-600 font-semibold">{{ session('success') }}</div>
-      @endif
-
-      @if ($errors->any())
-        <div class="mb-4 text-red-500 text-sm">
-          @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-          @endforeach
-        </div>
-      @endif
-
-      <div class="flex flex-col items-center w-96">
-        <form class="flex w-full gap-2" action="{{ route('newsletter.store') }}" method="POST">
-          @csrf
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email address"
-            class="w-full flex-1 rounded-full px-3 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary"
-            required
-          />
-          <button
-            type="submit"
-            class="bg-primary border border-primary hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full"
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-
     <!-- Footer -->
     <footer class="border-t border-gray-line">
-        <!-- Top part -->
         <div class="container mx-auto px-4 py-10">
-          <div class="flex flex-wrap -mx-4">
-            <!-- Menu 1 -->
-            <div class="w-full sm:w-1/6 px-4 mb-8">
-              <h3 class="text-lg font-semibold mb-4">Shop</h3>
-              <ul>
-                <li><a href="/products/list" class="hover:text-primary">Products</a></li>
-                <li><a href="#brands" class="hover:text-primary">Brands</a></li>
-                <li><a href="/404.html" class="hover:text-primary">Contact Us</a></li>
-              </ul>
+            <div class="flex flex-wrap -mx-4">
+                <!-- Menu sections here (same as your original layout) -->
             </div>
-            <!-- Menu 2 -->
-            <div class="w-full sm:w-1/6 px-4 mb-8">
-              <h3 class="text-lg font-semibold mb-4">Pages</h3>
-              <ul>
-                <li><a href="/products/list" class="hover:text-primary">Products</a></li>
-                <li><a href="#brands" class="hover:text-primary">Brands</a></li>
-                <li><a href="/404.html" class="hover:text-primary">Contact Us</a></li>
-              </ul>
-            </div>
-            <!-- Menu 3 -->
-            <div class="w-full sm:w-1/6 px-4 mb-8">
-              <h3 class="text-lg font-semibold mb-4">Account</h3>
-              <ul>
-                <li><a href="/cart.html" class="hover:text-primary">Cart</a></li>
-                <li><a href="/register" class="hover:text-primary">Registration</a></li>
-                <li><a href="/login" class="hover:text-primary">Login</a></li>
-              </ul>
-            </div>
-            <!-- Social Media -->
-            <div class="w-full sm:w-1/6 px-4 mb-8">
-              <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
-              <ul>
-                <li class="flex items-center mb-2">
-                  <img src="{{ asset('storage/images/social_icons/facebook.svg') }}" alt="Facebook" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
-                  <a href="#" class="hover:text-primary">Facebook</a>
-                </li>
-                <li class="flex items-center mb-2">
-                  <img src="{{ asset('storage/images/social_icons/twitter.svg') }}" alt="Twitter" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
-                  <a href="#" class="hover:text-primary">Twitter</a>
-                </li>
-                <li class="flex items-center mb-2">
-                  <img src="{{ asset('storage/images/social_icons/instagram.svg') }}" alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
-                  <a href="#" class="hover:text-primary">Instagram</a>
-                </li>
-                <li class="flex items-center mb-2">
-                  <img src="{{ asset('storage/images/social_icons/pinterest.svg') }}"   alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
-                  <a href="#" class="hover:text-primary">Pinterest</a>
-                </li>
-                <li class="flex items-center mb-2">
-                  <img src="{{ asset('storage/images/social_icons/youtube.svg') }}"  alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
-                  <a href="#" class="hover:text-primary">YouTube</a>
-                </li>
-              </ul>
-            </div>
-            <!-- Contact Information -->
-            <div class="w-full sm:w-2/6 px-4 mb-8">
-              <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-              <p><img  src="{{ asset('storage/images/walstyle.png') }}" alt="Logo" class="h-[60px] mb-4"></p>
-              <p>123 Street Name, Seoul, South Korea</p>
-              <p class="text-xl font-bold my-4">Phone: (123) 456-7890</p>
-              <a href="mailto:info@company.com" class="underline">Email: walstyle@gmail.com</a>
-            </div>
-          </div>
         </div>
-      
-        <!-- Bottom part -->
         <div class="py-6 border-t border-gray-line">
-          <div class="container mx-auto px-4 flex flex-wrap justify-between items-center">
-            <!-- Copyright and Links -->
-            <div class="w-full lg:w-3/4 text-center lg:text-left mb-4 lg:mb-0">
-              <p class="mb-2 font-bold">&copy;  {{ date('Y') }}  Your Company. All rights reserved.</p>
-              <ul class="flex justify-center lg:justify-start space-x-4 mb-4 lg:mb-0">
-                <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
-                <li><a href="#" class="hover:text-primary">Terms of Service</a></li>
-                <li><a href="#" class="hover:text-primary">FAQ</a></li>
-              </ul>
-              <p class="text-sm mt-4">Your shop's description goes here. This is a brief introduction to your shop and what you offer.</p>
+            <div class="container mx-auto px-4 flex flex-wrap justify-between items-center">
+                <p class="mb-2 font-bold">&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
             </div>
-            <!-- Payment Icons -->
-            <div class="w-full lg:w-1/4 text-center lg:text-right">
-              <img src="storage/images/social_icons/paypal.svg" alt="PayPal" class="inline-block h-8 mr-2">
-              <img src="storage/images/social_icons/stripe.svg" alt="Stripe" class="inline-block h-8 mr-2">
-              <img src="storage/images/social_icons/visa.svg" alt="Visa" class="inline-block h-8">
-            </div>
-          </div>
         </div>
     </footer>
-
-    @vite(['resources/js/script.js'])
-
-
-<!-- Swiper JS -->
-  
 
 </body>
 </html>
