@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\CartItem;
+use App\Models\Order;
+use Illuminate\Http\Request;
 use App\Services\StockService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -40,17 +41,29 @@ class CheckoutController extends Controller
     {
         $user = Auth::user();
 
+        $now = Carbon::now();
         $cartItems = CartItem::with('product')
-            ->where('user_id', $user->id)
-            ->get()
-            ->map(function($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'price'      => $item->product->price,
-                ];
-            })
-            ->toArray();
+        ->where('user_id', $user->id)
+        ->get()
+        ->map(function($item) use ($now) {
+            $product = $item->product;
+
+            // Check if discounted price applies
+            $isDiscounted = $product->discounted_price > 0
+                && $now->between(
+                    \Carbon\Carbon::parse($product->discount_start_date),
+                    \Carbon\Carbon::parse($product->discount_end_date)
+                );
+
+            $price = $isDiscounted ? $product->discounted_price : $product->price;
+
+            return [
+                'product_id' => $product->id,
+                'quantity'   => $item->quantity,
+                'price'      => $price,
+            ];
+        })
+        ->toArray();
 
         if (empty($cartItems)) {
             return redirect()->back()->with('error', 'Your cart is empty');
@@ -76,37 +89,47 @@ class CheckoutController extends Controller
      */
     public function payment($orderId)
     {
+        $order = Order::findOrFail($orderId);
+
+        if ($order->status === 'completed') {
+            return redirect()->route('home')
+                ->with('error', "This payment is already completed.");
+        }
+
         return view('shop.payment', compact('orderId'));
     }
 
+
     /**
-     * Simulate payment success callback
+     * Payment success handler
      */
     public function paymentSuccess($orderId)
     {
         try {
             $order = $this->stockService->confirmStock($orderId);
 
-            return redirect()->route('shop.index')
+            return redirect()->route('home')
                 ->with('success', "Payment successful. Order #{$order->id} confirmed.");
         } catch (\Exception $e) {
-            return redirect()->route('shop.index')
+            // Handle already completed orders gracefully
+            return redirect()->route('home')
                 ->with('error', $e->getMessage());
         }
     }
 
     /**
-     * Simulate payment failure
+     * Payment failure / cancel simulation
      */
     public function paymentFail($orderId)
     {
         try {
             $order = $this->stockService->releaseStock($orderId);
 
-            return redirect()->route('shop.index')
+            return redirect()->route('home')
                 ->with('error', "Payment failed. Order #{$order->id} cancelled.");
         } catch (\Exception $e) {
-            return redirect()->route('shop.index')
+            // Handle orders that cannot be cancelled (already completed)
+            return redirect()->route('home')
                 ->with('error', $e->getMessage());
         }
     }

@@ -84,12 +84,15 @@ $now = Carbon::now();
                                 <p class="mb-2">Availability:<strong> In Stock</strong></p>
                             </div>
                             <div class="flex items-center mb-4">
-                                <span class="text-2xl font-semibold">${{$product->price}}</span>
-
-                                
+                                @php
+                                    $isDiscounted = $product->discounted_price > 0 
+                                    && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date));
+                                    $price = $isDiscounted ? $product->discounted_price : $product->price;                      
+                                @endphp
+                                <span class="text-2xl font-semibold">${{$price}}</span>              
 
                                 @if ($product->discounted_price > 0 && $product->discount_start_date && $product->discount_end_date && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
-                                    <span class="text-lg line-through ml-2">${{ $product->discounted_price }}</span>
+                                    <span class="text-lg line-through ml-2">${{ $product->price }}</span>
                                 @endif
 
                             </div>
@@ -113,6 +116,9 @@ $now = Carbon::now();
                             @guest
                             <p class="text-red-500 mt-2">Please <a href="{{ route('login') }}" class="text-primary underline">login</a> to add items to cart.</p>
                             @endguest
+
+                            <span id="cart-msg" class="ml-4 text-green-500 hidden"></span>
+
 
                         </div>
                         @if (Auth::check())
@@ -223,7 +229,39 @@ $now = Carbon::now();
                         </div>
                         <div id="size-shape-content" role="tabpanel" aria-labelledby="size-shape-tab"
                             class="tab-content hidden">
+                            <div>                                                     
+                                @php
+                                    $pdfs = json_decode($product->pdfs ?? '[]', true);
+                                @endphp
 
+                                @if (!empty($pdfs) && count($pdfs) > 0)
+                                    <h3 class="text-lg font-semibold mb-2">Product Dcoumetns</h3>
+                                    <div class="grid grid-cols-5 gap-4">
+                                        @foreach ($pdfs as $pdf)
+                                            <div class="border rounded p-3 flex flex-col items-center text-center shadow-sm">
+                                            <i class="fa-solid fa-file-pdf text-red-600 text-4xl mb-2"></i>
+
+                                            <p class="text-sm mb-2 truncate w-full">
+                                                {{ basename($pdf) }}
+                                            </p>
+
+                                            <a href="{{ asset('storage/' . $pdf) }}" 
+                                            target="_blank"
+                                            class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 w-full">
+                                            View
+                                            </a>
+
+                                            <a href="{{ asset('storage/' . $pdf) }}" 
+                                            download
+                                            class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 w-full mt-1">
+                                            Download
+                                            </a>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                            </div>
 
                         </div>
                         <div id="reviews-content" role="tabpanel" aria-labelledby="reviews-tab"
@@ -331,6 +369,32 @@ $now = Carbon::now();
         </div>
     </section>
     <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tabs = document.querySelectorAll("[role='tab']");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", function () {
+
+            // Remove active from all tabs
+            tabs.forEach(t => t.classList.remove("active"));
+
+            // Hide all tab contents
+            tabContents.forEach(content => content.classList.add("hidden"));
+
+            // Activate clicked tab
+            this.classList.add("active");
+
+            // Show related content
+            const contentId = this.getAttribute("aria-controls");
+            document.getElementById(contentId).classList.remove("hidden");
+        });
+    });
+});
+</script>
+
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     const btnAdd = document.getElementById('addToCart');
     const quantityInput = document.getElementById('quantity');
@@ -338,6 +402,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const decreaseBtn = document.getElementById('decrease');
     const increaseBtn = document.getElementById('increase');
     const isLoggedIn = @json(Auth::check());
+    const cartMsg = document.getElementById('cart-msg');
+
 
     increaseBtn.onclick = () => {
         let current = parseInt(quantityInput.value) || 1;
@@ -373,9 +439,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const data = await res.json();
             if (data.success) {
-                alert(data.message);
+                //alert(data.message);
+                cartMsg.textContent = 'Added to cart!';
+                cartMsg.classList.remove('hidden');
+                setTimeout(() => cartMsg.classList.add('hidden'), 3000);
             } else {
-                alert(data.message || "Something went wrong!");
+                //alert(data.message || "Something went wrong!");
+                cartMsg.textContent = data.message;
+                cartMsg.classList.remove('hidden');
+                setTimeout(() => cartMsg.classList.add('hidden'), 3000);
             }
         } catch(err) {
             console.error(err);

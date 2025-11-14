@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+use Carbon\Carbon;
+$now = Carbon::now();
+@endphp
+
 <h1 class="text-2xl font-bold mb-4">Shopping Cart</h1>
 
 @if(count($cartItems) > 0)
@@ -16,11 +21,22 @@
         </thead>
         <tbody>
             @foreach ($cartItems as $item)
+            @php
+                $product = $item->product;
+                $isDiscounted = $product->discounted_price > 0 
+                    && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date));
+                $price = $isDiscounted ? $product->discounted_price : $product->price;
+            @endphp
             <tr>
-                <td class="p-3">{{ $item->product->name }}</td>
-                <td class="p-3">${{ number_format($item->product->price, 2) }}</td>
+                <td class="p-3">{{ $product->name }}</td>
+                <td class="p-3">
+                    ${{ number_format($price, 2) }}
+                    @if($isDiscounted)
+                        <span class="text-sm line-through text-gray-500 ml-2">${{ number_format($product->price, 2) }}</span>
+                    @endif
+                </td>
                 <td class="p-3">{{ $item->quantity }}</td>
-                <td class="p-3">${{ number_format($item->product->price * $item->quantity, 2) }}</td>
+                <td class="p-3">${{ number_format($price * $item->quantity, 2) }}</td>
                 <td class="p-3">
                     <form action="{{ url('/cart/remove/'.$item->id) }}" method="POST">
                         @csrf

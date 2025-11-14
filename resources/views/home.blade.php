@@ -69,15 +69,22 @@ $now = Carbon::now();
                   <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
                   <p class="my-2">{{ $product->category->name }}</p>
                   <div class="flex items-center mb-4">
-                    <span class="text-lg font-bold text-primary">${{$product->price}}</span>
+                    @php
+                      $isDiscounted = $product->discounted_price > 0 
+                      && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date));
+                      $price = $isDiscounted ? $product->discounted_price : $product->price;                      
+                    @endphp
+                    <span class="text-lg font-bold text-primary">${{$price}}</span>
 
                     @if ($product->discounted_price > 0 
                         && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
-                        <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+                        <span class="text-sm line-through ml-2">${{ $product->price }}</span>
                     @endif
 
                   </div>
-                  <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
+                  <button 
+                  data-product-id="{{ $product->id }}"
+                  class="add-to-cart bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
                 </div>
               </div>
               @endforeach
@@ -102,14 +109,21 @@ $now = Carbon::now();
                     <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
                     <p class=" my-2">{{ $product->category->name }}</p>
                     <div class="flex items-center mb-4">
-                      <span class="text-lg font-bold text-primary">${{$product->price}}</span>
+                      @php
+                        $isDiscounted = $product->discounted_price > 0 
+                        && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date));
+                        $price = $isDiscounted ? $product->discounted_price : $product->price;                      
+                      @endphp
+                      <span class="text-lg font-bold text-primary">${{$price}}</span>
                     
                         @if ($product->discounted_price > 0 
                             && $now->between(Carbon::parse($product->discount_start_date), Carbon::parse($product->discount_end_date)))
-                            <span class="text-sm line-through ml-2">${{ $product->discounted_price }}</span>
+                            <span class="text-sm line-through ml-2">${{ $product->price }}</span>
                         @endif
                     </div>
-                    <button class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
+                    <button 
+                    data-product-id="{{ $product->id }}"  
+                    class="add-to-cart bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
                   </div>
                 </div>
 
