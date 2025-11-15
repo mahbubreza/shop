@@ -83,8 +83,11 @@ $now = Carbon::now();
 
                   </div>
                   <button 
-                  data-product-id="{{ $product->id }}"
-                  class="add-to-cart bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">Add to Cart</button>
+                    data-product-id="{{ $product->id }}"
+                    class="add-to-cart bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
               @endforeach
@@ -148,13 +151,8 @@ $now = Carbon::now();
                     <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
                         <img src="{{ asset('storage/' . $brand->logo) }}" alt="Client Logo" class="max-h-full max-w-full">
                     </div>
-                  @endforeach
-                    
+                  @endforeach                
                   @endisset
-
-                  
-
-                  
               </div>
               <div class="swiper-button-prev"></div>
               <div class="swiper-button-next"></div>

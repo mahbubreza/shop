@@ -76,6 +76,15 @@ function getFinalPrice($product) {
                     </ul>
                 </li>
 
+                <li>
+                    <a href="/cart" class="hover:text-secondary font-semibold flex items-center">
+                        Cart
+                        <i class="fa-solid fa-cart-shopping ml-1 text-xs"></i>
+                    </a>
+                </li>
+
+
+
                 <li><a href="/contact" class="hover:text-secondary font-semibold">Contact Us</a></li>
             </ul>
         </nav>
@@ -190,6 +199,7 @@ function getFinalPrice($product) {
 
 <!-- Inline JS for Cart and Toasts -->
 <script>
+window.isLoggedIn = @json(auth()->check());
 document.addEventListener('DOMContentLoaded', function () {
     // Toast notifications
     @if(session('success'))
@@ -269,6 +279,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', () => {
+            if(!window.isLoggedIn){
+                Toastify({
+                    text: "Please login to add items to cart",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right,#f44336,#e53935)"
+                }).showToast();
+
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1200);
+                return;
+            }
             const productId = btn.dataset.productId;
             fetch('/cart/add',{method:'POST', headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}','Content-Type':'application/json'}, body:JSON.stringify({product_id:productId,quantity:1})})
             .then(res=>res.json())

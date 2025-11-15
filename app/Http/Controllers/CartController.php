@@ -14,40 +14,36 @@ class CartController extends Controller
      * Add product to cart
      */
     public function addToCart(Request $request)
-    {
-        
+    {        
+        // If user is not logged in → send JSON response for JS
+        if (!auth()->check()) {
+            return response()->json([
+                'success' => false,
+                'auth_required' => true,
+                'message' => 'Please login to add items to your cart.'
+            ]);
+        }
+        $user = Auth::user();
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'required|integer|min:1'
         ]);
 
-        $user = Auth::user();
         $product = Product::findOrFail($request->product_id);
         $qty = $request->quantity ?? 1;
-
-        // Check stock
-        // if ($product->stock - $product->reserved_stock < $request->quantity) {
-        //     return response()->json(['success' => false, 'message' => 'Not enough stock available.']);
-        // }
-        // Available stock = stock - reserved_stock
         $availableStock = $product->stock - $product->reserved_stock;
-
         // Check if cart already has quantity
         $existingCart = CartItem::where('user_id', $user->id)
             ->where('product_id', $product->id)
             ->first();
 
         $currentQtyInCart = $existingCart ? $existingCart->quantity : 0;
-
-        if($currentQtyInCart + $qty > $availableStock) {
-            
-return response()->json([
-            'success' => false,
-            'message' => "Cannot add {$qty} items. Only {$availableStock} left in stock."
-        ]);
+        if($currentQtyInCart + $qty > $availableStock) {    
+            return response()->json([
+                'success' => false,
+                'message' => "Cannot add {$qty} items. Only {$availableStock} left in stock."
+            ]);
         }
-
-
         // If product already exists in cart, update quantity
         $cartItem = CartItem::where('user_id', $user->id)
             ->where('product_id', $product->id)
@@ -62,7 +58,6 @@ return response()->json([
                 'quantity' => $request->quantity
             ]);
         }
-
         return response()->json([
             'success' => true,
             'message' => 'Added to cart successfully.',
@@ -100,6 +95,8 @@ return response()->json([
             return response()->json([
                 'items' => [],
                 'subtotal' => 0,
+                'total_count' => 0,
+
             ]);
         }
 

@@ -16,6 +16,11 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->decimal('total', 10, 2)->default(0);
+            $table->decimal('sub_total', 10, 2)->default(0);
+            $table->decimal('shipping_charge', 10, 2)->default(0);
+            $table->decimal('mfs_charge', 10, 2)->default(0);
+            $table->decimal('vat', 10, 2)->default(0);
+            $table->decimal('coupon_charge', 10, 2)->default(0);
             $table->string('status')->default('pending'); // pending, processing, shipped, delivered
             $table->string('shipping_address')->nullable();
             $table->timestamps();

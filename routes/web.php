@@ -67,13 +67,13 @@ Route::middleware(['auth', 'admin'])->group(function() {
 });
 
 
+Route::get('/cart/mini', [CartController::class, 'miniCart'])->name('cart.mini');
 
 Route::middleware('auth')->group(function () {
    Route::post('/products/{product}/rate', [ProductRatingController::class, 'store'])->name('products.rate');
 
    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-   Route::get('/cart/mini', [CartController::class, 'miniCart'])->name('cart.mini');
 
    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');

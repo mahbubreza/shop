@@ -37,52 +37,100 @@ class CheckoutController extends Controller
     /**
      * Place order (reserve stock)
      */
+    
     public function placeOrder(Request $request)
     {
         $user = Auth::user();
-
+        $shopConfig = config('shop');
         $now = Carbon::now();
+
         $cartItems = CartItem::with('product')
-        ->where('user_id', $user->id)
-        ->get()
-        ->map(function($item) use ($now) {
+            ->where('user_id', $user->id)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Your cart is empty');
+        }
+
+        $finalSubtotal = 0;
+        $orderItems = [];
+
+        // 1️⃣ Check availability and calculate subtotal
+        foreach ($cartItems as $item) {
             $product = $item->product;
 
-            // Check if discounted price applies
+            // Check stock availability
+            $available = $product->stock - $product->reserved_stock;
+            if ($item->quantity > $available) {
+                return redirect()->back()->with('error', "Not enough stock for {$product->name}. Available: {$available}");
+            }
+
+            // Discount logic
             $isDiscounted = $product->discounted_price > 0
                 && $now->between(
-                    \Carbon\Carbon::parse($product->discount_start_date),
-                    \Carbon\Carbon::parse($product->discount_end_date)
+                    Carbon::parse($product->discount_start_date),
+                    Carbon::parse($product->discount_end_date)
                 );
-
             $price = $isDiscounted ? $product->discounted_price : $product->price;
+            $subtotal = $price * $item->quantity;
+            $finalSubtotal += $subtotal;
 
-            return [
+            $orderItems[] = [
                 'product_id' => $product->id,
                 'quantity'   => $item->quantity,
                 'price'      => $price,
             ];
-        })
-        ->toArray();
-
-        if (empty($cartItems)) {
-            return redirect()->back()->with('error', 'Your cart is empty');
         }
 
-        try {
-            // Reserve stock and create pending order
-            $order = $this->stockService->reserveStock($cartItems, $user->id);
+        // Shipping charge
+        $shippingCharge = $request->input('shipping_charge', $shopConfig['inside_dhaka_shipping_charge']);
 
-            // Clear cart after reservation
+        // Payment method
+        $paymentMethod = $request->input('payment_method', 'cod');
+
+        // MFS charge (only for digital payment)
+        $mfsCharge = 0;
+        if ($shopConfig['mfs_charge'] && $paymentMethod !== 'cod') {
+            $mfsCharge = ($finalSubtotal + $shippingCharge) * ($shopConfig['mfs_percentage'] / 100);
+        }
+
+        // VAT (applied on subtotal + shipping)
+        $vat = 0;
+        if ($shopConfig['vat_applicable']) {
+            $vat = ($finalSubtotal + $shippingCharge) * ($shopConfig['vat_percent'] / 100);
+        }
+
+        // Total
+        $total = $finalSubtotal + $shippingCharge + $mfsCharge + $vat;
+
+        try {
+            // 2️⃣ Create order
+            $order = Order::create([
+                'user_id' => $user->id,
+                'sub_total' => $finalSubtotal,
+                'shipping_charge' => $shippingCharge,
+                'mfs_charge' => $mfsCharge,
+                'vat' => $vat,
+                'total' => $total,
+                'shipping_address' => $request->input('shipping_address'),
+                'status' => 'pending',
+            ]);
+
+            // 3️⃣ Reserve stock and create order items
+            $this->stockService->reserveStock($orderItems, $user->id, $order->id);
+
+            // 4️⃣ Clear cart
             CartItem::where('user_id', $user->id)->delete();
 
-            // Redirect to payment page (example)
             return redirect()->route('checkout.payment', $order->id)
                 ->with('success', 'Order placed. Proceed to payment.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+
 
     /**
      * Simulate payment page

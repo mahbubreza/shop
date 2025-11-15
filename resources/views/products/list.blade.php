@@ -154,19 +154,18 @@
                             @endif
                         </div>
 
-                        <button
-                            class="bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full"
+                        <button 
+                            data-product-id="{{ $product->id }}"
+                            class="add-to-cart bg-primary border border-transparent hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full"
                         >
                             Add to Cart
                         </button>
                         </div>
                         @endforeach
                             
-                        @endisset
-                        
+                        @endisset                       
                         
                     </div>
-
                 <!-- Pagination -->
                 <div class="flex justify-center mt-8">
                     <nav aria-label="Page navigation" class="pagination-custom">
