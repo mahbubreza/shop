@@ -7,15 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'user_id',
-        'sub_total',
-        'shipping_charge',
-        'mfs_charge',
-        'vat',
-        'total',
-        'shipping_address',
-        'status',
+        'user_id', 'sub_total', 'shipping_charge', 'mfs_charge',
+        'vat', 'coupon_id', 'coupon_discount', 'total',
+        'mobile_number', 'shipping_address', 'status'
     ];
+
 
     protected $casts = [
         'sub_total' => 'decimal:2',

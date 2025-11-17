@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
@@ -64,6 +65,16 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     Route::post('/products/{product}/toggle', [ProductController::class, 'toggleStatus'])->name('products.toggle');
 
+    Route::get('/coupons', [CouponController::class,'index'])->name('admin.coupons.index');
+    Route::get('/coupons/create', [CouponController::class,'create'])->name('admin.coupons.create');
+    Route::post('/coupons', [CouponController::class,'store'])->name('admin.coupons.store');
+    Route::get('/coupons/{coupon}/edit', [CouponController::class,'edit'])->name('admin.coupons.edit');
+    Route::patch('/coupons/{coupon}', [CouponController::class,'update'])->name('admin.coupons.update');
+    Route::delete('/coupons/{coupon}', [CouponController::class,'destroy'])->name('admin.coupons.destroy');
+    Route::post('/coupons/{coupon}/toggle', [CouponController::class,'toggle'])->name('coupons.toggle');
+
+    Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
+
 });
 
 
@@ -85,6 +96,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/payment/{orderId}', [CheckoutController::class, 'payment'])->name('checkout.payment');
     Route::get('/checkout/payment-success/{orderId}', [CheckoutController::class, 'paymentSuccess'])->name('checkout.payment.success');
     Route::get('/checkout/payment-fail/{orderId}', [CheckoutController::class, 'paymentFail'])->name('checkout.payment.fail');
+
+    
 
 });
 

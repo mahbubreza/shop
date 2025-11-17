@@ -78,6 +78,37 @@
             }
         });
     </script>
+    <!-- Toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Success message
+            @if(session('success'))
+                Toastify({
+                    text: "{{ session('success') }}",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4CAF50", // green
+                }).showToast();
+            @endif
+
+            // Error message (validation errors)
+            @if($errors->any())
+                @foreach($errors->all() as $error)
+                    Toastify({
+                        text: "{{ $error }}",
+                        duration: 4000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#FF5252", // red
+                    }).showToast();
+                @endforeach
+            @endif
+        });
+        </script>
+
 
     </body>
 </html>

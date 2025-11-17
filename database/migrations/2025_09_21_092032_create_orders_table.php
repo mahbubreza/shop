@@ -14,15 +14,28 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
+            // User placing the order
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->decimal('total', 10, 2)->default(0);
+
+            // Coupon fields
+            $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->decimal('coupon_discount', 10, 2)->default(0);
+
+            // Order amounts
             $table->decimal('sub_total', 10, 2)->default(0);
             $table->decimal('shipping_charge', 10, 2)->default(0);
             $table->decimal('mfs_charge', 10, 2)->default(0);
             $table->decimal('vat', 10, 2)->default(0);
-            $table->decimal('coupon_charge', 10, 2)->default(0);
-            $table->string('status')->default('pending'); // pending, processing, shipped, delivered
+            $table->decimal('total', 10, 2)->default(0);
+
+            // Customer info
+            $table->string('mobile_number')->nullable();
             $table->string('shipping_address')->nullable();
+
+            // Order status
+            $table->string('status')->default('pending'); // pending, processing, shipped, delivered
+
             $table->timestamps();
         });
     }
