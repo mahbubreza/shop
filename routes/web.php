@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
+
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\ProfileController;
@@ -75,7 +77,19 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
 
+    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
+
+    // ajax/update endpoints
+    Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    Route::post('/orders/{order}/add-note', [OrderController::class, 'addNote'])->name('admin.orders.addNote');
+    Route::post('/orders/{order}/export-invoice', [OrderController::class, 'exportInvoice'])->name('admin.orders.exportInvoice');
+    Route::post('/orders/export', [OrderController::class, 'exportList'])->name('admin.orders.exportList');
+
+    // bulk actions
+    Route::post('/orders/bulk', [OrderController::class, 'bulkAction'])->name('admin.orders.bulk');
 });
+
 
 
 Route::get('/cart/mini', [CartController::class, 'miniCart'])->name('cart.mini');
