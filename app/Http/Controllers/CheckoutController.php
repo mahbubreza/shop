@@ -335,6 +335,7 @@ class CheckoutController extends Controller
     // }
     public function applyCoupon(Request $request)
     {
+
         $request->validate(['code' => 'required|string']);
 
         $code = strtoupper(trim($request->input('code')));
@@ -349,8 +350,7 @@ class CheckoutController extends Controller
         if (! $coupon->isActive()) {
             return response()->json(['success' => false, 'message' => 'Coupon is not active or expired']);
         }
-
-        // check global uses
+            // check global uses
         if ($coupon->max_uses && $coupon->used_count >= $coupon->max_uses) {
             return response()->json(['success' => false, 'message' => 'Coupon usage limit reached']);
         }

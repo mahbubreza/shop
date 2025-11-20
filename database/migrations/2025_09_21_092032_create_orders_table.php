@@ -28,6 +28,7 @@ return new class extends Migration
             $table->decimal('mfs_charge', 10, 2)->default(0);
             $table->decimal('vat', 10, 2)->default(0);
             $table->decimal('total', 10, 2)->default(0);
+            
 
             // Customer info
             $table->string('mobile_number')->nullable();
@@ -35,6 +36,12 @@ return new class extends Migration
 
             // Order status
             $table->string('status')->default('pending'); // pending, processing, shipped, delivered
+
+            $table->text('admin_note')->nullable();
+            $table->string('tracking_number')->nullable();
+            $table->string('payment_provider')->nullable();
+
+
 
             $table->timestamps();
         });

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.addEventListener("click", () => {
             const id = btn.dataset.id;
             const status = btn.dataset.status;
-            fetch(`/admin/orders/${id}/status`, {
+            fetch(`/orders/${id}/status`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         saveTrack.addEventListener("click", () => {
             const id = saveTrack.dataset.id;
             const tracking = document.getElementById("tracking_number").value;
-            fetch(`/admin/orders/${id}/status`, {
+            fetch(`/orders/${id}/status`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         saveNote.addEventListener("click", () => {
             const id = saveNote.dataset.id;
             const note = document.getElementById("admin_note").value;
-            fetch(`/admin/orders/${id}/add-note`, {
+            fetch(`/orders/${id}/add-note`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

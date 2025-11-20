@@ -75,7 +75,6 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::delete('/coupons/{coupon}', [CouponController::class,'destroy'])->name('admin.coupons.destroy');
     Route::post('/coupons/{coupon}/toggle', [CouponController::class,'toggle'])->name('coupons.toggle');
 
-    Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
@@ -110,6 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/payment/{orderId}', [CheckoutController::class, 'payment'])->name('checkout.payment');
     Route::get('/checkout/payment-success/{orderId}', [CheckoutController::class, 'paymentSuccess'])->name('checkout.payment.success');
     Route::get('/checkout/payment-fail/{orderId}', [CheckoutController::class, 'paymentFail'])->name('checkout.payment.fail');
+    Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
 
     
 
