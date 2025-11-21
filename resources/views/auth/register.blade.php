@@ -9,6 +9,15 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Mobile Number -->
+        <div class="mt-4">
+            <x-input-label for="mobile_number" :value="__('Mobile Number')" />
+            <x-text-input id="mobile_number" class="block mt-1 w-full"
+                type="text" name="mobile_number"
+                :value="old('mobile_number')" required placeholder="01XXXXXXXXX" />
+            <x-input-error :messages="$errors->get('mobile_number')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />

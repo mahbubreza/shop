@@ -20,6 +20,16 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+         // If email NOT verified → logout immediately and redirect to verify email
+        if (Auth::user()->email_verified_at === null) {
+
+            //Auth::logout(); // logout the session created by authenticate()
+
+            return redirect()
+                ->route('verification.notice')
+                ->with('message', 'Please verify your email before logging in.');
+        }
+
         $request->session()->regenerate();
 
         // Redirect based on role

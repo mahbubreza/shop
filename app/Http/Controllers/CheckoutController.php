@@ -54,6 +54,17 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty');
         }
 
+        // validate incoming data
+        $request->validate([
+            'mobile_number'    => ['required', 'regex:/^01[3-9][0-9]{8}$/'],
+            'shipping_address' => ['required', 'string', 'max:2000'],
+            'payment_method'   => ['required', 'in:cod,bkash,nagad,rocket'],
+            'shipping_charge'  => ['nullable', 'numeric'],
+            'coupon_id'        => ['nullable', 'integer'],
+            'coupon_code'      => ['nullable', 'string'],
+            'coupon_discount'  => ['nullable', 'numeric'],
+        ]);
+
         $finalSubtotal = 0;
         $orderItems = [];
 
@@ -61,8 +72,13 @@ class CheckoutController extends Controller
         foreach ($cartItems as $item) {
             $product = $item->product;
 
+            // ensure product exists
+            if (! $product) {
+                return redirect()->back()->with('error', "A product in your cart no longer exists.");
+            }
+
             // Check stock availability
-            $available = $product->stock - $product->reserved_stock;
+            $available = (int) $product->stock - (int) $product->reserved_stock;
             if ($item->quantity > $available) {
                 return redirect()->back()->with('error', "Not enough stock for {$product->name}. Available: {$available}");
             }
@@ -79,20 +95,20 @@ class CheckoutController extends Controller
 
             $orderItems[] = [
                 'product_id' => $product->id,
-                'quantity'   => $item->quantity,
-                'price'      => $price,
+                'quantity'   => (int) $item->quantity,
+                'price'      => (float) $price,
             ];
         }
 
         // Shipping charge
-        $shippingCharge = $request->input('shipping_charge', $shopConfig['inside_dhaka_shipping_charge']);
+        $shippingCharge = (float) $request->input('shipping_charge', $shopConfig['inside_dhaka_shipping_charge']);
 
         // Payment method
         $paymentMethod = $request->input('payment_method', 'cod');
 
           // Coupon logic (same as applyCoupon)
         $couponId = $request->input('coupon_id');
-        $couponDiscount = 0;
+        $couponDiscount = 0.0;
         $coupon = null;
 
         if ($couponId) {
@@ -150,6 +166,7 @@ class CheckoutController extends Controller
                 'coupon_discount' => $couponDiscount,
                 'total'           => $total,
                 'mobile_number'   => $request->input('mobile_number'),   // NEW
+                'payment_provider' => $paymentMethod,
                 'shipping_address'=> $request->input('shipping_address'),
                 'status'          => 'pending',
             ]);

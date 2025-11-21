@@ -1,5 +1,8 @@
 <x-shop.layout>
     <!-- Shop -->
+    @php
+    $shopConfig = config('shop');
+    @endphp
     <section id="shop">
         <div class="container mx-auto">
             <!-- Top Filter -->
@@ -57,7 +60,8 @@
                             @endisset                        
                         </div>
                     </div>
-                    <!-- Size Filter -->
+                    @if ($shopConfig['size_filtering'])
+                      <!-- Size Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Size</h3>
                         <div class="space-y-2">
@@ -74,7 +78,10 @@
                             @endisset  
                             
                         </div>
-                    </div>
+                    </div>  
+                    @endif
+                    @if ($shopConfig['color_filtering'])
+
                     <!-- Color Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Color</h3>
@@ -92,6 +99,7 @@
                             
                         </div>
                     </div>
+                    @endif
                     <!-- Brand Filter -->
                     <div class="mb-6 pb-8 border-b border-gray-line">
                         <h3 class="text-lg font-semibold mb-6">Brand</h3>

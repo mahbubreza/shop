@@ -8,7 +8,8 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id', 'sub_total', 'shipping_charge', 'mfs_charge',
-        'vat', 'coupon_id', 'coupon_discount', 'total',
+        'vat', 'coupon_id', 'coupon_discount', 'total', 
+        'payment_provider',
         'mobile_number', 'shipping_address', 'status'
     ];
 
