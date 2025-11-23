@@ -26,6 +26,7 @@
 
 @php
 use Carbon\Carbon;
+$shopConfig = config('shop');
 
 function getFinalPrice($product) {
     $now = Carbon::now();
@@ -40,7 +41,7 @@ function getFinalPrice($product) {
     <div class="container mx-auto flex justify-between items-center py-4">
         <!-- Logo -->
         <a href="/" class="flex items-center">
-            <img src="{{ asset('storage/images/walstyle.png') }}" class="h-24 rounded" width="100">
+            <img src="{{ asset('storage/images/logo.png') }}" class="h-24 rounded" width="100">
         </a>
 
         <!-- Mobile Hamburger -->
@@ -82,11 +83,11 @@ function getFinalPrice($product) {
                     <a href="/cart" class="hover:text-secondary font-semibold flex items-center">
                         Cart
                         <i class="fa-solid fa-cart-shopping ml-1 text-xs"></i>
-                    </a>
+                        <span id="cart-count-menu" class="ml-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                            {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }}
+                        </span>    
+                    </a>                    
                 </li>
-
-
-
                 <li><a href="/contact" class="hover:text-secondary font-semibold">Contact Us</a></li>
             </ul>
         </nav>
@@ -181,15 +182,147 @@ function getFinalPrice($product) {
 
 <main>{{ $slot }}</main>
 
+    <!-- Subscribe section -->
+<section id="subscribe" class="py-6 lg:py-24 bg-white border-t border-gray-line">
+  <div class="container mx-auto">
+    <div class="flex flex-col items-center rounded-lg p-4 sm:p-0">
+      <div class="mb-8">
+        <h2 class="text-center text-xl font-bold sm:text-2xl lg:text-left lg:text-3xl">
+          Join our newsletter
+        </h2>
+      </div>
+
+      @if (session('success'))
+        <div class="mb-4 text-green-600 font-semibold">{{ session('success') }}</div>
+      @endif
+
+      @if ($errors->any())
+        <div class="mb-4 text-red-500 text-sm">
+          @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+          @endforeach
+        </div>
+      @endif
+
+      <div class="flex flex-col items-center w-96">
+        <form class="flex w-full gap-2" action="{{ route('newsletter.store') }}" method="POST">
+          @csrf
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            class="w-full flex-1 rounded-full px-3 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-primary border border-primary hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Footer -->
 <footer class="border-t border-gray-line">
     <div class="container mx-auto px-4 py-10">
         <!-- Optional Footer Content -->
+                <!-- Top part -->
+        <div class="container mx-auto px-4 py-10">
+          <div class="flex flex-wrap -mx-4">
+            <!-- Menu 1 -->
+            <div class="w-full sm:w-1/6 px-4 mb-8">
+              <h3 class="text-lg font-semibold mb-4">Shop</h3>
+              <ul>
+                <li><a href="/cart" class="hover:text-primary">Cart</a></li>
+                <li><a href="/products/list" class="hover:text-primary">Products</a></li>
+                <li><a href="#brands" class="hover:text-primary">Brands</a></li>
+              </ul>
+            </div>
+            <!-- Menu 2 -->
+            <div class="w-full sm:w-1/6 px-4 mb-8">
+              <h3 class="text-lg font-semibold mb-4">Pages</h3>
+              <ul>
+                <li><a href="/shop.html" class="hover:text-primary">Shop</a></li>
+                <li><a href="/product/list" class="hover:text-primary">Product</a></li>
+                <li><a href="/checkout" class="hover:text-primary">Checkout</a></li>
+                <li><a href="/contact" class="hover:text-primary">Contact Us</a></li>
+              </ul>
+            </div>
+            <!-- Menu 3 -->
+            <div class="w-full sm:w-1/6 px-4 mb-8">
+              <h3 class="text-lg font-semibold mb-4">Account</h3>
+              <ul>
+                <li><a href="/cart" class="hover:text-primary">Cart</a></li>
+                <li><a href="/register" class="hover:text-primary">Registration</a></li>
+                <li><a href="/login" class="hover:text-primary">Login</a></li>
+              </ul>
+            </div>
+            <!-- Social Media -->
+            <div class="w-full sm:w-1/6 px-4 mb-8">
+              <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+              <ul>
+                <li class="flex items-center mb-2">
+                  <img src="{{ asset('storage/images/social_icons/facebook.svg') }}" alt="Facebook" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
+                    <a href="{{ !empty($shopConfig['fb_link']) ? $shopConfig['fb_link'] : '/' }}" target="_blank"
+                    class="hover:text-primary">
+                        Facebook
+                    </a>
+                </li>
+                <li class="flex items-center mb-2">
+                  <img src="{{ asset('storage/images/social_icons/twitter.svg') }}" alt="Twitter" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
+                  <a href="{{ !empty($shopConfig['twitter_link']) ? $shopConfig['twitter_link'] : '/' }}" target="_blank" class="hover:text-primary">Twitter</a>
+                </li>
+                <li class="flex items-center mb-2">
+                  <img src="{{ asset('storage/images/social_icons/instagram.svg') }}" alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
+                  <a href="{{ !empty($shopConfig['instagram_link']) ? $shopConfig['instagram_link'] : '/' }}" target="_blank" class="hover:text-primary">Instagram</a>
+                </li>
+                <li class="flex items-center mb-2">
+                  <img src="{{ asset('storage/images/social_icons/pinterest.svg') }}"   alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
+                  <a href="{{ !empty($shopConfig['pinterest_link']) ? $shopConfig['pinterest_link'] : '/' }}" target="_blank" class="hover:text-primary">Pinterest</a>
+                </li>
+                <li class="flex items-center mb-2">
+                  <img src="{{ asset('storage/images/social_icons/youtube.svg') }}"  alt="Instagram" class="w-4 h-4 transition-transform transform hover:scale-110 mr-2">
+                  <a href="{{ !empty($shopConfig['youtube_link']) ? $shopConfig['youtube_link'] : '/' }}" target="_blank" class="hover:text-primary">YouTube</a>
+                </li>
+              </ul>
+            </div>
+            <!-- Contact Information -->
+            <div class="w-full sm:w-2/6 px-4 mb-8">
+              <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+              <p><img  src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="h-[60px] mb-4"></p>
+              <p>{{$shopConfig['business_contact_address']}}</p>
+              <p class="text-xl font-bold my-4">Phone: {{$shopConfig['business_phone']}}</p>
+              <a href="mailto:info@company.com" class="underline">Email: {{$shopConfig['business_contact_email']}}</a>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Bottom part -->
     </div>
     <div class="py-6 border-t border-gray-line">
         <div class="container mx-auto px-4 flex flex-wrap justify-between items-center">
-            <p class="mb-2 font-bold">&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
+                    <!-- Copyright and Links -->
+        <div class="w-full lg:w-3/4 text-center lg:text-left mb-4 lg:mb-0">
+            <p class="mb-2 font-bold">&copy; {{ date('Y') }} {{$shopConfig['business_name']}}. All rights reserved.</p>
+            <ul class="flex justify-center lg:justify-start space-x-4 mb-4 lg:mb-0">
+            <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-primary">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-primary">FAQ</a></li>
+            </ul>
+            <p class="text-sm mt-4">Your shop's description goes here. This is a brief introduction to your shop and what you offer.</p>
         </div>
+        <!-- Payment Icons -->
+        <div class="w-full lg:w-1/4 text-center lg:text-right">
+            <img src="storage/images/social_icons/paypal.svg" alt="PayPal" class="inline-block h-8 mr-2">
+            <img src="storage/images/social_icons/stripe.svg" alt="Stripe" class="inline-block h-8 mr-2">
+            <img src="storage/images/social_icons/visa.svg" alt="Visa" class="inline-block h-8">
+        </div>
+        </div>
+
     </div>
 </footer>
 
@@ -203,7 +336,8 @@ function getFinalPrice($product) {
 
 <!-- Inline JS for Cart and Toasts -->
 <script>
-window.isLoggedIn = @json(auth()->check());
+// window.isLoggedIn = @json(auth()->check());
+window.isLoggedIn = @json(auth()->check() && auth()->user()->hasVerifiedEmail());
 document.addEventListener('DOMContentLoaded', function () {
     // Toast notifications
     @if(session('success'))
@@ -216,8 +350,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const updateCartCount = count => {
         const desktop = document.getElementById('cart-count-desktop');
         const mobile = document.getElementById('cart-count-mobile');
+        const menu = document.getElementById('cart-count-menu'); // <-- new
+
         if(desktop) desktop.textContent = count;
         if(mobile) mobile.textContent = count;
+        if(menu) menu.textContent = count; // <-- update the menu count too
+
     };
 
     const refreshMiniCart = () => {

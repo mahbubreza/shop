@@ -1,0 +1,69 @@
+Scheduler triggered 
+
+   INFO  No scheduled commands are ready to run.  
+
+[Sun 11/23/2025 10:40:00.58] Scheduler triggered 
+
+  2025-11-23 10:40:02 Running ["artisan" orders:release-expired] ............................................. 5s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 10:40:11.17] Scheduler triggered 
+
+  2025-11-23 10:40:12 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 10:45:01.08] Scheduler triggered 
+
+  2025-11-23 10:45:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 10:50:01.02] Scheduler triggered 
+
+  2025-11-23 10:50:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 10:55:01.05] Scheduler triggered 
+
+  2025-11-23 10:55:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:00:01.02] Scheduler triggered 
+
+  2025-11-23 11:00:02 Running ["artisan" orders:release-expired] ............................................. 6s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:05:01.03] Scheduler triggered 
+
+  2025-11-23 11:05:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:10:01.05] Scheduler triggered 
+
+  2025-11-23 11:10:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:15:01.03] Scheduler triggered 
+
+  2025-11-23 11:15:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:20:01.12] Scheduler triggered 
+
+  2025-11-23 11:20:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:25:01.03] Scheduler triggered 
+
+  2025-11-23 11:25:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:30:01.01] Scheduler triggered 
+
+  2025-11-23 11:30:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
+[Sun 11/23/2025 11:35:01.05] Scheduler triggered 
+
+  2025-11-23 11:35:02 Running ["artisan" orders:release-expired] ............................................. 1s DONE
+  ⇂ "D:\xampp\php84\php.exe" "artisan" orders:release-expired > "NUL" 2>&1  
+
