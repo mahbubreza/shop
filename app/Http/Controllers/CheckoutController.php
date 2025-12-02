@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Services\Payments\BkashService;
 use Illuminate\Http\Request;
 use App\Services\StockService;
 use Carbon\Carbon;
@@ -14,11 +15,15 @@ use Illuminate\Support\Facades\DB;
 class CheckoutController extends Controller
 {
     protected $stockService;
+    protected $bkashService;
 
-    public function __construct(StockService $stockService)
+
+    public function __construct(StockService $stockService, BkashService $bkashService)
     {
         $this->stockService = $stockService;
+        $this->bkashService = $bkashService;
     }
+
 
     /**
      * Show checkout page
@@ -216,6 +221,10 @@ class CheckoutController extends Controller
     public function payment($orderId)
     {
         $order = Order::findOrFail($orderId);
+
+        if ($order->payment_provider === 'bkash') {
+            return $this->bkashService->initiate($order);
+        }
 
         if ($order->status === 'completed') {
             return redirect()->route('home')

@@ -16,7 +16,7 @@ return [
     'outside_dhaka_shipping_charge' => 150, 
     'mfs_charge' => 1,
     'mfs_percentage' => 2,
-    'bkash_applicable' => 0,
+    'bkash_applicable' => 1,
     'rocket_applicable' => 0,
     'nagad_applicable' => 1,
     'color_filtering' => 0,

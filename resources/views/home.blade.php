@@ -212,6 +212,49 @@ $now = Carbon::now();
         </div>
     </div>
   </section>
+      <!-- Subscribe section -->
+<section id="subscribe" class="py-6 lg:py-24 bg-white border-t border-gray-line">
+  <div class="container mx-auto">
+    <div class="flex flex-col items-center rounded-lg p-4 sm:p-0">
+      <div class="mb-8">
+        <h2 class="text-center text-xl font-bold sm:text-2xl lg:text-left lg:text-3xl">
+          Join our newsletter
+        </h2>
+      </div>
+
+      @if (session('success'))
+        <div class="mb-4 text-green-600 font-semibold">{{ session('success') }}</div>
+      @endif
+
+      @if ($errors->any())
+        <div class="mb-4 text-red-500 text-sm">
+          @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+          @endforeach
+        </div>
+      @endif
+
+      <div class="flex flex-col items-center w-96">
+        <form class="flex w-full gap-2" action="{{ route('newsletter.store') }}" method="POST">
+          @csrf
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            class="w-full flex-1 rounded-full px-3 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-primary border border-primary hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 

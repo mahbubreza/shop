@@ -11,7 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
-
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\ProfileController;
@@ -111,7 +111,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/payment-fail/{orderId}', [CheckoutController::class, 'paymentFail'])->name('checkout.payment.fail');
     Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
 
-    
+    Route::post('/checkout/payment-callback/{order}', [CheckoutController::class, 'paymentCallback'])->name('checkout.paymentCallback');
+
+    Route::get('/pay/{orderId}', [PaymentController::class, 'initialize'])
+    ->name('payment.start');
+
+    Route::get('/payment/callback/{provider}', [PaymentController::class, 'callback'])
+        ->name('payment.callback');
 
 });
 
