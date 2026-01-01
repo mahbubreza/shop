@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -12,6 +13,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
+
 
 class ProductController extends Controller
 {
@@ -70,8 +73,6 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'categories', 'brands'));
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -91,7 +92,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         
-      $request->validate([
+        $shopConfig = config('shop');
+        $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
@@ -115,15 +117,41 @@ class ProductController extends Controller
         ]);
 
         // ✅ Handle thumbnail image
-        $thumbnail = $request->file('image') 
-            ? $request->file('image')->store('products/thumbnails', 'public') 
-            : null;
+        // $thumbnail = $request->file('image') 
+        //     ? $request->file('image')->store('products/thumbnails', 'public') 
+        //     : null;
+        $thumbnail = null;
+        $regular = null;
+        if ($request->hasFile('image')) {
+            $regular = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'products/regular',
+                $shopConfig['product_image_width'],
+                $shopConfig['product_image_height']
+            );
+            $thumbnail = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'products/thumbnails',
+                $shopConfig['product_thumbnail_image_width'],
+                $shopConfig['product_thumbnail_image_height']
+            );
+        }
 
         // ✅ Handle gallery images
         $gallery = [];
+        // if ($request->hasFile('images')) {
+        //     foreach ($request->file('images') as $img) {
+        //         $gallery[] = $img->store('products/images', 'public');
+        //     }
+        // }
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
-                $gallery[] = $img->store('products/images', 'public');
+                $gallery[] = ImageHelper::resizeToWebp(
+                    $img,
+                    'products/images',
+                    $shopConfig['product_image_width'],
+                    $shopConfig['product_image_height']
+                );
             }
         }
 
@@ -156,7 +184,8 @@ class ProductController extends Controller
             'youtube_link' => $request->youtube_link,
             'featured' => $request->featured,
             'published' => $request->published,
-            'image' => $thumbnail,
+            'thumbnail_image' => $thumbnail,
+            'image' => $regular,
             'images' => !empty($gallery) ? json_encode($gallery) : null,
             'videos' => !empty($videos) ? json_encode($videos) : null,
             'pdfs' => !empty($pdfs) ? json_encode($pdfs) : null,        
@@ -228,6 +257,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         
+        $shopConfig = config('shop');
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -275,12 +305,33 @@ class ProductController extends Controller
             $data['image'] = null;
         }
 
+        // if ($request->hasFile('image')) {
+        //     if ($product->image) {
+        //         Storage::disk('public')->delete($product->image);
+        //     }
+        //     $data['image'] = $request->file('image')->store('products/thumbnails', 'public');
+        // }
         if ($request->hasFile('image')) {
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
+                Storage::disk('public')->delete($product->thumbnail_image);
             }
-            $data['image'] = $request->file('image')->store('products/thumbnails', 'public');
+
+           
+            $data['image'] = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'products/regular',
+                $shopConfig['product_image_width'],
+                $shopConfig['product_image_height']
+            );
+            $data['thumbnail_image'] = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'products/thumbnails',
+                $shopConfig['product_thumbnail_image_width'],
+                $shopConfig['product_thumbnail_image_height']
+            );
         }
+
 
         // --- Handle Multiple Images
         $existingImages = json_decode($product->images ?? '[]', true);
@@ -294,11 +345,23 @@ class ProductController extends Controller
         }
 
         // Add new uploads
+        // if ($request->hasFile('new_images')) {
+        //     foreach ($request->file('new_images') as $file) {
+        //         $existingImages[] = $file->store('products/images', 'public');
+        //     }
+        // }
+
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $file) {
-                $existingImages[] = $file->store('products/images', 'public');
+                $existingImages[] = ImageHelper::resizeToWebp(
+                    $file,
+                    'products/images',
+                    $shopConfig['product_image_width'],
+                    $shopConfig['product_image_height']
+                );
             }
         }
+
 
         $data['images'] = json_encode(array_values($existingImages));
 

@@ -1,3 +1,6 @@
+@php
+    $shopConfig = config('shop');
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -139,7 +142,7 @@
                                 </div>
 
                                 <p class="mt-1 text-sm/6 text-gray-600">
-                                    This image is visible in all product box. Minimum dimensions required: 195px width X 195px height. 
+                                    This image is visible in all product box. Minimum dimensions required: {{$shopConfig['product_image_width']}}px width X {{$shopConfig['product_image_height']}}px height. 
                                     Keep some blank space around main object of your image as we had to crop some edge in different 
                                     devices to make it responsive. If no thumbnail is uploaded, the product's first gallery image 
                                     will be used as the thumbnail image.
@@ -170,7 +173,7 @@
                                     <x-forms.form-error name="new_images[]" />   
                                 </div>
                                 <p class="mt-1 text-sm/6 text-gray-600">
-                                    These images are visible in product details page gallery. Minimum dimensions required: 900px width X 900px height.
+                                    These images are visible in product details page gallery. Minimum dimensions required: {{$shopConfig['product_image_width']}}px width X {{$shopConfig['product_image_height']}}px height.
                                 <p>
                                 <!-- Preview container -->
                                 <div id="image-list" class="flex flex-wrap gap-2 mt-2">

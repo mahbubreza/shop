@@ -42,7 +42,7 @@ $now = Carbon::now();
 
                                     <div>
                                     <img onclick="changeImage(this)"
-                                    data-full="{{ $img }}"
+                                    data-full="{{ asset('storage/' . $img) }}"
                                     src="{{ asset('storage/' . $img) }}"
                                     class="object-cover object-center max-h-30 max-w-full rounded-lg cursor-pointer"
                                     alt="Gallery Image" />

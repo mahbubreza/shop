@@ -10,13 +10,18 @@ $now = Carbon::now();
       <div class="main-slider swiper-container">
           <div class="swiper-wrapper">
             @isset($categories)
-                @foreach ($categories->where('carousal', 1) as  $category)
+                {{-- @foreach ($categories->where('carousal', 1) as  $category) --}}
+                @foreach ($categories->where('carousal', 1)->take(5) as $category)
                 <div class="swiper-slide">
                   <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
+                  
+                 {{-- <img data-src="{{ asset('storage/' . $category->image) }}" class="swiper-lazy w-full h-full object-cover"  alt="{{ $category->name }}"> --}}
+
+
                   <div class="swiper-slide-content">
                     <h2 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4">{{ $category->name }}</h2>
                     <p class="mb-4 text-white md:text-2xl">{{$category->description}}</p>
-                      <a href="/"
+                      <a href="/products/list?category={{$category->id}}"
                           class="bg-primary hover:bg-transparent text-white hover:text-white border border-transparent hover:border-white font-semibold px-4 py-2 rounded-full inline-block">Shop
                           now</a>
                   </div>
@@ -24,10 +29,11 @@ $now = Carbon::now();
                 @endforeach             
             @endisset
           </div>
+          <!-- Slider Pagination -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
       </div>
-      <!-- Slider Pagination -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      
   </section>
 
   <!-- Product banner section -->
@@ -39,14 +45,19 @@ $now = Carbon::now();
                 @foreach ($categories->where('featured', 1) as  $category)
                 <div class="w-full sm:w-1/3 px-4 mb-8">
                     <div class="category-banner relative overflow-hidden rounded-lg shadow-lg group">
-                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="w-full h-auto">
+                        <img src="{{ asset('storage/' . $category->thumbnail_image) }}" alt="{{ $category->name }}" class="w-full h-auto">
                         <div class="absolute inset-0 bg-gray-light bg-opacity-50"></div>
                         <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
+                            {{-- class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4"> --}}
+                            class="category-text absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4 transition duration-300">
+
                             <h2 class="text-2xl md:text-3xl font-bold mb-4">{{ $category->name }}</h2>
-                            <a href="/"
-                                class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block">Shop
-                                now</a>
+                            <a href="/products/list?category={{$category->id}}"
+                                class="bg-primary hover:bg-transparent border border-transparent hover:border-white text-white hover:text-white font-semibold px-4 py-2 rounded-full inline-block"
+                            >
+                            Shop Now
+                                
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -65,7 +76,7 @@ $now = Carbon::now();
               @foreach ($popularProducts as $product)
                   <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
-                  <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
+                  <img src="{{ asset('storage/' . $product->thumbnail_image) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-[300px] object-cover mb-4 rounded-lg">
                   <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
                   <p class="my-2">{{ $product->category->name }}</p>
                   <div class="flex items-center mb-4">
@@ -108,7 +119,7 @@ $now = Carbon::now();
                 @foreach ($latestProducts as $product)
                 <div class="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
                   <div class="bg-white p-3 rounded-lg shadow-lg">
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full object-cover mb-4 rounded-lg">
+                    <img src="{{ asset('storage/' . $product->thumbnail_image) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-[300px] object-cover mb-4 rounded-lg">
                     <a href="/products/{{ $product->id }}/details" class="text-lg font-semibold mb-2">{{ $product->name }}</a>
                     <p class=" my-2">{{ $product->category->name }}</p>
                     <div class="flex items-center mb-4">
@@ -149,8 +160,16 @@ $now = Carbon::now();
                   @isset($brands)
                   @foreach ($brands as $brand)
                     <div class="swiper-slide flex-none bg-gray-200 flex items-center justify-center rounded-md">
-                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="Client Logo" class="max-h-full max-w-full">
-                    </div>
+                        {{-- <img src="{{ asset('storage/' . $brand->logo) }}" alt="Client Logo" class="max-h-full max-w-full"> --}}
+                        <img
+                        data-src="{{ asset('storage/' . $brand->logo) }}"
+                        class="swiper-lazy max-h-full max-w-full"
+                        alt="{{ $brand->name }}"
+                        loading="lazy"
+                      />
+                      <div class="swiper-lazy-preloader"></div>
+
+                      </div>
                   @endforeach                
                   @endisset
               </div>
@@ -161,7 +180,7 @@ $now = Carbon::now();
 
   <!-- Banner section -->
   <section id="banner" class="relative my-16">
-      <div class="container mx-auto px-4 py-20 rounded-lg relative bg-cover bg-center" style="background-image: url('storage/images/beauty.jpg');">
+      <div class="container mx-auto px-4 py-20 rounded-lg relative bg-cover bg-center" style="background-image: url('storage/images/beauty.webp');">
           <div class="absolute inset-0 bg-black opacity-40 rounded-lg"></div>
           <div class="relative flex flex-col items-center justify-center h-full text-center text-white py-20">
               <h2 class="text-4xl font-bold mb-4">Welcome to Our Shop</h2>
@@ -256,6 +275,10 @@ $now = Carbon::now();
   </div>
 </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script
+  src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+  defer
+></script>
+
 
 </x-shop.layout>

@@ -35,6 +35,7 @@ return new class extends Migration
 
             // File uploads
             $table->string('image')->nullable();         // Thumbnail
+            $table->string('thumbnail_image')->nullable();         // Thumbnail
             $table->text('images')->nullable();          // Gallery images (JSON encoded)
             $table->text('videos')->nullable();          // Videos (JSON encoded)
             $table->text('pdfs')->nullable();            // PDFs (JSON encoded)

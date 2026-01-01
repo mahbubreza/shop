@@ -32,4 +32,14 @@ return [
     'business_phone' => '(123) 456-7890',
     'business_contact_address'=>'123 Street Name, Seoul, South Korea',
     'business_contact_email' => 'contact@walstyle.com',
+
+    'product_image_width' => 800,
+    'product_image_height' => 1200,
+    'product_thumbnail_image_width' => 400,
+    'product_thumbnail_image_height' => 600,
+
+    'category_image_width' => 1200,
+    'category_image_height' => 505,
+    'category_thumbnail_image_width' => 600,
+    'category_thumbnail_image_height' => 400,
 ];

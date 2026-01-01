@@ -144,7 +144,7 @@
                         @isset($products)
                         @foreach ($products as $product)
                         <div class="bg-white p-4 rounded-lg shadow">
-                        <img  src="{{ asset('storage/' . $product->image) }}" alt="{{$product->name}}"
+                        <img  src="{{ asset('storage/' . $product->thumbnail_image) }}" alt="{{$product->name}}"
                             class="w-full object-cover mb-4 rounded-lg">
                         <a href="/products/{{$product->id}}/details" class="text-lg font-semibold mb-2">{{$product->name}}</a>
                         <p class=" my-2">{{$product->category->name}}</p>

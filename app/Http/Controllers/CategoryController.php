@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        
         return view('categories.index', [
-            'categories'=> Category::paginate(10)
+            'categories'=> Category::all()
         ]);
 
     }
@@ -34,6 +36,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $shopConfig = config('shop');
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:100',
@@ -44,14 +48,37 @@ class CategoryController extends Controller
             'image' => 'nullable|image|max:5120', // 5MB thumbnail
 
         ]);
-        $thumbnail = $request->file('image') 
-            ? $request->file('image')->store('categories/thumbnails', 'public') 
-            : null;
+        // $thumbnail = $request->file('image') 
+        //     ? $request->file('image')->store('categories/thumbnails', 'public') 
+        //     : null;
+
+        $image = null;
+        $thumbnail = null;
+
+        if ($request->hasFile('image')) {
+            $image = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'categories/regular',
+                $shopConfig['category_image_width'],      //width
+                $shopConfig['category_image_height'],     //height
+                80      // quality
+            );
+
+            $thumbnail = ImageHelper::resizeToWebp(
+                $request->file('image'),
+                'categories/thumbnails',
+                $shopConfig['category_thumbnail_image_width'],      //width
+                $shopConfig['category_thumbnail_image_height'],     //height
+                80      // quality
+            );
+        }
+
         $category = Category::create([
             'name' => $validated['name'],
             'description' => trim($validated['description']),
             'slug' => $validated['slug'],
-            'image' => $thumbnail,
+            'image' => $image,
+            'thumbnail_image' => $thumbnail,
 
             'hot' => $validated['hot'],
             'featured' => $validated['featured'],
@@ -85,6 +112,7 @@ class CategoryController extends Controller
      */
     public function update(Category $category)
     {
+        $shopConfig = config('shop');
         request()->validate([
                 'name' => 'required',
                 'slug' => 'required',
@@ -93,18 +121,42 @@ class CategoryController extends Controller
                 'carousal' => 'required',
                 'featured' => 'required'
             ]);
-        $thumbnail = $category->image;
+        $image = $category->image;
+        $thumbnail = $category->thumbnail_image;
         if (request()->has('remove_thumbnail') && $category->image) {
             Storage::disk('public')->delete($category->image);
             $thumbnail = null;
+            $image = null;
         }
 
-         if (request()->hasFile('image')) {
+        if (request()->hasFile('image')) {
             if ($category->image) {
                 Storage::disk('public')->delete($category->image);
             }
-            $thumbnail = request()->file('image')->store('categories/thumbnails', 'public');
+
+            $image = ImageHelper::resizeToWebp(
+                request()->file('image'),
+                'categories/regular',
+                $shopConfig['category_image_width'],
+                $shopConfig['category_image_height'],
+                80
+            );
+
+            $thumbnail = ImageHelper::resizeToWebp(
+                request()->file('image'),
+                'categories/thumbnails',
+                $shopConfig['category_thumbnail_image_width'],
+                $shopConfig['category_thumbnail_image_height'],
+                80
+            );
         }
+
+        //  if (request()->hasFile('image')) {
+        //     if ($category->image) {
+        //         Storage::disk('public')->delete($category->image);
+        //     }
+        //     $thumbnail = request()->file('image')->store('categories/thumbnails', 'public');
+        // }
           
         $category->update([
         'name' => request('name'),
@@ -112,7 +164,8 @@ class CategoryController extends Controller
         'slug' => request('slug'),
         'hot' => request('hot'),
         'featured' => request('featured'),
-        'image' => $thumbnail,
+        'image' => $image,
+        'thumbnail_image' => $thumbnail,
         'status' => request('status'),
         'carousal' => request('carousal'),
         'updated_by' => Auth::user()->email,

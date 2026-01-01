@@ -84,7 +84,8 @@ function getFinalPrice($product) {
                         Cart
                         <i class="fa-solid fa-cart-shopping ml-1 text-xs"></i>
                         <span id="cart-count-menu" class="ml-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                            {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }}
+                            {{-- {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }} --}}
+                            {{ $cartCount }}
                         </span>    
                     </a>                    
                 </li>
@@ -112,7 +113,8 @@ function getFinalPrice($product) {
                 <a href="/cart" @click.prevent="open = !open">
                     <img src="{{ asset('storage/images/cart-shopping.svg') }}" alt="Cart" class="h-6 w-6">
                     <span id="cart-count-desktop" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                        {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }}
+                        {{-- {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }} --}}
+                        {{ $cartCount }}
                     </span>
                 </a>
 
@@ -175,56 +177,17 @@ function getFinalPrice($product) {
         <a href="/register" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full min-w-[110px]">Register</a>
         <a href="/login" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full min-w-[110px]">Login</a>
         <a href="/cart" class="bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-semibold px-4 py-2 rounded-full min-w-[110px]">
-            Cart - <span id="cart-count-mobile">{{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }}</span> items
+            Cart - <span id="cart-count-mobile">
+                {{-- {{ Auth::check() ? Auth::user()->cartItems()->count() : 0 }} --}}
+                {{ $cartCount }}
+            </span> items
         </a>
     </div>
 </nav>
 
 <main>{{ $slot }}</main>
 
-    <!-- Subscribe section -->
-<section id="subscribe" class="py-6 lg:py-24 bg-white border-t border-gray-line">
-  <div class="container mx-auto">
-    <div class="flex flex-col items-center rounded-lg p-4 sm:p-0">
-      <div class="mb-8">
-        <h2 class="text-center text-xl font-bold sm:text-2xl lg:text-left lg:text-3xl">
-          Join our newsletter
-        </h2>
-      </div>
 
-      @if (session('success'))
-        <div class="mb-4 text-green-600 font-semibold">{{ session('success') }}</div>
-      @endif
-
-      @if ($errors->any())
-        <div class="mb-4 text-red-500 text-sm">
-          @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-          @endforeach
-        </div>
-      @endif
-
-      <div class="flex flex-col items-center w-96">
-        <form class="flex w-full gap-2" action="{{ route('newsletter.store') }}" method="POST">
-          @csrf
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email address"
-            class="w-full flex-1 rounded-full px-3 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary"
-            required
-          />
-          <button
-            type="submit"
-            class="bg-primary border border-primary hover:bg-transparent hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full"
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- Footer -->
 <footer class="border-t border-gray-line">
@@ -317,9 +280,9 @@ function getFinalPrice($product) {
         </div>
         <!-- Payment Icons -->
         <div class="w-full lg:w-1/4 text-center lg:text-right">
-            <img src="storage/images/social_icons/paypal.svg" alt="PayPal" class="inline-block h-8 mr-2">
-            <img src="storage/images/social_icons/stripe.svg" alt="Stripe" class="inline-block h-8 mr-2">
-            <img src="storage/images/social_icons/visa.svg" alt="Visa" class="inline-block h-8">
+            <img src="{{ asset('storage/images/social_icons/paypal.svg') }}" alt="PayPal" class="inline-block h-8 mr-2">
+            <img src="{{ asset('storage/images/social_icons/stripe.svg') }}"   alt="Stripe" class="inline-block h-8 mr-2">
+            <img src="{{ asset('storage/images/social_icons/visa.svg') }}"  alt="Visa" class="inline-block h-8">
         </div>
         </div>
 

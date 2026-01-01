@@ -31,7 +31,8 @@
                            class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md text-sm px-3 py-2 w-56 focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
-
+         
+            
             <!-- Products Table -->
             <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
                 <table class="min-w-full text-sm text-gray-700 dark:text-gray-300">
@@ -111,7 +112,7 @@
                     </tbody>
                 </table>
                 <div>
-                    {{ $categories->links() }}
+                    {{-- {{ $categories->links() }} --}}
                 </div>
             </div>
         </div>

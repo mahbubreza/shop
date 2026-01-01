@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('slug')->unique();
             $table->string('image')->nullable();
+            $table->string('thumbnail_image')->nullable();
             $table->char('hot', 1)->default('0');
             $table->char('featured', 1)->default('0');
             $table->char('carousal', 1)->default('0');
